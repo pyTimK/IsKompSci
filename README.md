@@ -1,4 +1,4 @@
-# iskompsci
+# IsKompSci
 
 ## For developers
 1. Download or Clone this project.
