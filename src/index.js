@@ -4,10 +4,31 @@ import "./index.css";
 import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core";
+import { BrowserRouter as Router } from "react-router-dom";
+import { green, orange } from "@material-ui/core/colors";
+
+const theme = createMuiTheme({
+  typography: {
+    fontFamily: "metropolis",
+    fontWeightLight: 400,
+    fontWeightRegular: 500,
+    fontWeightMedium: 600,
+    fontWeightBold: 700,
+  },
+  palette: {
+    primary: green,
+    secondary: orange,
+  },
+});
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider theme={theme}>
+      <Router>
+        <App />
+      </Router>
+    </ThemeProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

@@ -1,0 +1,38 @@
+.wrapper {
+    width: 100vw;
+    height: 100vh;
+    color: white;
+    text-align: center;
+    background-image: linear-gradient(var(--green), var(--lightgreen));
+}
+
+.bottom {
+    position: fixed;
+    bottom: 5vh;
+    width: 100vw;
+}
+
+.left {
+    display: inline-block;
+    text-align: left;
+    width: 35%;
+}
+
+.right {
+    display: inline-block;
+    text-align: left;
+    width: 55%;
+    vertical-align: top;
+    padding: 1rem 0;
+}
+
+
+
+.courses-wrapper {
+    background-color: var(--white);
+    height: 50vh;
+    /* width: 200vw; */
+    overflow-x: scroll;
+    padding: 8px;
+    vertical-align: top;
+}
