@@ -1,0 +1,15 @@
+.main-wrapper {
+    padding: 0 16px;
+    
+}
+
+.main-center {
+    padding-top: 42px;
+    color: var(--darkgray);
+    text-align: center;
+}
+
+.main-center h6 {
+    font-weight: 600;
+
+}

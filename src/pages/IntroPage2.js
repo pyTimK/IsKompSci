@@ -1,46 +1,53 @@
-import { Button, Container, Typography } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import { motion } from "framer-motion";
+import { useState } from "react";
+import GroupBySem from "../components/GroupBySem";
+import Legend from "../components/Legend";
 import "../styles/intro.css";
 
 const IntroPage2 = ({ name, setTaken, setTaking, courses }) => {
-  let taken = [];
-  let taking = [];
+  const [taken, pageSetTaken] = useState([]);
+  const [taking, pageSetTaking] = useState([]);
 
-  console.log(courses);
+  const handleCourseTap = ({ subject, takenStatus }) => {
+    if (takenStatus === "not-taken") {
+      let newTaken = [...taken, subject];
+      pageSetTaken(newTaken);
+    } else if (takenStatus === "taken") {
+      let newTaken = taken.filter((takenCourse) => takenCourse !== subject);
+      pageSetTaken(newTaken);
+      let newTaking = [...taking, subject];
+      pageSetTaking(newTaking);
+    } else {
+      let newTaking = taking.filter((takenCourse) => takenCourse !== subject);
+      pageSetTaking(newTaking);
+    }
+  };
+
   return (
-    <div className="wrapper">
+    <div className="intro-wrapper">
       <h4>Hello {name}!</h4>
       <div className="top-align">
-        <div className="left">
-          <img className="logo full-width" src="/logo.png" />
+        <div className="intro-left">
+          <img className="logo" src="/logo.png" />
         </div>
-        <div className="right">
-          <h5>TELL ME ALL THE COURSES YOU HAVE TAKEN!</h5>
+        <div className="intro-right">
+          <p>SELECT ALL THE COURSES YOU HAVE TAKEN!</p>
         </div>
       </div>
 
       <div className="courses-wrapper">
-        {courses.map((course) => {
-          let takenStatus = "not-taken";
-          if (taken.includes(course.subject)) takenStatus = "taken";
-          else if (taking.includes(course.subject)) takenStatus = "taking";
-
-          return (
-            <motion.div
-              onClick={(e) => {
-                console.log(e.target.classList);
-              }}
-              whileTap={{ scale: 0.8 }}
-              className={`course-box ${takenStatus}`}
-              key={course.id}>
-              <p>{course.subject}</p>
-            </motion.div>
-          );
-        })}
+        <Legend />
+        <GroupBySem tighten={true} taken={taken} taking={taking} courses={courses} handleCourseTap={handleCourseTap} />
       </div>
 
       <div className="bottom">
         <Button
+          onTap={(e) => {
+            setTaking(taking);
+            setTaken(taken);
+          }}
+          className="mybutton"
           component={motion.button}
           whileHover={{
             scale: 1.2,

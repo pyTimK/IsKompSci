@@ -1,24 +1,21 @@
-.wrapper {
+.intro-wrapper {
+    --padding: 5vh;
     width: 100vw;
-    height: 100vh;
+    height: calc(100vh - var(--padding));
+    padding-top: var(--padding);
     color: white;
     text-align: center;
     background-image: linear-gradient(var(--green), var(--lightgreen));
 }
 
-.bottom {
-    position: fixed;
-    bottom: 5vh;
-    width: 100vw;
-}
 
-.left {
+.intro-left {
     display: inline-block;
-    text-align: left;
+    text-align: right;
     width: 35%;
 }
 
-.right {
+.intro-right {
     display: inline-block;
     text-align: left;
     width: 55%;
@@ -28,11 +25,3 @@
 
 
 
-.courses-wrapper {
-    background-color: var(--white);
-    height: 50vh;
-    /* width: 200vw; */
-    overflow-x: scroll;
-    padding: 8px;
-    vertical-align: top;
-}

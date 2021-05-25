@@ -1,6 +1,5 @@
 import { Button, Typography } from "@material-ui/core";
 import { motion } from "framer-motion";
-import "../styles/intro.css";
 
 const IntroPage1 = ({ setName }) => {
   const handleOnSubmit = (e) => {
@@ -12,8 +11,8 @@ const IntroPage1 = ({ setName }) => {
   };
 
   return (
-    <div className="wrapper">
-      <img className="logo top-margin" src="/logo.png" />
+    <div className="intro-wrapper">
+      <img className="logo" src="/logo.png" />
       <h4>IsKompSci</h4>
 
       <form onSubmit={handleOnSubmit} className="bottom">
@@ -22,6 +21,7 @@ const IntroPage1 = ({ setName }) => {
         <Button
           // variant="contained"
           // size="large"
+          className="mybutton"
           component={motion.button}
           whileHover={{
             scale: 1.2,
