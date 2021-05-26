@@ -1,5 +1,5 @@
 import { AnimatePresence, AnimateSharedLayout } from "framer-motion";
-import React, { useState } from "react";
+import React from "react";
 import { Route, Switch } from "react-router-dom";
 import Layout from "./components/Layout";
 import useLocalStorage from "./hooks/useLocalStorage";
@@ -23,10 +23,11 @@ function App() {
   const hasName = name !== "";
   const hasTaken = taken !== null;
   const hasTaking = taking !== null;
+  const showAppbar = hasName && hasTaken && hasTaking;
 
   return (
     <div className="App">
-      <Layout willShow={hasName && hasTaken && hasTaking} editMode={editMode} toggleEditMode={toggleEditMode}>
+      <Layout willShow={showAppbar} editMode={editMode} toggleEditMode={toggleEditMode}>
         <Switch>
           <Route path="/main2">
             <MainPage2 />
@@ -41,20 +42,23 @@ function App() {
             <CourseDescrip2 />
           </Route>
           <Route path="/">
-            {!hasName ? (
-              <IntroPage1 setName={setName} />
-            ) : !hasTaken || !hasTaking ? (
-              <IntroPage2 setTaken={setTaken} setTaking={setTaking} name={name} courses={courses} />
-            ) : (
-              <MainPage1
-                taken={taken}
-                taking={taking}
-                courses={courses}
-                editMode={editMode}
-                setTaken={setTaken}
-                setTaking={setTaking}
-              />
-            )}
+            <AnimatePresence exitBeforeEnter initial={false}>
+              {!hasName ? (
+                <IntroPage1 setName={setName} key="intro1" />
+              ) : !hasTaken || !hasTaking ? (
+                <IntroPage2 key="intro2" setTaken={setTaken} setTaking={setTaking} name={name} courses={courses} />
+              ) : (
+                <MainPage1
+                  key="main1"
+                  taken={taken}
+                  taking={taking}
+                  courses={courses}
+                  editMode={editMode}
+                  setTaken={setTaken}
+                  setTaking={setTaking}
+                />
+              )}
+            </AnimatePresence>
           </Route>
         </Switch>
       </Layout>

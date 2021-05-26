@@ -2,6 +2,7 @@ import { AppBar, Button, IconButton, makeStyles, Toolbar, Typography } from "@ma
 import MenuIcon from "@material-ui/icons/Menu";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import DoneOutlinedIcon from "@material-ui/icons/DoneOutlined";
+import { AnimatePresence, AnimateSharedLayout, motion } from "framer-motion";
 
 const Layout = ({ willShow, children, editMode, toggleEditMode }) => {
   const classes = useStyles();
@@ -9,7 +10,18 @@ const Layout = ({ willShow, children, editMode, toggleEditMode }) => {
   return (
     <div className="layout-wrapper">
       {willShow && (
-        <div>
+        <motion.div
+          initial={{
+            y: "-100%",
+          }}
+          animate={{
+            y: 0,
+          }}
+          transition={
+            {
+              // delay: 1,
+            }
+          }>
           <AppBar>
             <Toolbar>
               <IconButton edge="start" className={classes.menuButton} aria-label="menu">
@@ -30,7 +42,7 @@ const Layout = ({ willShow, children, editMode, toggleEditMode }) => {
             </Toolbar>
           </AppBar>
           <div className={classes.toolbarHeight}></div>
-        </div>
+        </motion.div>
       )}
 
       {children}

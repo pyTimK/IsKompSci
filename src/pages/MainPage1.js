@@ -30,41 +30,53 @@ const MainPage1 = ({ taken, taking, setTaken, setTaking, courses, editMode }) =>
     }
   };
   return (
-    <div className="main-wrapper">
-      <AnimateSharedLayout>
-        <AnimatePresence>
-          {editMode && (
-            <motion.div
-              layout
-              className="main-center"
-              initial={{
-                opacity: 0.6,
-                // y: "-100%",
-                scaleY: 0,
-              }}
-              animate={{
-                opacity: 1,
-                // y: "0",
-                scaleY: 1,
-                transition: {
-                  // duration: 3,
-                },
-              }}
-              exit={{
-                opacity: 0,
-                // y: "-100%",
-                transition: { duration: 0.2 },
-              }}>
-              <h6>Edit Mode</h6>
-              <p>TAP TO CHANGE COURSE STATUS</p>
-            </motion.div>
-          )}
-        </AnimatePresence>
-        <motion.div layout>
-          <GroupBySem taken={taken} taking={taking} courses={courses} handleCourseTap={handleCourseTap} />
-        </motion.div>
-        <Legend />
-      </AnimateSharedLayout>
+    <div className="main-bg">
+      <motion.div
+        className="main-wrapper"
+        initial={{
+          opacity: 0,
+        }}
+        animate={{
+          opacity: 1,
+        }}
+        exit={{
+          opacity: 0,
+        }}>
+        <AnimateSharedLayout>
+          <AnimatePresence>
+            {editMode && (
+              <motion.div
+                layout
+                className="main-center"
+                initial={{
+                  opacity: 0.6,
+                  // y: "-100%",
+                  scaleY: 0,
+                }}
+                animate={{
+                  opacity: 1,
+                  // y: "0",
+                  scaleY: 1,
+                  transition: {
+                    // duration: 3,
+                  },
+                }}
+                exit={{
+                  opacity: 0,
+                  // y: "-100%",
+                  transition: { duration: 0.2 },
+                }}>
+                <h6>Edit Mode</h6>
+                <p>TAP TO CHANGE COURSE STATUS</p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <motion.div layout>
+            <GroupBySem taken={taken} taking={taking} courses={courses} handleCourseTap={handleCourseTap} />
+          </motion.div>
+          <Legend />
+        </AnimateSharedLayout>
+      </motion.div>
     </div>
   );
 };
