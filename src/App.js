@@ -1,6 +1,6 @@
 import { AnimatePresence, AnimateSharedLayout } from "framer-motion";
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, useLocation } from "react-router-dom";
 import Layout from "./components/Layout";
 import useLocalStorage from "./hooks/useLocalStorage";
 import useToggle from "./hooks/useToggle";
@@ -13,6 +13,7 @@ import MainPage2 from "./pages/MainPage2";
 import SettingsPage from "./pages/SettingsPage";
 
 function App() {
+  const location = useLocation();
   const [name, setName] = useLocalStorage("name", "");
   const [taken, setTaken] = useLocalStorage("taken", null);
   const [taking, setTaking] = useLocalStorage("taking", null);
@@ -28,9 +29,10 @@ function App() {
   return (
     <div className="App">
       <Layout name={name} willShow={showAppbar} editMode={editMode} toggleEditMode={toggleEditMode}>
-        <Switch>
+        {/* <AnimatePresence exitBeforeEnter> */}
+        <Switch location={location} key={location.key}>
           <Route path="/main2">
-            <MainPage2 />
+            <MainPage2 key="main2" />
           </Route>
           <Route path="/settings">
             <SettingsPage />
@@ -61,6 +63,7 @@ function App() {
             </AnimatePresence>
           </Route>
         </Switch>
+        {/* </AnimatePresence> */}
       </Layout>
     </div>
   );

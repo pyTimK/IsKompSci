@@ -1,6 +1,6 @@
 import {
   AppBar,
-  Button,
+  Box,
   Divider,
   IconButton,
   List,
@@ -9,33 +9,40 @@ import {
   ListItemText,
   makeStyles,
   SwipeableDrawer,
+  Tab,
+  Tabs,
   Toolbar,
   Typography,
 } from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import DoneOutlinedIcon from "@material-ui/icons/DoneOutlined";
-import { AnimatePresence, AnimateSharedLayout, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import useToggle from "../hooks/useToggle";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
-import React from "react";
-import { green } from "@material-ui/core/colors";
-import SettingsIcon from "@material-ui/icons/Settings";
+import React, { useState } from "react";
 import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
-import EmailIcon from "@material-ui/icons/Email";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
-import clsx from "clsx";
 import UseAnimations from "react-useanimations";
 import menu4 from "react-useanimations/lib/menu4";
+import clsx from "clsx";
+import { useHistory } from "react-router";
 
 const Layout = ({ name, willShow, children, editMode, toggleEditMode }) => {
   const classes = useStyles();
+  const history = useHistory();
   const [drawer, toggleDrawer] = useToggle(false);
+  const [tab, setTab] = useState(0);
   const drawerItems = [
     ["Settings", <SettingsOutlinedIcon />],
     ["Feedback", <MailOutlineIcon />],
   ];
+
+  const handleChange = (event, newTab) => {
+    if (newTab !== tab) {
+      console.log(newTab);
+      history.push(newTab === 0 ? "/" : "/main2");
+    }
+    setTab(newTab);
+  };
 
   return (
     <div className="layout-wrapper">
@@ -85,8 +92,12 @@ const Layout = ({ name, willShow, children, editMode, toggleEditMode }) => {
                   {editMode ? <DoneOutlinedIcon /> : <EditOutlinedIcon />}
                 </IconButton>
               </Toolbar>
+              <Tabs value={tab} onChange={handleChange} variant="fullWidth">
+                <Tab className={classes.tabLabel} label="Cards" />
+                <Tab className={classes.tabLabel} label="Graph" />
+              </Tabs>
             </AppBar>
-            <div className={classes.toolbarHeight}></div>
+            <div className={clsx(classes.toolbarHeight, classes.marginBottom)}></div>
           </motion.div>
         </div>
       )}
@@ -114,7 +125,16 @@ const useStyles = makeStyles((theme) => {
     white: {
       color: "white",
     },
+    tabLabel: {
+      fontWeight: "400",
+      fontSize: "0.8rem",
+      color: "white",
+      letterSpacing: "0.05rem",
+    },
     toolbarHeight: theme.mixins.toolbar,
+    marginBottom: {
+      // marginBottom: "48px",
+    },
     drawer: {
       width: 250,
       backgroundColor: "white",

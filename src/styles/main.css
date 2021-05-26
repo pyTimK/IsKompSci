@@ -1,6 +1,6 @@
 .main-bg {
-    width: 100vw;
     height: 100vh;
+    padding-top: 48px;
 }
 
 .main-wrapper {
@@ -9,7 +9,7 @@
 }
 
 .main-center {
-    padding-top: 42px;
+    margin-top: 42px;
     color: var(--darkgray);
     text-align: center;
 }

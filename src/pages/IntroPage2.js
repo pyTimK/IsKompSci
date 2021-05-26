@@ -45,7 +45,7 @@ const IntroPage2 = ({ name, setTaken, setTaking, courses }) => {
           opacity: 0,
         }}>
         {/* <h4>Hello {name}!</h4> */}
-        <h4>
+        {/* <h4>
           <TypewriterComponent
             onInit={(typewriter) => {
               console.log("hifds");
@@ -56,7 +56,17 @@ const IntroPage2 = ({ name, setTaken, setTaking, courses }) => {
               cursor: "",
             }}
           />
-        </h4>
+        </h4> */}
+        <motion.h4
+          initial={{
+            y: "-300%",
+          }}
+          animate={{
+            y: 0,
+            transition: { delay: 1 },
+          }}>
+          Hello {name}!
+        </motion.h4>
         <div className="top-align">
           <div className="intro-left">
             <img className="logo" src="/logo.png" />
@@ -66,7 +76,7 @@ const IntroPage2 = ({ name, setTaken, setTaking, courses }) => {
               <TypewriterComponent
                 onInit={(typewriter) => {
                   console.log("hifds");
-                  typewriter.pauseFor(3000).typeString("SELECT ALL THE COURSES YOU HAVE TAKEN!").start();
+                  typewriter.pauseFor(2000).typeString("SELECT ALL THE COURSES YOU HAVE TAKEN!").start();
                 }}
                 options={{
                   delay: 15,
