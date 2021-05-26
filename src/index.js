@@ -6,7 +6,8 @@ import "./styles/main.css";
 import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core";
+import { unstable_createMuiStrictModeTheme as createMuiTheme, ThemeProvider } from "@material-ui/core";
+// import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import { BrowserRouter as Router } from "react-router-dom";
 import { green, orange } from "@material-ui/core/colors";
 

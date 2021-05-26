@@ -27,7 +27,7 @@ function App() {
 
   return (
     <div className="App">
-      <Layout willShow={showAppbar} editMode={editMode} toggleEditMode={toggleEditMode}>
+      <Layout name={name} willShow={showAppbar} editMode={editMode} toggleEditMode={toggleEditMode}>
         <Switch>
           <Route path="/main2">
             <MainPage2 />
