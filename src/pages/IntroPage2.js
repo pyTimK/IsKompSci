@@ -1,15 +1,23 @@
 import { Button } from "@material-ui/core";
 import { AnimatePresence, motion, useAnimation } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GroupBySem from "../components/GroupBySem";
 import Legend from "../components/Legend";
 import "../styles/intro.css";
 import TypewriterComponent from "typewriter-effect";
+import { useHistory } from "react-router";
 
-const IntroPage2 = ({ name, setTaken, setTaking, courses }) => {
+const IntroPage2 = ({ name, hasIntroData, setTaken, setTaking, courses }) => {
+  const history = useHistory();
   const exitAnimation = useAnimation();
   const [taken, pageSetTaken] = useState([]);
   const [taking, pageSetTaking] = useState([]);
+
+  useEffect(() => {
+    if (hasIntroData) {
+      history.push("/");
+    }
+  }, [hasIntroData]);
 
   const handleCourseTap = ({ subject, takenStatus }) => {
     if (takenStatus === "not-taken") {
@@ -44,19 +52,6 @@ const IntroPage2 = ({ name, setTaken, setTaking, courses }) => {
         exit={{
           opacity: 0,
         }}>
-        {/* <h4>Hello {name}!</h4> */}
-        {/* <h4>
-          <TypewriterComponent
-            onInit={(typewriter) => {
-              console.log("hifds");
-              typewriter.pauseFor(1000).typeString(`Hello ${name}!`).start();
-            }}
-            options={{
-              delay: 15,
-              cursor: "",
-            }}
-          />
-        </h4> */}
         <motion.h4
           initial={{
             y: "-300%",
@@ -72,17 +67,18 @@ const IntroPage2 = ({ name, setTaken, setTaking, courses }) => {
             <img className="logo" src="/logo.png" />
           </div>
           <div className="intro-right">
-            <p>
-              <TypewriterComponent
-                onInit={(typewriter) => {
-                  console.log("hifds");
-                  typewriter.pauseFor(2000).typeString("SELECT ALL THE COURSES YOU HAVE TAKEN!").start();
-                }}
-                options={{
-                  delay: 15,
-                }}
-              />
-            </p>
+            {/* <p> */}
+            <TypewriterComponent
+              onInit={(typewriter) => {
+                console.log("hifds");
+                typewriter.pauseFor(2000).typeString("SELECT ALL THE COURSES YOU HAVE TAKEN!").start();
+              }}
+              options={{
+                delay: 15,
+                cursor: "",
+              }}
+            />
+            {/* </p> */}
           </div>
         </div>
 

@@ -1,14 +1,23 @@
 import { Button, Typography } from "@material-ui/core";
 import { motion } from "framer-motion";
+import { useEffect } from "react";
+import { useHistory } from "react-router";
 
-const IntroPage1 = ({ setName }) => {
+const IntroPage1 = ({ name, setName }) => {
+  const history = useHistory();
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    let name = document.getElementById("nameInput").value;
-    if (name !== "") {
-      setName(name);
+    let newName = document.getElementById("nameInput").value;
+    if (newName !== "") {
+      setName(newName);
     }
   };
+
+  useEffect(() => {
+    if (name !== "") {
+      history.push("/intro2");
+    }
+  }, [name]);
 
   return (
     <div className="intro-bg">

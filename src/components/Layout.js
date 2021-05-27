@@ -1,6 +1,5 @@
 import {
   AppBar,
-  Box,
   Divider,
   IconButton,
   List,
@@ -12,13 +11,12 @@ import {
   Tab,
   Tabs,
   Toolbar,
-  Typography,
 } from "@material-ui/core";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import DoneOutlinedIcon from "@material-ui/icons/DoneOutlined";
 import { motion } from "framer-motion";
 import useToggle from "../hooks/useToggle";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import UseAnimations from "react-useanimations";
@@ -26,11 +24,16 @@ import menu4 from "react-useanimations/lib/menu4";
 import clsx from "clsx";
 import { useHistory } from "react-router";
 
-const Layout = ({ name, willShow, children, editMode, toggleEditMode }) => {
-  const classes = useStyles();
+const Layout = ({ name, hasIntroData, children, editMode, toggleEditMode }) => {
   const history = useHistory();
+  const classes = useStyles();
   const [drawer, toggleDrawer] = useToggle(false);
   const [tab, setTab] = useState(0);
+
+  if (!hasIntroData) {
+    history.push("/intro1");
+  }
+
   const drawerItems = [
     ["Settings", <SettingsOutlinedIcon />],
     ["Feedback", <MailOutlineIcon />],
@@ -38,7 +41,6 @@ const Layout = ({ name, willShow, children, editMode, toggleEditMode }) => {
 
   const handleChange = (event, newTab) => {
     if (newTab !== tab) {
-      console.log(newTab);
       history.push(newTab === 0 ? "/" : "/main2");
     }
     setTab(newTab);
@@ -46,7 +48,7 @@ const Layout = ({ name, willShow, children, editMode, toggleEditMode }) => {
 
   return (
     <div className="layout-wrapper">
-      {willShow && (
+      {hasIntroData && (
         <div>
           <SwipeableDrawer open={drawer} onClose={toggleDrawer} onOpen={toggleDrawer}>
             <div className={classes.drawer} role="presentation" onClick={toggleDrawer} onKeyDown={toggleDrawer}>
@@ -99,10 +101,9 @@ const Layout = ({ name, willShow, children, editMode, toggleEditMode }) => {
             </AppBar>
             <div className={clsx(classes.toolbarHeight, classes.marginBottom)}></div>
           </motion.div>
+          {children}
         </div>
       )}
-
-      {children}
     </div>
   );
 };

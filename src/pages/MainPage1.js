@@ -1,4 +1,5 @@
 import { AnimatePresence, AnimateSharedLayout, motion } from "framer-motion";
+import { useHistory } from "react-router";
 import GroupBySem from "../components/GroupBySem";
 import Legend from "../components/Legend";
 

@@ -13,7 +13,7 @@ import MainPage2 from "./pages/MainPage2";
 import SettingsPage from "./pages/SettingsPage";
 
 function App() {
-  const location = useLocation();
+  // const location = useLocation();
   const [name, setName] = useLocalStorage("name", "");
   const [taken, setTaken] = useLocalStorage("taken", null);
   const [taking, setTaking] = useLocalStorage("taking", null);
@@ -24,47 +24,59 @@ function App() {
   const hasName = name !== "";
   const hasTaken = taken !== null;
   const hasTaking = taking !== null;
-  const showAppbar = hasName && hasTaken && hasTaking;
+  const hasIntroData = hasName && hasTaken && hasTaking;
 
   return (
     <div className="App">
-      <Layout name={name} willShow={showAppbar} editMode={editMode} toggleEditMode={toggleEditMode}>
-        {/* <AnimatePresence exitBeforeEnter> */}
-        <Switch location={location} key={location.key}>
-          <Route path="/main2">
-            <MainPage2 key="main2" />
+      <AnimatePresence exitBeforeEnter initial={false}>
+        <Switch>
+          <Route path="/intro1">
+            <IntroPage1 name={name} setName={setName} />
           </Route>
-          <Route path="/settings">
-            <SettingsPage />
+          <Route path="/intro2">
+            <IntroPage2
+              setTaken={setTaken}
+              setTaking={setTaking}
+              name={name}
+              hasIntroData={hasIntroData}
+              courses={courses}
+            />
           </Route>
-          <Route path="/coursedescrip1">
-            <CourseDescrip1 />
-          </Route>
-          <Route path="/coursedescrip2">
-            <CourseDescrip2 />
-          </Route>
+
           <Route path="/">
-            <AnimatePresence exitBeforeEnter initial={false}>
-              {!hasName ? (
-                <IntroPage1 setName={setName} key="intro1" />
-              ) : !hasTaken || !hasTaking ? (
-                <IntroPage2 key="intro2" setTaken={setTaken} setTaking={setTaking} name={name} courses={courses} />
-              ) : (
-                <MainPage1
-                  key="main1"
-                  taken={taken}
-                  taking={taking}
-                  courses={courses}
-                  editMode={editMode}
-                  setTaken={setTaken}
-                  setTaking={setTaking}
-                />
-              )}
-            </AnimatePresence>
+            <Layout name={name} hasIntroData={hasIntroData} editMode={editMode} toggleEditMode={toggleEditMode}>
+              {/* <AnimatePresence exitBeforeEnter> */}
+              <Switch>
+                <Route path="/main2">
+                  <MainPage2 key="main2" />
+                </Route>
+                <Route path="/settings">
+                  <SettingsPage />
+                </Route>
+                <Route path="/coursedescrip1">
+                  <CourseDescrip1 />
+                </Route>
+                <Route path="/coursedescrip2">
+                  <CourseDescrip2 />
+                </Route>
+                <Route path="/">
+                  <MainPage1
+                    key="main1"
+                    name={name}
+                    taken={taken}
+                    taking={taking}
+                    courses={courses}
+                    editMode={editMode}
+                    setTaken={setTaken}
+                    setTaking={setTaking}
+                  />
+                </Route>
+              </Switch>
+              {/* </AnimatePresence> */}
+            </Layout>
           </Route>
         </Switch>
-        {/* </AnimatePresence> */}
-      </Layout>
+      </AnimatePresence>
     </div>
   );
 }
