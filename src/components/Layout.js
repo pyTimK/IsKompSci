@@ -22,16 +22,25 @@ import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import UseAnimations from "react-useanimations";
 import menu4 from "react-useanimations/lib/menu4";
 import clsx from "clsx";
-import { useHistory } from "react-router";
+import { useHistory, useLocation } from "react-router";
+import useLocalStorage from "../hooks/useLocalStorage";
+import { ReactFlowProvider } from "react-flow-renderer";
 
 const Layout = ({ name, hasIntroData, children, editMode, toggleEditMode }) => {
   const history = useHistory();
+  const location = useLocation();
   const classes = useStyles();
   const [drawer, toggleDrawer] = useToggle(false);
-  const [tab, setTab] = useState(0);
+  const [tab, setTab] = useLocalStorage("tabIndex", 0);
 
   if (!hasIntroData) {
     history.push("/intro1");
+  }
+
+  if (location.pathname === "/main2" && tab === 0) {
+    setTab(1);
+  } else if (location.pathname !== "/main2" && tab === 1) {
+    setTab(0);
   }
 
   const drawerItems = [
@@ -101,7 +110,7 @@ const Layout = ({ name, hasIntroData, children, editMode, toggleEditMode }) => {
             </AppBar>
             <div className={clsx(classes.toolbarHeight, classes.marginBottom)}></div>
           </motion.div>
-          {children}
+          <ReactFlowProvider>{children}</ReactFlowProvider>
         </div>
       )}
     </div>

@@ -5,7 +5,13 @@
 
 .main-wrapper {
     padding: 0 16px;
-    
+}
+
+.main2-wrapper {
+    /* height: calc(100% - 48px); */
+    position: fixed;
+    width: 100%;
+    bottom: 0;
 }
 
 .main-center {
