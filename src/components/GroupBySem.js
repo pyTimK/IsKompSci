@@ -1,34 +1,6 @@
 import { motion } from "framer-motion";
 
-const GroupBySem = ({ tighten, taken, taking, courses, handleCourseTap }) => {
-  const groupBySem = (courses) => {
-    const groupedCourses = {};
-    const specialCourses = {
-      PE: ["1Y-1S", "1Y-2S", "2Y-1S", "2Y-2S"],
-      NSTP: ["2Y-1S", "2Y-2S"],
-    };
-
-    const pushGroupedCourses = (sem, course) => {
-      if (sem in groupedCourses) {
-        groupedCourses[sem].push(course);
-      } else {
-        groupedCourses[sem] = [course];
-      }
-    };
-
-    courses.forEach((course) => {
-      if (course.subject in specialCourses) {
-        specialCourses[course.subject].forEach((sem) => pushGroupedCourses(sem, course));
-        return;
-      }
-      pushGroupedCourses(course.offered, course);
-    });
-
-    return groupedCourses;
-  };
-
-  const groupedBySemCourses = groupBySem(courses);
-
+const GroupBySem = ({ tighten, taken, taking, groupedBySemCourses, handleCourseTap }) => {
   return (
     <div id="group-by-sem-div">
       {Object.entries(groupedBySemCourses).map((semCourse, index) => {
@@ -47,7 +19,7 @@ const GroupBySem = ({ tighten, taken, taking, courses, handleCourseTap }) => {
 
                 return (
                   <motion.div
-                    onTap={(e) => handleCourseTap({ e, course, subject, takenStatus })}
+                    onTap={(e) => handleCourseTap({ e, subject, takenStatus })}
                     whileTap={{ scale: 0.8 }}
                     className={`course-box ${takenStatus}`}
                     key={course.id}>

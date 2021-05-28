@@ -1,4 +1,4 @@
-import { Button, Typography } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { useHistory } from "react-router";
@@ -32,7 +32,7 @@ const IntroPage1 = ({ name, setName }) => {
         exit={{
           opacity: 0,
         }}>
-        <img className="logo" src="/logo.png" />
+        <img className="logo" src="/logo.png" alt="app logo" />
         <h4>IsKompSci</h4>
 
         <form onSubmit={handleOnSubmit} className="bottom">

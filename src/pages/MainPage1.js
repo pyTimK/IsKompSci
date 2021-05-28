@@ -1,55 +1,21 @@
 import { AnimatePresence, AnimateSharedLayout, motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { useHistory } from "react-router";
+import { useEffect } from "react";
 import GroupBySem from "../components/GroupBySem";
 import Legend from "../components/Legend";
-import useLocalStorage from "../hooks/useLocalStorage";
+import updateCourseStatus from "../functions/updateCourseStatus";
 
-const MainPage1 = ({ taken, taking, setTaken, setTaking, courses, editMode }) => {
-  // const [offset, setOffset] = useLocalStorage(0);
-  // const [mainPage1offset, setMainPage1Offset] = useLocalStorage("mainPage1offset", 0);
-  // // let isMounted = useRef(true);
-
-  // useEffect(() => {
-  //   const updateOffset = () => {
-  //     setOffset(window.pageYOffset);
-  //   };
-  //   window.onscroll = window.addEventListener("scroll", updateOffset, false);
-  //   return () => {
-  //     console.log("offset: ", offset);
-  //     setMainPage1Offset(offset);
-  //     window.removeEventListener("scroll", updateOffset, false);
-  //   };
-  // }, []);
-
-  // console.log(offset);
-
+const MainPage1 = ({ taken, taking, setTaken, setTaking, editMode, graphElements, groupedBySemCourses }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const updateCourseStatus = ({ subject, takenStatus }) => {
-    if (takenStatus === "not-taken") {
-      let newTaken = [...taken, subject];
-      setTaken(newTaken);
-    } else if (takenStatus === "taken") {
-      let newTaken = taken.filter((takenCourse) => takenCourse !== subject);
-      setTaken(newTaken);
-      let newTaking = [...taking, subject];
-      setTaking(newTaking);
-    } else {
-      let newTaking = taking.filter((takenCourse) => takenCourse !== subject);
-      setTaking(newTaking);
-    }
-  };
-
   const showCourseDetails = ({}) => {
-    //
+    //TODO
   };
 
-  const handleCourseTap = ({ e, course, subject, takenStatus }) => {
+  const handleCourseTap = ({ subject, takenStatus, graphElements }) => {
     if (editMode) {
-      updateCourseStatus({ subject, takenStatus });
+      updateCourseStatus({ subject, takenStatus, setTaken, setTaking, graphElements });
     } else {
       showCourseDetails({});
     }
@@ -97,7 +63,12 @@ const MainPage1 = ({ taken, taking, setTaken, setTaking, courses, editMode }) =>
             )}
           </AnimatePresence>
           <motion.div layout>
-            <GroupBySem taken={taken} taking={taking} courses={courses} handleCourseTap={handleCourseTap} />
+            <GroupBySem
+              taken={taken}
+              taking={taking}
+              groupedBySemCourses={groupedBySemCourses}
+              handleCourseTap={({ subject, takenStatus }) => handleCourseTap({ subject, takenStatus, graphElements })}
+            />
           </motion.div>
           <Legend />
         </AnimateSharedLayout>

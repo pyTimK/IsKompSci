@@ -1,13 +1,14 @@
 import { Button } from "@material-ui/core";
-import { AnimatePresence, motion, useAnimation } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 import { useEffect, useState } from "react";
 import GroupBySem from "../components/GroupBySem";
 import Legend from "../components/Legend";
 import "../styles/intro.css";
 import TypewriterComponent from "typewriter-effect";
 import { useHistory } from "react-router";
+import updateCourseStatus from "../functions/updateCourseStatus";
 
-const IntroPage2 = ({ name, hasIntroData, setTaken, setTaking, courses }) => {
+const IntroPage2 = ({ name, hasIntroData, setTaken, setTaking, graphElements, groupedBySemCourses }) => {
   const history = useHistory();
   const exitAnimation = useAnimation();
   const [taken, pageSetTaken] = useState([]);
@@ -18,21 +19,6 @@ const IntroPage2 = ({ name, hasIntroData, setTaken, setTaking, courses }) => {
       history.push("/");
     }
   }, [hasIntroData]);
-
-  const handleCourseTap = ({ subject, takenStatus }) => {
-    if (takenStatus === "not-taken") {
-      let newTaken = [...taken, subject];
-      pageSetTaken(newTaken);
-    } else if (takenStatus === "taken") {
-      let newTaken = taken.filter((takenCourse) => takenCourse !== subject);
-      pageSetTaken(newTaken);
-      let newTaking = [...taking, subject];
-      pageSetTaking(newTaking);
-    } else {
-      let newTaking = taking.filter((takenCourse) => takenCourse !== subject);
-      pageSetTaking(newTaking);
-    }
-  };
 
   return (
     <motion.div
@@ -64,7 +50,7 @@ const IntroPage2 = ({ name, hasIntroData, setTaken, setTaking, courses }) => {
         </motion.h4>
         <div className="top-align">
           <div className="intro-left">
-            <img className="logo" src="/logo.png" />
+            <img className="logo" src="/logo.png" alt="app logo" />
           </div>
           <div className="intro-right">
             {/* <p> */}
@@ -88,8 +74,16 @@ const IntroPage2 = ({ name, hasIntroData, setTaken, setTaking, courses }) => {
             tighten={true}
             taken={taken}
             taking={taking}
-            courses={courses}
-            handleCourseTap={handleCourseTap}
+            groupedBySemCourses={groupedBySemCourses}
+            handleCourseTap={({ subject, takenStatus }) =>
+              updateCourseStatus({
+                subject,
+                takenStatus,
+                setTaken: pageSetTaken,
+                setTaking: pageSetTaking,
+                graphElements,
+              })
+            }
           />
         </div>
 

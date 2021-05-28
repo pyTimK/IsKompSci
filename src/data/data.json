@@ -62,7 +62,7 @@
       "is_image_added": "Yes",
       "units": 3,
       "offered": "1Y-2S",
-      "prerequisites": "CS 12",
+      "prerequisites": "CS 11",
       "requirement": ""
     },
     {
@@ -127,7 +127,7 @@
       "is_image_added": "No",
       "units": 4,
       "offered": "2Y-1S",
-      "prerequisites": "CS 31",
+      "prerequisites": "CS 31, CS 12",
       "requirement": ""
     },
     {

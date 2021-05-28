@@ -16,7 +16,7 @@ import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import DoneOutlinedIcon from "@material-ui/icons/DoneOutlined";
 import { motion } from "framer-motion";
 import useToggle from "../hooks/useToggle";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import UseAnimations from "react-useanimations";
@@ -62,7 +62,7 @@ const Layout = ({ name, hasIntroData, children, editMode, toggleEditMode }) => {
           <SwipeableDrawer open={drawer} onClose={toggleDrawer} onOpen={toggleDrawer}>
             <div className={classes.drawer} role="presentation" onClick={toggleDrawer} onKeyDown={toggleDrawer}>
               <div className={classes.logo}>
-                <img className="logo" src="/logo.png" />
+                <img className="logo" src="/logo.png" alt="app logo" />
               </div>
               <p>Hello!</p>
               <h5>{name}</h5>
