@@ -1,24 +1,22 @@
 import { Button } from "@material-ui/core";
 import { motion, useAnimation } from "framer-motion";
-import { useEffect, useState } from "react";
 import GroupBySem from "../components/GroupBySem";
 import Legend from "../components/Legend";
 import "../styles/intro.css";
 import TypewriterComponent from "typewriter-effect";
 import { useHistory } from "react-router";
 import updateCourseStatus from "../functions/updateCourseStatus";
+import getFromLocalStorage from "../functions/getFromLocalStorage";
+import { useEffect } from "react";
 
-const IntroPage2 = ({ name, hasIntroData, setTaken, setTaking, graphElements, groupedBySemCourses }) => {
+const IntroPage2 = ({ hasIntroData, setHasIntroData, graphElements, groupedBySemCourses }) => {
   const history = useHistory();
   const exitAnimation = useAnimation();
-  const [taken, pageSetTaken] = useState([]);
-  const [taking, pageSetTaking] = useState([]);
+  const name = getFromLocalStorage("name", "Ricardo");
 
   useEffect(() => {
-    if (hasIntroData) {
-      history.push("/");
-    }
-  }, [hasIntroData]);
+    if (hasIntroData) history.push("/");
+  }, [hasIntroData, history]);
 
   return (
     <motion.div
@@ -72,16 +70,12 @@ const IntroPage2 = ({ name, hasIntroData, setTaken, setTaking, graphElements, gr
           <Legend />
           <GroupBySem
             tighten={true}
-            taken={taken}
-            taking={taking}
             groupedBySemCourses={groupedBySemCourses}
-            handleCourseTap={({ subject, takenStatus }) =>
+            handleCourseTap={({ subject, setStatus }) =>
               updateCourseStatus({
                 subject,
-                takenStatus,
-                setTaken: pageSetTaken,
-                setTaking: pageSetTaking,
                 graphElements,
+                setStatus,
               })
             }
           />
@@ -91,8 +85,7 @@ const IntroPage2 = ({ name, hasIntroData, setTaken, setTaking, graphElements, gr
           <Button
             onTap={async (e) => {
               await exitAnimation.start({ opacity: 0, transition: { delay: 0.3 } });
-              setTaking(taking);
-              setTaken(taken);
+              setHasIntroData(true);
             }}
             className="mybutton"
             component={motion.button}

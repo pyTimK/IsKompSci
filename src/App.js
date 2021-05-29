@@ -14,7 +14,7 @@ function App() {
 
   return (
     <div className="App">
-      <CourseStatusWrapper courses={courses} graphElements={graphElements} groupedBySemCourses={groupedBySemCourses} />
+      <CourseStatusWrapper graphElements={graphElements} groupedBySemCourses={groupedBySemCourses} />
     </div>
   );
 }

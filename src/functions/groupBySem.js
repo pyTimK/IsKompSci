@@ -1,5 +1,4 @@
 const groupBySem = (courses) => {
-  console.log("groupBySem RAN");
   const groupedCourses = {};
   const specialCourses = {
     PE: ["1Y-1S", "1Y-2S", "2Y-1S", "2Y-2S"],

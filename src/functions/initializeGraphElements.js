@@ -1,5 +1,4 @@
 const initializeGraphElements = ({ courses, taken, taking }) => {
-  console.log("initializeGraphElements RAN");
   if ([taken, taking].some((r) => [null, undefined].includes(r))) return [];
   const semSequence = [
     //

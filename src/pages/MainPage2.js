@@ -1,23 +1,20 @@
 import { makeStyles } from "@material-ui/core";
 import clsx from "clsx";
-import { motion } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
+import { useEffect } from "react";
 import OverviewFlow from "../components/OverviewFlow";
 
 const MainPage2 = ({ graphElements }) => {
   const classes = useStyles();
+  const divAnimation = useAnimation();
+
+  useEffect(() => {
+    divAnimation.start({ opacity: 1 });
+  }, [divAnimation]);
+
   return (
     <div className="main-bg">
-      <motion.div
-        className={clsx("main2-wrapper", classes.flow)}
-        initial={{
-          opacity: 0,
-        }}
-        animate={{
-          opacity: 1,
-        }}
-        exit={{
-          opacity: 0,
-        }}>
+      <motion.div className={clsx("main2-wrapper", classes.flow)} initial={{ opacity: 0 }} animate={divAnimation}>
         <OverviewFlow graphElements={graphElements} />
       </motion.div>
     </div>

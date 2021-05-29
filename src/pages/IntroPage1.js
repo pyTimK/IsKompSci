@@ -1,23 +1,26 @@
 import { Button } from "@material-ui/core";
-import { motion } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 import { useEffect } from "react";
 import { useHistory } from "react-router";
+import setFromLocalStorage from "../functions/setFromLocalStorage";
 
-const IntroPage1 = ({ name, setName }) => {
+const IntroPage1 = () => {
   const history = useHistory();
-  const handleOnSubmit = (e) => {
+  const divAnimation = useAnimation();
+
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
     let newName = document.getElementById("nameInput").value;
     if (newName !== "") {
-      setName(newName);
+      setFromLocalStorage("name", newName);
+      await divAnimation.start({ opacity: 0, transition: { delay: 0.3 } });
+      history.push("/intro2");
     }
   };
 
   useEffect(() => {
-    if (name !== "") {
-      history.push("/intro2");
-    }
-  }, [name]);
+    divAnimation.start({ opacity: 1 });
+  }, [divAnimation]);
 
   return (
     <div className="intro-bg">
@@ -26,12 +29,7 @@ const IntroPage1 = ({ name, setName }) => {
         initial={{
           opacity: 0,
         }}
-        animate={{
-          opacity: 1,
-        }}
-        exit={{
-          opacity: 0,
-        }}>
+        animate={divAnimation}>
         <img className="logo" src="/logo.png" alt="app logo" />
         <h4>IsKompSci</h4>
 

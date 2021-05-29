@@ -35,7 +35,9 @@
   --darkgray: #5e5e5e;
   --bggray: #eaeaea;
   scroll-behavior: smooth;
+  
 }
+
 
 body {
   margin: 0;
@@ -172,8 +174,6 @@ input:focus {
 } */
 
 
-
-
 /* * COURSE BOXES */
 
 .courses-wrapper {
@@ -214,7 +214,7 @@ input:focus {
 }
 
 .taking {
-  background-color: var(--green) !important;
+  background:#00a87e !important;
   /* border-color: #073d1c; */
 }
 

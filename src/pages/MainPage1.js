@@ -1,38 +1,30 @@
-import { AnimatePresence, AnimateSharedLayout, motion } from "framer-motion";
+import { AnimatePresence, AnimateSharedLayout, motion, useAnimation } from "framer-motion";
 import { useEffect } from "react";
 import GroupBySem from "../components/GroupBySem";
 import Legend from "../components/Legend";
 import updateCourseStatus from "../functions/updateCourseStatus";
 
-const MainPage1 = ({ taken, taking, setTaken, setTaking, editMode, graphElements, groupedBySemCourses }) => {
+const MainPage1 = ({ editMode, graphElements, groupedBySemCourses }) => {
+  const divAnimation = useAnimation();
   useEffect(() => {
+    divAnimation.start({ opacity: 1 });
     window.scrollTo(0, 0);
-  }, []);
+  }, [divAnimation]);
 
   const showCourseDetails = ({}) => {
     //TODO
   };
 
-  const handleCourseTap = ({ subject, takenStatus, graphElements }) => {
+  const handleCourseTap = ({ subject, setStatus }) => {
     if (editMode) {
-      updateCourseStatus({ subject, takenStatus, setTaken, setTaking, graphElements });
+      updateCourseStatus({ subject, graphElements, setStatus });
     } else {
       showCourseDetails({});
     }
   };
   return (
     <div className="main-bg">
-      <motion.div
-        className="main-wrapper"
-        initial={{
-          opacity: 0,
-        }}
-        animate={{
-          opacity: 1,
-        }}
-        exit={{
-          opacity: 0,
-        }}>
+      <motion.div className="main-wrapper" initial={{ opacity: 0 }} animate={divAnimation}>
         <AnimateSharedLayout>
           <AnimatePresence>
             {editMode && (
@@ -64,10 +56,8 @@ const MainPage1 = ({ taken, taking, setTaken, setTaking, editMode, graphElements
           </AnimatePresence>
           <motion.div layout>
             <GroupBySem
-              taken={taken}
-              taking={taking}
               groupedBySemCourses={groupedBySemCourses}
-              handleCourseTap={({ subject, takenStatus }) => handleCourseTap({ subject, takenStatus, graphElements })}
+              handleCourseTap={({ subject, setStatus }) => handleCourseTap({ subject, setStatus })}
             />
           </motion.div>
           <Legend />

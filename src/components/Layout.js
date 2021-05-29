@@ -1,37 +1,25 @@
-import {
-  AppBar,
-  Divider,
-  IconButton,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  makeStyles,
-  SwipeableDrawer,
-  Tab,
-  Tabs,
-  Toolbar,
-} from "@material-ui/core";
+import { AppBar, IconButton, makeStyles, Tab, Tabs, Toolbar } from "@material-ui/core";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import DoneOutlinedIcon from "@material-ui/icons/DoneOutlined";
 import { motion } from "framer-motion";
 import useToggle from "../hooks/useToggle";
 import React from "react";
-import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
-import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import UseAnimations from "react-useanimations";
 import menu4 from "react-useanimations/lib/menu4";
 import clsx from "clsx";
 import { useHistory, useLocation } from "react-router";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { ReactFlowProvider } from "react-flow-renderer";
+import MyDrawer from "./MyDrawer";
 
-const Layout = ({ name, hasIntroData, children, editMode, toggleEditMode }) => {
+const Layout = ({ hasIntroData, children, editMode, toggleEditMode }) => {
   const history = useHistory();
   const location = useLocation();
   const classes = useStyles();
   const [drawer, toggleDrawer] = useToggle(false);
   const [tab, setTab] = useLocalStorage("tabIndex", 0);
+
+  console.log("LAYOUT rendered");
 
   if (!hasIntroData) {
     history.push("/intro1");
@@ -43,12 +31,7 @@ const Layout = ({ name, hasIntroData, children, editMode, toggleEditMode }) => {
     setTab(0);
   }
 
-  const drawerItems = [
-    ["Settings", <SettingsOutlinedIcon />],
-    ["Feedback", <MailOutlineIcon />],
-  ];
-
-  const handleChange = (event, newTab) => {
+  const handleChange = (e, newTab) => {
     if (newTab !== tab) {
       history.push(newTab === 0 ? "/" : "/main2");
     }
@@ -59,25 +42,7 @@ const Layout = ({ name, hasIntroData, children, editMode, toggleEditMode }) => {
     <div className="layout-wrapper">
       {hasIntroData && (
         <div>
-          <SwipeableDrawer open={drawer} onClose={toggleDrawer} onOpen={toggleDrawer}>
-            <div className={classes.drawer} role="presentation" onClick={toggleDrawer} onKeyDown={toggleDrawer}>
-              <div className={classes.logo}>
-                <img className="logo" src="/logo.png" alt="app logo" />
-              </div>
-              <p>Hello!</p>
-              <h5>{name}</h5>
-              <Divider className={classes.drawerDivider} />
-              <List>
-                {drawerItems.map((item) => (
-                  <ListItem button key={item[0]}>
-                    <ListItemIcon className={classes.drawerIcons}>{item[1]}</ListItemIcon>
-                    <ListItemText primary={item[0]} />
-                  </ListItem>
-                ))}
-              </List>
-              <h5 className={classes.iskompsci}>IsKompSci</h5>
-            </div>
-          </SwipeableDrawer>
+          <MyDrawer drawer={drawer} toggleDrawer={toggleDrawer} />
           <motion.div
             initial={{
               y: "-100%",
@@ -118,7 +83,6 @@ const Layout = ({ name, hasIntroData, children, editMode, toggleEditMode }) => {
 };
 
 const useStyles = makeStyles((theme) => {
-  const drawerPadding = "16px";
   return {
     root: {
       flexGrow: 1,
@@ -145,36 +109,12 @@ const useStyles = makeStyles((theme) => {
     marginBottom: {
       // marginBottom: "48px",
     },
-    drawer: {
-      width: 250,
-      backgroundColor: "white",
-      // backgroundColor: green[600],
-      height: "100%",
-      padding: drawerPadding,
-      fontWeight: "300",
-      textAlign: "center",
-      color: "var(--darkgray)",
-    },
-    drawerIcons: {
-      minWidth: "42px",
-    },
+
     drawerDivider: {
       margin: "12px 0",
     },
     avoidClicks: {
       pointerEvents: "none",
-    },
-    iskompsci: {
-      position: "absolute",
-      bottom: "16px",
-      width: `calc(100% - 2 * ${drawerPadding})`,
-      opacity: 0.7,
-
-      // width: `calc(100% - 2 * ${drawerPadding})`,
-    },
-    logo: {
-      textAlign: "center",
-      height: "6rem",
     },
   };
 });

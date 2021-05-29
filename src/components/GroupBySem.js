@@ -1,6 +1,10 @@
-import { motion } from "framer-motion";
+import getFromLocalStorage from "../functions/getFromLocalStorage";
+import CourseBox from "./CourseBox";
 
-const GroupBySem = ({ tighten, taken, taking, groupedBySemCourses, handleCourseTap }) => {
+const GroupBySem = ({ tighten, groupedBySemCourses, handleCourseTap }) => {
+  const taken = getFromLocalStorage("taken", []);
+  const taking = getFromLocalStorage("taking", []);
+
   return (
     <div id="group-by-sem-div">
       {Object.entries(groupedBySemCourses).map((semCourse, index) => {
@@ -12,19 +16,20 @@ const GroupBySem = ({ tighten, taken, taking, groupedBySemCourses, handleCourseT
                 if (["PE", "NSTP"].includes(subject)) {
                   subject = `${subject}-${semCourse[0]}`;
                 }
-
-                let takenStatus = "not-taken";
-                if (taken.includes(subject)) takenStatus = "taken";
-                else if (taking.includes(subject)) takenStatus = "taking";
+                let initialStatus = taken.includes(subject)
+                  ? "taken"
+                  : taking.includes(subject)
+                  ? "taking"
+                  : "not-taken";
 
                 return (
-                  <motion.div
-                    onTap={(e) => handleCourseTap({ e, subject, takenStatus })}
-                    whileTap={{ scale: 0.8 }}
-                    className={`course-box ${takenStatus}`}
-                    key={course.id}>
-                    <p>{course.subject}</p>
-                  </motion.div>
+                  <CourseBox
+                    key={subject}
+                    course={course}
+                    handleCourseTap={handleCourseTap}
+                    subject={subject}
+                    initialStatus={initialStatus}
+                  />
                 );
               })}
             </div>

@@ -2,7 +2,7 @@ import React from "react";
 import ReactFlow, { useStoreState, Controls, useZoomPanHelper } from "react-flow-renderer";
 
 const onLoad = (reactFlowInstance) => {
-  setTimeout(reactFlowInstance.fitView, 0);
+  reactFlowInstance.fitView();
 };
 
 const OverviewFlow = ({ graphElements }) => {
