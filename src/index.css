@@ -97,6 +97,8 @@ h6 {
   --toolbarHeight: 60px;
   --tabsHeight: 48px;
   --tabsIndicatorHeight: 2px;
+  --editModeTextHeight: 90px;
+  --editModeDividerTopMargin: 8px;
   
   color: white;
   background-color: var(--bggray);

@@ -1,7 +1,6 @@
 .main-bg {
     /* height: 100%; */
     padding-top: calc(var(--tabsHeight));
-    border: 1px solid red;
 }
 
 .main-wrapper {
@@ -16,9 +15,16 @@
 }
 
 .main-center {
-    margin-top: 42px;
+    height: var(--editModeTextHeight);
+    vertical-align: text-bottom;
     color: var(--darkgray);
     text-align: center;
+}
+
+.bottom-align {
+    position:absolute;
+    bottom: 0;
+    width: 100%;
 }
 
 .main-center h6 {

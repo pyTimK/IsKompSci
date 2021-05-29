@@ -25,8 +25,10 @@ const EditModeText = ({ editMode, text }) => {
             // y: "-100%",
             transition: { duration: 0.2 },
           }}>
-          <h6>Edit Mode</h6>
-          <p>{text}</p>
+          <div className="bottom-align">
+            <h6>Edit Mode</h6>
+            <p>{text}</p>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>

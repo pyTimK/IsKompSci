@@ -30,14 +30,18 @@ const MainPage2 = ({ editMode, graphElements }) => {
 };
 
 const useStyles = makeStyles((theme) => {
+  console.log("makestylfsdalj");
   return {
     flow: {
       // height: `100vh`,
       height: `calc(100vh - (var(--toolbarHeight) + var(--tabsHeight)))`,
-      // height: (editMode) => `calc(100vh - (${theme.mixins.toolbar.minHeight}px + 48px + ${editMode ? 100 : 0}px))`,
+      height: (editMode) =>
+        `calc(100vh - (var(--toolbarHeight) + var(--tabsHeight) + ${
+          editMode ? "var(--editModeTextHeight)  + var(--editModeDividerTopMargin) + 2px" : "0px"
+        }))`,
     },
     noMargin: {
-      margin: "8px 0 0 0 !important",
+      margin: "var(--editModeDividerTopMargin) 0 0 0 !important",
     },
   };
 });

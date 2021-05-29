@@ -1,6 +1,7 @@
 {
-  "courses": [
-    {
+  "version": 1.0,
+  "AY": "2020-2021",
+  "data": [{
       "id": 1,
       "subject": "CS 10",
       "title": "Introduction to Computing",
