@@ -54,7 +54,6 @@ const IntroPage2 = ({ hasIntroData, setHasIntroData, graphElements, groupedBySem
             {/* <p> */}
             <TypewriterComponent
               onInit={(typewriter) => {
-                console.log("hifds");
                 typewriter.pauseFor(2000).typeString("SELECT ALL THE COURSES YOU HAVE TAKEN!").start();
               }}
               options={{

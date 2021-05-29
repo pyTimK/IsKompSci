@@ -1,5 +1,8 @@
-const initializeGraphElements = ({ courses, taken, taking }) => {
+const initializeGraphElements = ({ courses, taken, taking, savedGraphPositions }) => {
   if ([taken, taking].some((r) => [null, undefined].includes(r))) return [];
+
+  const hasSavedGraph = savedGraphPositions !== null;
+
   const semSequence = [
     //
     "1Y-1S",
@@ -20,7 +23,14 @@ const initializeGraphElements = ({ courses, taken, taking }) => {
   const graphElements = courses
     .map((course) => {
       let semIndex = semSequence.findIndex((sem) => sem === course.offered);
-      semCounts[semIndex]++;
+      let position;
+      if (hasSavedGraph) {
+        position = savedGraphPositions[course.subject];
+      } else {
+        semCounts[semIndex]++;
+        position = { x: 120 * (semCounts[semIndex] - 1), y: 100 * semIndex };
+      }
+
       return {
         id: course.subject,
         className: taken.includes(course.subject) ? "taken" : taking.includes(course.subject) ? "taking" : "not-taken",
@@ -29,7 +39,7 @@ const initializeGraphElements = ({ courses, taken, taking }) => {
         data: {
           label: <>{course.subject}</>,
         },
-        position: { x: 120 * (semCounts[semIndex] - 1), y: 100 * semIndex },
+        position: position,
       };
     })
     .filter((course) => !["PE", "NSTP"].includes(course.id));

@@ -3,7 +3,7 @@ import { useState } from "react";
 
 const CourseBox = ({ course, handleCourseTap, subject, initialStatus }) => {
   const [status, setStatus] = useState(initialStatus);
-  // console.log("Course Box ", subject, " renders ", status);
+
   return (
     <motion.div
       onTap={(e) => handleCourseTap({ e, subject, status, setStatus })}

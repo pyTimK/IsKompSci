@@ -10,7 +10,8 @@ function App() {
   const groupedBySemCourses = groupBySem(courses);
   const taken = getFromLocalStorage("taken", []);
   const taking = getFromLocalStorage("taking", []);
-  const graphElements = initializeGraphElements({ courses, taken, taking });
+  const savedGraphPositions = getFromLocalStorage("graphPositions", null);
+  const graphElements = initializeGraphElements({ courses, taken, taking, savedGraphPositions });
 
   return (
     <div className="App">

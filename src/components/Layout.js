@@ -51,7 +51,7 @@ const Layout = ({ hasIntroData, children, editMode, toggleEditMode }) => {
               y: 0,
             }}>
             <AppBar>
-              <Toolbar>
+              <Toolbar className={classes.toolbar}>
                 <IconButton onClick={toggleDrawer} edge="start" className={classes.menuButton} aria-label="menu">
                   <UseAnimations className={classes.avoidClicks} strokeColor="white" animation={menu4} size={36} />
                 </IconButton>
@@ -68,7 +68,7 @@ const Layout = ({ hasIntroData, children, editMode, toggleEditMode }) => {
                   {editMode ? <DoneOutlinedIcon /> : <EditOutlinedIcon />}
                 </IconButton>
               </Toolbar>
-              <Tabs value={tab} onChange={handleChange} variant="fullWidth">
+              <Tabs className={classes.tabs} value={tab} onChange={handleChange} variant="fullWidth">
                 <Tab className={classes.tabLabel} label="Cards" />
                 <Tab className={classes.tabLabel} label="Graph" />
               </Tabs>
@@ -86,6 +86,10 @@ const useStyles = makeStyles((theme) => {
   return {
     root: {
       flexGrow: 1,
+    },
+    toolbar: {
+      height: "var(--toolbarHeight) !important",
+      minHeight: "var(--toolbarHeight) !important",
     },
     menuButton: {
       marginRight: theme.spacing(2),
@@ -105,7 +109,9 @@ const useStyles = makeStyles((theme) => {
       color: "white",
       letterSpacing: "0.05rem",
     },
-    toolbarHeight: theme.mixins.toolbar,
+    toolbarHeight: {
+      height: "var(--toolbarHeight)",
+    },
     marginBottom: {
       // marginBottom: "48px",
     },
@@ -115,6 +121,10 @@ const useStyles = makeStyles((theme) => {
     },
     avoidClicks: {
       pointerEvents: "none",
+    },
+
+    tabs: {
+      height: "var(--tabsHeight) !important",
     },
   };
 });

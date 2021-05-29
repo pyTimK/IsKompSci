@@ -91,9 +91,16 @@ h6 {
   font-size: 1.25rem;
 }
 
+
+/** LAYOUT */
 .layout-wrapper {
+  --toolbarHeight: 60px;
+  --tabsHeight: 48px;
+  --tabsIndicatorHeight: 2px;
+  
   color: white;
   background-color: var(--bggray);
+
 }
 
 .full-width {

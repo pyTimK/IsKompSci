@@ -13,7 +13,7 @@ const Home = ({ hasIntroData, graphElements, groupedBySemCourses }) => {
     <Layout hasIntroData={hasIntroData} editMode={editMode} toggleEditMode={toggleEditMode}>
       <Switch>
         <Route path="/main2">
-          <MainPage2 graphElements={graphElements} />
+          <MainPage2 editMode={editMode} graphElements={graphElements} />
         </Route>
         <Route path="/settings">
           <SettingsPage />

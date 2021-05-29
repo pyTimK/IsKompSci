@@ -5,7 +5,7 @@ const onLoad = (reactFlowInstance) => {
   reactFlowInstance.fitView();
 };
 
-const OverviewFlow = ({ graphElements }) => {
+const OverviewFlow = ({ editMode, graphElements = [] }) => {
   const transformState = useStoreState((store) => store.transform);
   const { transform } = useZoomPanHelper();
   const onMoveStart = (flowTransform) => {
@@ -15,7 +15,7 @@ const OverviewFlow = ({ graphElements }) => {
   return (
     <ReactFlow
       nodesConnectable={false}
-      nodesDraggable={false}
+      nodesDraggable={editMode}
       elements={graphElements}
       onLoad={onLoad}
       onMoveStart={onMoveStart}
@@ -23,6 +23,8 @@ const OverviewFlow = ({ graphElements }) => {
       minZoom={0.3}
       elementsSelectable={false}
       arrowHeadColor="black"
+      snapToGrid={true}
+      snapGrid={[10, 10]}
 
       //
     >
