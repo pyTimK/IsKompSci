@@ -7,15 +7,19 @@ import TypewriterComponent from "typewriter-effect";
 import { useHistory } from "react-router";
 import updateCourseStatus from "../functions/updateCourseStatus";
 import getFromLocalStorage from "../functions/getFromLocalStorage";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
+import CoursesDataContext from "../contexts/CoursesDataContext";
 
-const IntroPage2 = ({ hasIntroData, setHasIntroData, graphElements, groupedBySemCourses }) => {
+const IntroPage2 = ({ hasIntroData, setHasIntroData }) => {
+  const data = useContext(CoursesDataContext);
+  const groupedBySemCourses = data.groupedBySemCourses;
+  const graphElements = data.graphElements;
   const history = useHistory();
   const exitAnimation = useAnimation();
   const name = getFromLocalStorage("name", "Ricardo");
 
   useEffect(() => {
-    if (hasIntroData) history.push("/");
+    if (hasIntroData) history.push("/1");
   }, [hasIntroData, history]);
 
   return (

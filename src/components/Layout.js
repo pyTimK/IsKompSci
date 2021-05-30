@@ -1,13 +1,13 @@
 import { AppBar, IconButton, makeStyles, Tab, Tabs, Toolbar } from "@material-ui/core";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import DoneOutlinedIcon from "@material-ui/icons/DoneOutlined";
-import { motion } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 import useToggle from "../hooks/useToggle";
-import React from "react";
+import React, { useEffect } from "react";
 import UseAnimations from "react-useanimations";
 import menu4 from "react-useanimations/lib/menu4";
 import clsx from "clsx";
-import { useHistory, useLocation } from "react-router";
+import { useHistory, useLocation, useParams } from "react-router";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { ReactFlowProvider } from "react-flow-renderer";
 import MyDrawer from "./MyDrawer";
@@ -18,6 +18,17 @@ const Layout = ({ hasIntroData, children, editMode, toggleEditMode }) => {
   const classes = useStyles();
   const [drawer, toggleDrawer] = useToggle(false);
   const [tab, setTab] = useLocalStorage("tabIndex", 0);
+  const appbarAnimation = useAnimation();
+
+  const { animate } = useParams();
+  //* animate!=1 means we dont need to reanimate, e.g., using back
+
+  useEffect(() => {
+    if (animate === "1") {
+      appbarAnimation.set({ y: "-100%" });
+      appbarAnimation.start({ y: 0 }).then(() => history.push("/"));
+    }
+  }, [animate, appbarAnimation, history]);
 
   console.log("LAYOUT rendered");
 
@@ -25,17 +36,18 @@ const Layout = ({ hasIntroData, children, editMode, toggleEditMode }) => {
     history.push("/intro1");
   }
 
-  if (location.pathname === "/main2" && tab === 0) {
+  if (location.pathname === "/main2" && tab !== 1) {
     setTab(1);
-  } else if (location.pathname !== "/main2" && tab === 1) {
+  } else if (location.pathname !== "/main2" && tab !== 0) {
     setTab(0);
   }
 
   const handleChange = (e, newTab) => {
     if (newTab !== tab) {
+      if (editMode) toggleEditMode();
+      setTab(newTab);
       history.push(newTab === 0 ? "/" : "/main2");
     }
-    setTab(newTab);
   };
 
   return (
@@ -43,14 +55,8 @@ const Layout = ({ hasIntroData, children, editMode, toggleEditMode }) => {
       {hasIntroData && (
         <div>
           <MyDrawer drawer={drawer} toggleDrawer={toggleDrawer} />
-          <motion.div
-            initial={{
-              y: "-100%",
-            }}
-            animate={{
-              y: 0,
-            }}>
-            <AppBar>
+          <motion.div animate={appbarAnimation}>
+            <AppBar position="absolute">
               <Toolbar className={classes.toolbar}>
                 <IconButton onClick={toggleDrawer} edge="start" className={classes.menuButton} aria-label="menu">
                   <UseAnimations className={classes.avoidClicks} strokeColor="white" animation={menu4} size={36} />

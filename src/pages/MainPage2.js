@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import EditModeText from "../components/EditModeText";
 import OverviewFlow from "../components/OverviewFlow";
 
-const MainPage2 = ({ editMode, graphElements }) => {
+const MainPage2 = ({ editMode }) => {
   const classes = useStyles(editMode);
   const divAnimation = useAnimation();
 
@@ -20,7 +20,7 @@ const MainPage2 = ({ editMode, graphElements }) => {
           <EditModeText editMode={editMode} text="DRAG COURSES TO MODIFY VIEW" />
           {editMode && <hr className={classes.noMargin} />}
           <motion.div layout className={clsx("main2-wrapper", classes.flow)}>
-            <OverviewFlow editMode={editMode} graphElements={graphElements} />
+            <OverviewFlow editMode={editMode} />
             {/* <h1>fds</h1> */}
           </motion.div>
         </motion.div>
@@ -30,11 +30,8 @@ const MainPage2 = ({ editMode, graphElements }) => {
 };
 
 const useStyles = makeStyles((theme) => {
-  console.log("makestylfsdalj");
   return {
     flow: {
-      // height: `100vh`,
-      height: `calc(100vh - (var(--toolbarHeight) + var(--tabsHeight)))`,
       height: (editMode) =>
         `calc(100vh - (var(--toolbarHeight) + var(--tabsHeight) + ${
           editMode ? "var(--editModeTextHeight)  + var(--editModeDividerTopMargin) + 2px" : "0px"

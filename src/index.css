@@ -1,39 +1,16 @@
-@font-face {
-  font-family: metropolis;
-  src: url(fonts/Metropolis-Light.otf) format('truetype');
-  font-weight: 300;
-}
-@font-face {
-  font-family: metropolis;
-  src: url(fonts/Metropolis-Regular.otf) format('truetype');
-  font-weight: 400;
-}
-@font-face {
-  font-family: metropolis;
-  src: url(fonts/Metropolis-Medium.otf) format('truetype');
-  font-weight: 500;
-}
-@font-face {
-  font-family: metropolis;
-  src: url(fonts/Metropolis-SemiBold.otf) format('truetype');
-  font-weight: 600;
-}
-@font-face {
-  font-family: metropolis;
-  src: url(fonts/Metropolis-Bold.otf) format('truetype');
-  font-weight: 700;
-}
-
-
 :root {
   --green: #0A5E2A;
   --darkgreen: #03461c;
   --lightgreen: #6DAC4F;
+  --bluegreen: #00a87e;
   --white: #EFEFE7;
   --red: #FE0000;
   --gray: #919191;
   --darkgray: #5e5e5e;
   --bggray: #eaeaea;
+  --takenColor: var(--lightgreen);
+  --takingColor: var(--bluegreen);
+  --not-takenColor: var(--gray);
   scroll-behavior: smooth;
   
 }
@@ -90,6 +67,7 @@ h6 {
   font-weight: 400;
   font-size: 1.25rem;
 }
+
 
 
 /** LAYOUT */
@@ -185,6 +163,7 @@ input:focus {
 
 /* * COURSE BOXES */
 
+
 .courses-wrapper {
   background-color: var(--white);
   height: 55vh;
@@ -193,6 +172,16 @@ input:focus {
   padding: 8px;
   vertical-align: top;
 }
+
+.div-full-screen {
+  position: fixed;
+  /* pointer-events: none; */
+  z-index: 1101;
+  background-color: var(--green);
+  opacity: 0,
+}
+
+
 
 .course-box {
   
@@ -218,17 +207,17 @@ input:focus {
 }
 
 .taken {
-  background-color: var(--lightgreen) !important;
+  background-color: var(--takenColor) !important;
   /* border-color: #4c7937; */
 }
 
 .taking {
-  background:#00a87e !important;
+  background:var(--takingColor) !important;
   /* border-color: #073d1c; */
 }
 
 .not-taken {
-  background-color: var(--gray) !important;
+  background-color: var(--not-takenColor) !important;
   /* border-color: #5f5f5f; */
 }
 

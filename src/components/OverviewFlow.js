@@ -1,18 +1,16 @@
-import React, { useState } from "react";
-import ReactFlow, { useStoreState, Controls, useZoomPanHelper, Background } from "react-flow-renderer";
+import React, { useContext } from "react";
+import ReactFlow, { useStoreState, Controls, useZoomPanHelper } from "react-flow-renderer";
+import CoursesDataContext from "../contexts/CoursesDataContext";
 import getFromLocalStorage from "../functions/getFromLocalStorage";
 import setFromLocalStorage from "../functions/setFromLocalStorage";
 
 const onLoad = (reactFlowInstance) => {
-  let output = "";
-  reactFlowInstance.getElements().forEach((element) => {
-    output += `"${element.id}": ${JSON.stringify(element.position)}, `;
-  });
-  console.log(output);
   reactFlowInstance.fitView();
 };
 
-const OverviewFlow = ({ editMode, graphElements = [] }) => {
+const OverviewFlow = ({ editMode }) => {
+  const data = useContext(CoursesDataContext);
+  const graphElements = data.graphElements || [];
   // const [rfInstance, setRfInstance] = useState(null);
   const transformState = useStoreState((store) => store.transform);
   const { transform } = useZoomPanHelper();

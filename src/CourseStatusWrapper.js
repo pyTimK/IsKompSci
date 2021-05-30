@@ -6,8 +6,9 @@ import IntroPage2 from "./pages/IntroPage2";
 import getFromLocalStorage from "./functions/getFromLocalStorage";
 import { useState } from "react";
 import Home from "./Home";
+import CoursePage from "./pages/CoursePage";
 
-const CourseStatusWrapper = ({ graphElements, groupedBySemCourses }) => {
+const CourseStatusWrapper = () => {
   const name = getFromLocalStorage("name", "");
   const taken = getFromLocalStorage("taken", null);
   const taking = getFromLocalStorage("taking", null);
@@ -19,16 +20,15 @@ const CourseStatusWrapper = ({ graphElements, groupedBySemCourses }) => {
         <IntroPage1 />
       </Route>
       <Route path="/intro2">
-        <IntroPage2
-          hasIntroData={hasIntroData}
-          setHasIntroData={setHasIntroData}
-          graphElements={graphElements}
-          groupedBySemCourses={groupedBySemCourses}
-        />
+        <IntroPage2 hasIntroData={hasIntroData} setHasIntroData={setHasIntroData} />
       </Route>
 
-      <Route path="/">
-        <Home hasIntroData={hasIntroData} graphElements={graphElements} groupedBySemCourses={groupedBySemCourses} />
+      <Route path="/course/:id">
+        <CoursePage hasIntroData={hasIntroData} />
+      </Route>
+
+      <Route path="/:animate?">
+        <Home hasIntroData={hasIntroData} />
       </Route>
     </Switch>
   );
