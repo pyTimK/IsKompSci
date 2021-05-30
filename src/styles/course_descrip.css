@@ -1,6 +1,21 @@
-.course-descrip-bg {
+.course-page-bg {
+    position: fixed;
     width: 100vw;
     height: 100vh;
-    background-color: var(--darkgreen);
+    background-color: var(--green);
     color: white;
+}
+
+.course-descrip-bg {
+    --padding: 16px;
+    position: absolute;
+    top: 45%;
+    z-index: 1;
+    width: calc(100% - 2 * var(--padding));
+    min-height: calc(55% - 2 * var(--padding));
+    padding: var(--padding);
+    background-color: var(--white);
+    color: var(--darkergray);
+    /* text-align: justify; */
+    border-radius: 2em 2em 0 0;
 }

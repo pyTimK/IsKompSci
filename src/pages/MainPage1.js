@@ -23,6 +23,7 @@ const MainPage1 = ({ editMode }) => {
     if (subject === "") return;
     if (subject.startsWith("PE-")) subject = "PE";
     else if (subject.startsWith("NSTP-")) subject = "NSTP";
+    subject = encodeURIComponent(subject);
     exitAnimate().then(() => history.push(`/course/${subject}`));
   };
 

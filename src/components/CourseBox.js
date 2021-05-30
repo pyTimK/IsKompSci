@@ -29,7 +29,7 @@ const CourseBox = ({ course, handleCourseTap, subject, initialStatus }) => {
       backgroundColor: "var(--darkgreen)",
       transition: {
         duration: 0.3,
-        ease: "easeInOut",
+        ease: "easeOut",
       },
     });
   };
