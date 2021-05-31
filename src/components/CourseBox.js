@@ -26,7 +26,7 @@ const CourseBox = ({ course, handleCourseTap, subject, initialStatus }) => {
       width: window.screen.width,
       height: window.screen.height,
 
-      backgroundColor: "var(--darkgreen)",
+      backgroundColor: "var(--materialgreen)",
       transition: {
         duration: 0.3,
         ease: "easeOut",

@@ -13,7 +13,6 @@ const CourseStatusWrapper = () => {
   const taken = getFromLocalStorage("taken", null);
   const taking = getFromLocalStorage("taking", null);
   const [hasIntroData, setHasIntroData] = useState(name !== "" && taken !== null && taking !== null);
-  console.log("CourseStatusWrapper rendered");
 
   return (
     <Switch>

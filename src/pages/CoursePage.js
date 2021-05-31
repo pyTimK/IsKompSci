@@ -11,6 +11,7 @@ const offsetNeeded = 0.45 * window.screen.height;
 
 const CoursePage = ({ hasIntroData }) => {
   const [opacity, setOpacity] = useState(1);
+  const [willGoToTips, setWillGoToTips] = useState(false);
   const classes = useStyles(opacity);
   const { id } = useParams();
   const history = useHistory();
@@ -22,10 +23,16 @@ const CoursePage = ({ hasIntroData }) => {
 
   const showAppbar = opacity === 0;
 
-  console.log("CoursePage rendered");
+  console.log("location: ", history.location);
+  console.log("path: ", path);
+
   useEffect(() => {
     window.scrollTo(0, 0);
     function handleScroll() {
+      if (willGoToTips && window.scrollY === 0) {
+        setWillGoToTips(false);
+        history.replace(`${id}/tips`);
+      }
       const y = window.scrollY;
       if (y >= offsetNeeded) {
         setOpacity(0);
@@ -39,17 +46,15 @@ const CoursePage = ({ hasIntroData }) => {
     return () => {
       window.removeEventListener("scroll", handleScroll, false);
     };
-  }, []);
+  }, [willGoToTips, history, id]);
 
   if (!hasIntroData) {
     history.push("/intro1");
   }
 
-  //TODO CHANGE IMAGE TO BE
   let image;
   try {
-    const imgName = id.split(/\*|\s|_/).join("_");
-    console.log(imgName);
+    const imgName = course.subject.split(/[^\w\d]/).join("_");
     image = require(`../assets/img/${imgName}.png`).default;
   } catch (error) {
     console.log("Error: ", error.message);
@@ -64,8 +69,8 @@ const CoursePage = ({ hasIntroData }) => {
             <motion.div
               initial={{ x: "-100%" }}
               animate={{ x: 0, transition: { delay: 0.1, duration: 1, type: "spring" } }}>
-              <IconButton onClick={() => history.goBack()} className={classes.backButton} aria-label="menu">
-                <ArrowBackIosIcon fontSize="large" className={classes.backIcon} color="secondary" />
+              <IconButton onClick={() => history.goBack()} className={classes.backButton} aria-label="back">
+                <ArrowBackIosIcon fontSize="large" className={classes.backIcon} />
               </IconButton>
             </motion.div>
             <div className={classes.spacer}></div>
@@ -88,16 +93,18 @@ const CoursePage = ({ hasIntroData }) => {
             </motion.div>
           </div>
         </div>
-        <AnimatePresence exitBeforeEnter>
-          <Switch key={path}>
-            <Route path={`${path}/feedback`}>
-              <CourseDescrip2 course={course} />
-            </Route>
-            <Route path={`${path}`}>
-              <CourseDescrip1 course={course} />
-            </Route>
-          </Switch>
-        </AnimatePresence>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="course-descrip-bg">
+          <AnimatePresence exitBeforeEnter>
+            <Switch location={history.location} key={history.location.pathname}>
+              <Route path={`${path}/tips`}>
+                <CourseDescrip2 course={course} />
+              </Route>
+              <Route path={`${path}`}>
+                <CourseDescrip1 course={course} setWillGoToTips={setWillGoToTips} />
+              </Route>
+            </Switch>
+          </AnimatePresence>
+        </motion.div>
         <AnimatePresence>
           {showAppbar && (
             <motion.div
@@ -134,6 +141,7 @@ const useStyles = makeStyles((theme) => {
     },
     backIcon: {
       margin: "0 !important",
+      color: "var(--white)",
       transform: "translateX(-12px)",
     },
     spacer: {
@@ -172,14 +180,14 @@ const useStyles = makeStyles((theme) => {
       width: "100%",
       textAlign: "center",
       top: 0,
-      backgroundColor: "var(--green)",
+      backgroundColor: "var(--materialgreen)",
       zIndex: 4,
       paddingTop: "auto",
       // height: "60px",
       fontWeight: 600,
       fontSize: "1.5rem",
       color: "white",
-      boxShadow: "0px 1px 2px #333",
+      // boxShadow: "0px 1px 2px #333",
     },
   };
 });
