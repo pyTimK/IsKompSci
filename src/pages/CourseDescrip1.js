@@ -180,6 +180,7 @@ const useStyles = makeStyles((theme) => {
     },
     buttonWrapper: {
       textAlign: "center",
+      paddingTop: "20px",
     },
   };
 });
