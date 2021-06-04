@@ -9,6 +9,7 @@ import updateCourseStatus from "../functions/updateCourseStatus";
 import getFromLocalStorage from "../functions/getFromLocalStorage";
 import { useContext, useEffect } from "react";
 import CoursesDataContext from "../contexts/CoursesDataContext";
+import { auth } from "../firebase";
 
 const IntroPage2 = ({ hasIntroData, setHasIntroData }) => {
   const data = useContext(CoursesDataContext);
@@ -17,6 +18,8 @@ const IntroPage2 = ({ hasIntroData, setHasIntroData }) => {
   const history = useHistory();
   const exitAnimation = useAnimation();
   const name = getFromLocalStorage("name", "Ricardo");
+  const user = auth.currentUser;
+  console.log("Current User in Intro2: ", user);
 
   useEffect(() => {
     if (hasIntroData) history.push("/1");

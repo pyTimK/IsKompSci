@@ -2,21 +2,30 @@ import { Button } from "@material-ui/core";
 import { motion, useAnimation } from "framer-motion";
 import { useEffect, useRef } from "react";
 import { useHistory } from "react-router";
+import { auth } from "../firebase";
 import setFromLocalStorage from "../functions/setFromLocalStorage";
 
-const IntroPage1 = () => {
+const IntroPage1 = ({ hasIntroData }) => {
   const history = useHistory();
   const inputRef = useRef();
   const divAnimation = useAnimation();
 
-  const handleOnSubmit = async (e) => {
+  useEffect(() => {
+    if (hasIntroData) history.push("/intro2");
+  }, [hasIntroData, history]);
+
+  const handleOnSubmit = (e) => {
     e.preventDefault();
     let newName = inputRef.current.value;
 
     if (newName !== "") {
       setFromLocalStorage("name", newName);
-      await divAnimation.start({ opacity: 0, transition: { delay: 0.3 } });
-      history.push("/intro2");
+      auth
+        .signInAnonymously()
+        .then((result) => result.user.updateProfile({ displayName: newName }))
+        .then(() => divAnimation.start({ opacity: 0, transition: { delay: 0.3 } }))
+        .then(() => history.push("/intro2"))
+        .catch((error) => console.log("Error loging in: ", error.message));
     }
   };
 

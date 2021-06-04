@@ -29,7 +29,7 @@ const CourseDescrip1 = ({ course, setWillGoToTips }) => {
         <p>
           It is recommended to take this course during the{" "}
           <strong className={classes.inline}>{abbvreviations[course.offered.charAt(3)]} Semester </strong> of your{" "}
-          <strong className={classes.inline}>{abbvreviations[course.offered.charAt(0)]} Academic Year</strong>
+          <strong className={classes.inline}>{abbvreviations[course.offered.charAt(0)]} Academic Year</strong>.
         </p>
       </div>
       {(textbooks.length > 0 || websites.length > 0) && (

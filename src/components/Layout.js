@@ -30,8 +30,6 @@ const Layout = ({ hasIntroData, children, editMode, toggleEditMode }) => {
     }
   }, [animate, appbarAnimation, history]);
 
-  console.log("LAYOUT rendered");
-
   if (!hasIntroData) {
     history.push("/intro1");
   }

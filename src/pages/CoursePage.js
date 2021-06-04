@@ -23,9 +23,6 @@ const CoursePage = ({ hasIntroData }) => {
 
   const showAppbar = opacity === 0;
 
-  console.log("location: ", history.location);
-  console.log("path: ", path);
-
   useEffect(() => {
     window.scrollTo(0, 0);
     function handleScroll() {

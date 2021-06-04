@@ -153,7 +153,6 @@ input:focus {
 
 
 
-
 /** BUTTON */
 
 .mybutton {
@@ -166,7 +165,7 @@ input:focus {
   box-shadow: 0 1px 10px rgb(54, 54, 54) !important;
 }
 
-  /** Button2 for Submit*/
+  /** Button2 for View Tips*/
 
 .mybutton2 {
   letter-spacing: 0.1rem;
@@ -176,6 +175,34 @@ input:focus {
   padding: 8px 45px !important;
   border-radius: 2rem !important;
   box-shadow: 0 1px 10px rgb(54, 54, 54) !important;
+
+}
+
+/** Button3 for Submit*/
+
+.mybutton3 {
+  letter-spacing: 0.1rem;
+  background-color: var(--green) !important;
+  color: var(--white) !important;
+  width: 30%;
+  /* margin: 0 auto !important; */
+  /* padding: 8px 45px !important; */
+  /* border-radius: 2rem !important; */
+  box-shadow: 0 1px 10px rgb(54, 54, 54) !important;
+
+}
+
+/** Button4 for Cancel*/
+
+.mybutton4 {
+  letter-spacing: 0.1rem;
+  background-color: transparent !important;
+  color: var(--green) !important;
+  width: 30%;
+  /* margin: 0 auto !important; */
+  /* padding: 8px 45px !important; */
+  /* border-radius: 2rem !important; */
+  /* box-shadow: 0 1px 10px rgb(54, 54, 54) !important; */
 
 }
 

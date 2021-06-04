@@ -26,8 +26,6 @@ function App() {
 
   const graphElements = initializeGraphElements({ courses, taken, taking, savedGraphPositions });
 
-  // const divRef = useRef();
-
   const data = { courses: courses, groupedBySemCourses: groupedBySemCourses, graphElements: graphElements };
   return (
     <div className="App">
