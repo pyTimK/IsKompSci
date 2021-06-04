@@ -1,7 +1,7 @@
 import { Route, Switch, useHistory, useParams, useRouteMatch } from "react-router";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import { IconButton, makeStyles } from "@material-ui/core";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import CoursesDataContext from "../contexts/CoursesDataContext";
 import CourseDescrip2 from "./CourseDescrip2";
 import CourseDescrip1 from "./CourseDescrip1";
@@ -18,8 +18,11 @@ const CoursePage = ({ hasIntroData }) => {
   const { path } = useRouteMatch();
 
   const data = useContext(CoursesDataContext);
-  const courses = data.courses;
-  const course = courses.find((course) => course.subject === decodeURIComponent(id));
+
+  const course = useMemo(() => {
+    const courses = data.courses;
+    return courses.find((course) => course.subject === decodeURIComponent(id));
+  }, [data, id]);
 
   const showAppbar = opacity === 0;
 
@@ -45,18 +48,22 @@ const CoursePage = ({ hasIntroData }) => {
     };
   }, [willGoToTips, history, id]);
 
-  if (!hasIntroData) {
-    history.push("/intro1");
-  }
+  useEffect(() => {
+    if (!hasIntroData) history.push("/intro1");
+  }, [hasIntroData, history]);
 
-  let image;
-  try {
-    const imgName = course.subject.split(/[^\w\d]/).join("_");
-    image = require(`../assets/img/${imgName}.png`).default;
-  } catch (error) {
-    console.log("Error: ", error.message);
-    image = require(`../assets/img/CS_12.png`).default;
-  }
+  const image = useMemo(() => {
+    let image;
+    try {
+      const imgName = course.subject.split(/[^\w\d]/).join("_");
+      image = require(`../assets/img/${imgName}.png`).default;
+      return image;
+    } catch (error) {
+      console.log("Error: ", error.message);
+      image = require(`../assets/img/CS_12.png`).default;
+      return image;
+    }
+  }, [course]);
 
   return (
     hasIntroData && (

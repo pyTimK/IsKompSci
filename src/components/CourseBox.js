@@ -9,7 +9,6 @@ const CourseBox = ({ course, handleCourseTap, subject, initialStatus }) => {
 
   const divFullScreenAnimate = useContext(CrossFadePageContext);
 
-  //TODO: MEMOIZE THIS
   const exitAnimate = async () => {
     const domRect = divRef.current.getBoundingClientRect();
     divFullScreenAnimate.set({
@@ -39,7 +38,6 @@ const CourseBox = ({ course, handleCourseTap, subject, initialStatus }) => {
       ref={divRef}
       onTap={(e) => handleCourseTap({ e, subject, status, setStatus, exitAnimate })}
       whileTap={{ scale: 0.8 }}
-      // transition={{ delay: 3 }}
       className={clsx("course-box", status)}
       key={course.id}>
       <p>{course.subject}</p>
@@ -48,14 +46,3 @@ const CourseBox = ({ course, handleCourseTap, subject, initialStatus }) => {
 };
 
 export default CourseBox;
-
-//  {
-//    willExit && (
-//      <motion.div
-//        onClick={(e) => e.stopPropagation()}
-//        animate={div2Animation}
-//        layoutId="maindiv"
-//        className={clsx("full-screen-exit", status)}
-//      />
-//    );
-//  }

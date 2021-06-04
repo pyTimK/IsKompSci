@@ -19,7 +19,6 @@ const MainPage1 = ({ editMode }) => {
   }, [divAnimation]);
 
   const showCourseDetails = ({ subject = "", exitAnimate }) => {
-    //TODO Finish This
     if (subject === "") return;
     if (subject.startsWith("PE-")) subject = "PE";
     else if (subject.startsWith("NSTP-")) subject = "NSTP";

@@ -32,14 +32,21 @@ const initializeGraphElements = ({ courses, taken, taking, savedGraphPositions }
         semCounts[semIndex]++;
         position = { x: 120 * (semCounts[semIndex] - 1), y: 100 * semIndex };
       }
+      const className = taken.includes(course.subject)
+        ? "taken"
+        : taking.includes(course.subject)
+        ? "taking"
+        : "not-taken";
 
       return {
         id: course.subject,
-        className: taken.includes(course.subject) ? "taken" : taking.includes(course.subject) ? "taking" : "not-taken",
+        className: className,
         //
+        // type: "special",
         type: course.prerequisites === "" ? "input" : "default",
         data: {
           label: <>{course.subject}</>,
+          status: className,
         },
         position: position,
       };

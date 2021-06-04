@@ -54,7 +54,7 @@ const CourseDescrip2 = ({ course }) => {
       .catch((error) => {
         //TODO handle ui on error
         if (!isMounted.current) return;
-        console.log("Error adding tip: ", error);
+        console.log("Error adding tip: ", error.message);
         setLoading(false);
         setError(error.message);
       });
@@ -78,7 +78,7 @@ const CourseDescrip2 = ({ course }) => {
       .catch((error) => {
         //TODO handle ui on error
         if (!isMounted.current) return;
-        console.log("Error updating tip: ", error);
+        console.log("Error updating tip: ", error.message);
         setLoading(false);
         setError(error);
       });
@@ -127,7 +127,7 @@ const CourseDescrip2 = ({ course }) => {
       .catch((error) => {
         //TODO handle ui on error
         if (!isMounted.current) return;
-        console.log("Error getting tip: ", error);
+        console.log("Error getting tip: ", error.message);
         setLoading(false);
         setError(error.message);
       });

@@ -43,7 +43,7 @@ const TipsBox = ({ tip, uid, inputRef, updateTipRef, setIsUpdateMode, deleteTipV
       updates.dislikers = fieldValue.arrayRemove(uid);
     }
 
-    docRef.update(updates).catch((error) => console.log("Error liking: ", error));
+    docRef.update(updates).catch((error) => console.log("Error liking: ", error.message));
 
     setIsDisliked(false);
   };
@@ -62,7 +62,7 @@ const TipsBox = ({ tip, uid, inputRef, updateTipRef, setIsUpdateMode, deleteTipV
       updates.likers = fieldValue.arrayRemove(uid);
     }
 
-    docRef.update(updates).catch((error) => console.log("Error disliking: ", error));
+    docRef.update(updates).catch((error) => console.log("Error disliking: ", error.message));
 
     setIsLiked(false);
   };
@@ -93,7 +93,7 @@ const TipsBox = ({ tip, uid, inputRef, updateTipRef, setIsUpdateMode, deleteTipV
       return;
     }
     deleteTipVisually(tip.id);
-    docRef.delete().catch((error) => console.log("Error deleting: ", error));
+    docRef.delete().catch((error) => console.log("Error deleting: ", error.message));
     setIsOpenDialog(false);
   };
   return (
