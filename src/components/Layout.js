@@ -6,13 +6,12 @@ import useToggle from "../hooks/useToggle";
 import React, { useEffect } from "react";
 import UseAnimations from "react-useanimations";
 import menu4 from "react-useanimations/lib/menu4";
-import clsx from "clsx";
 import { useHistory, useLocation, useParams } from "react-router";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { ReactFlowProvider } from "react-flow-renderer";
 import MyDrawer from "./MyDrawer";
 
-const Layout = ({ hasIntroData, children, editMode, toggleEditMode }) => {
+const Layout = ({ hasIntroData, children, editMode, toggleEditMode, setShowSettings }) => {
   const history = useHistory();
   const location = useLocation();
   const classes = useStyles();
@@ -52,7 +51,7 @@ const Layout = ({ hasIntroData, children, editMode, toggleEditMode }) => {
     <div className="layout-wrapper">
       {hasIntroData && (
         <div>
-          <MyDrawer drawer={drawer} toggleDrawer={toggleDrawer} />
+          <MyDrawer drawer={drawer} toggleDrawer={toggleDrawer} setShowSettings={setShowSettings} />
           <motion.div animate={appbarAnimation}>
             <AppBar position="absolute">
               <Toolbar className={classes.toolbar}>
@@ -77,7 +76,7 @@ const Layout = ({ hasIntroData, children, editMode, toggleEditMode }) => {
                 <Tab className={classes.tabLabel} label="Graph" />
               </Tabs>
             </AppBar>
-            <div className={clsx(classes.toolbarHeight, classes.marginBottom)}></div>
+            <div className={classes.toolbarHeight}></div>
           </motion.div>
           <ReactFlowProvider>{children}</ReactFlowProvider>
         </div>
@@ -115,9 +114,6 @@ const useStyles = makeStyles((theme) => {
     },
     toolbarHeight: {
       height: "var(--toolbarHeight)",
-    },
-    marginBottom: {
-      // marginBottom: "48px",
     },
 
     drawerDivider: {

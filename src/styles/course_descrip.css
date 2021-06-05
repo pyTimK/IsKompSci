@@ -9,10 +9,10 @@
 .course-descrip-bg {
     --padding: 16px;
     position: absolute;
-    top: 45%;
+    top: 45vh;
     z-index: 1;
-    width: calc(100% - 2 * var(--padding));
-    min-height: calc(55% - 2 * var(--padding));
+    width: calc(100vw - 2 * var(--padding));
+    min-height: calc(55vh - 2 * var(--padding));
     padding: var(--padding);
     background-color: var(--white);
     color: var(--darkergray);

@@ -23,7 +23,7 @@ const CourseBox = ({ course, handleCourseTap, subject, initialStatus }) => {
       x: 0,
       y: 0,
       width: window.screen.width,
-      height: window.screen.height,
+      height: document.documentElement.clientHeight,
 
       backgroundColor: "var(--materialgreen)",
       transition: {

@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => {
       position: "absolute",
       width: "100%",
       height: "100%",
-      backgroundColor: "var(--materialgreen)",
+      backgroundColor: "var(--green)",
     },
     logo: {
       position: "absolute",

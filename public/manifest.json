@@ -1,8 +1,7 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
-  "icons": [
-    {
+  "name": "IsKompSci",
+  "short_name": "IsKompSci",
+  "icons": [{
       "src": "/img/icons/maskable_icon_x48.png",
       "type": "image/png",
       "sizes": "48x48"
@@ -41,6 +40,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#0A5E2A",
+  "background_color": "#0A5E2A"
 }

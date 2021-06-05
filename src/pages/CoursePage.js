@@ -7,7 +7,7 @@ import CourseDescrip2 from "./CourseDescrip2";
 import CourseDescrip1 from "./CourseDescrip1";
 import { AnimatePresence, motion } from "framer-motion";
 
-const offsetNeeded = 0.45 * window.screen.height;
+const offsetNeeded = 0.45 * document.documentElement.clientHeight;
 
 const CoursePage = ({ hasIntroData }) => {
   const [opacity, setOpacity] = useState(1);
@@ -71,9 +71,10 @@ const CoursePage = ({ hasIntroData }) => {
         <div className="course-page-bg">
           <div className={classes.root}>
             <motion.div
-              initial={{ x: "-100%" }}
-              animate={{ x: 0, transition: { delay: 0.1, duration: 1, type: "spring" } }}>
-              <IconButton onClick={() => history.goBack()} className={classes.backButton} aria-label="back">
+              className={classes.backIconWrapper}
+              initial={{ x: "-480px" }}
+              animate={{ x: "-12px", transition: { delay: 0.1, duration: 1, type: "spring" } }}>
+              <IconButton onClick={() => history.goBack()} aria-label="back">
                 <ArrowBackIosIcon fontSize="large" className={classes.backIcon} />
               </IconButton>
             </motion.div>
@@ -140,13 +141,12 @@ const useStyles = makeStyles((theme) => {
         fontSize: "1rem",
       },
     },
-    backButton: {
-      position: "absolute",
+    backIconWrapper: {
+      float: "left",
     },
     backIcon: {
       margin: "0 !important",
       color: "var(--white)",
-      transform: "translateX(-12px)",
     },
     spacer: {
       height: "48px",

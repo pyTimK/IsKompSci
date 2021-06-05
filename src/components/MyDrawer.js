@@ -3,13 +3,20 @@ import getFromLocalStorage from "../functions/getFromLocalStorage";
 import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
 
-const MyDrawer = ({ drawer, toggleDrawer }) => {
+const MyDrawer = ({ drawer, toggleDrawer, setShowSettings }) => {
   const classes = useStyles();
   const name = getFromLocalStorage("name", "Ricardough");
 
   const drawerItems = [
-    ["Settings", <SettingsOutlinedIcon />],
-    ["Feedback", <MailOutlineIcon />],
+    { label: "Settings", icon: <SettingsOutlinedIcon />, onClick: (e) => setShowSettings(true) },
+    {
+      label: "Feedback",
+      icon: <MailOutlineIcon />,
+      onClick: (e) => {
+        // TODO
+        console.log("Feedback Clicked!");
+      },
+    },
   ];
 
   return (
@@ -23,9 +30,9 @@ const MyDrawer = ({ drawer, toggleDrawer }) => {
         <Divider className={classes.drawerDivider} />
         <List>
           {drawerItems.map((item) => (
-            <ListItem button key={item[0]}>
-              <ListItemIcon className={classes.drawerIcons}>{item[1]}</ListItemIcon>
-              <ListItemText primary={item[0]} />
+            <ListItem button key={item.label} onClick={item.onClick}>
+              <ListItemIcon className={classes.drawerIcons}>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.label} />
             </ListItem>
           ))}
         </List>

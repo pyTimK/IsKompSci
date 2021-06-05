@@ -34,7 +34,7 @@ const MainPage1 = ({ editMode }) => {
     }
   };
   return (
-    <div className="main-bg">
+    <div className="main-bg" onClick={(e) => console.log("MAINPAGE1 CLICKED")}>
       <motion.div className="main-wrapper" initial={{ opacity: 0 }} animate={divAnimation}>
         <AnimateSharedLayout>
           <EditModeText editMode={editMode} text="TAP TO CHANGE COURSE STATUS" />

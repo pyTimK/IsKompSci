@@ -143,7 +143,9 @@ const CourseDescrip2 = ({ course }) => {
       if (!reachEndQuery.current) {
         var scrollMaxY =
           window.scrollMaxY || document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        if (scrollMaxY === window.scrollY) {
+        // console.log(window.scrollY);
+        // console.log("max: ", scrollMaxY);
+        if (scrollMaxY <= window.scrollY) {
           getTips();
         }
       }

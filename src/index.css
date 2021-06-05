@@ -90,14 +90,18 @@ h6 {
 }
 
 
-
-/** LAYOUT */
-.layout-wrapper {
+/** HOME */
+.home-wrapper {
   --toolbarHeight: 60px;
   --tabsHeight: 48px;
   --tabsIndicatorHeight: 2px;
   --editModeTextHeight: 90px;
   --editModeDividerTopMargin: 8px;
+}
+
+/** LAYOUT */
+.layout-wrapper {
+  
   
   color: white;
   background-color: var(--bggray);

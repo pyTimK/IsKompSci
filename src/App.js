@@ -7,6 +7,8 @@ import initializeGraphElements from "./functions/initializeGraphElements";
 import setFromLocalStorage from "./functions/setFromLocalStorage";
 
 function App() {
+  // console.log("size: ", window.screen.width, window.screen.height);
+  // console.log("clientHeight: ", document.documentElement.clientHeight);
   const coursesJSON = require("./data/courses.json");
   const courses = coursesJSON.data;
 
