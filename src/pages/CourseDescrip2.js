@@ -28,29 +28,28 @@ const CourseDescrip2 = ({ course }) => {
   const [isUpdateMode, setIsUpdateMode] = useState(false);
 
   const createTip = (message) => {
+    const newTip = {
+      tip: message,
+      likes: 0,
+      user: user.uid || "noID",
+      likers: [],
+      dislikers: [],
+      created: fieldValue.serverTimestamp(),
+    };
     courseDocRef
       .get()
       .then((docSnapshot) => {
         if (docSnapshot.exists) return;
         return courseDocRef.set({ name: course.subject });
       })
-      .then(() =>
-        courseDocRef.collection("list").add({
-          tip: message,
-          likes: 0,
-          user: user.uid || "noID",
-          likers: [],
-          dislikers: [],
-          created: fieldValue.serverTimestamp(),
-        })
-      )
-      .then((docRef) => docRef.get())
-      .then((doc) => {
+      .then(() => courseDocRef.collection("list").add(newTip))
+      .then((docRef) => {
         //? NO ERRORS, NEW TIPS WILL RE-RENDER
         if (!isMounted.current) return;
-        setTips((prevTips) => [{ ...doc.data(), id: doc.id, ref: doc.ref }, ...prevTips]);
+        setTips((prevTips) => [{ ...newTip, id: docRef.id, ref: docRef }, ...prevTips]);
         setLoading(false);
       })
+      .then((doc) => {})
       .catch((error) => {
         //TODO handle ui on error
         if (!isMounted.current) return;
@@ -71,7 +70,7 @@ const CourseDescrip2 = ({ course }) => {
         //? NO ERRORS, NEW TIPS WILL RE-RENDER
         if (!isMounted.current) return;
         const newTips = tips.filter((tip) => updateTipRef.current.id !== tip.id);
-        newTips.push({ ...updateTipRef.current, tip: message });
+        newTips.unshift({ ...updateTipRef.current, tip: message });
         setTips(newTips);
         setLoading(false);
       })
@@ -91,6 +90,7 @@ const CourseDescrip2 = ({ course }) => {
 
     const message = inputRef.current.value;
     setInputFocus(false);
+    setIsUpdateMode(false);
     setLoading(true);
     inputRef.current.value = "";
 

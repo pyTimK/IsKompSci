@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { CoursesDataProvider } from "./contexts/CoursesDataContext";
 import CourseStatusWrapper from "./CourseStatusWrapper";
 import getFromLocalStorage from "./functions/getFromLocalStorage";
@@ -26,9 +26,19 @@ function App() {
     savedGraphPositions = initialGraphPositions;
   }
 
+  console.log(savedGraphPositions);
+
+  // const [graphPositions, setgraphPositions] = useState(savedGraphPositions);
+  // console.log(graphPositions);
+
   const graphElements = initializeGraphElements({ courses, taken, taking, savedGraphPositions });
 
-  const data = { courses: courses, groupedBySemCourses: groupedBySemCourses, graphElements: graphElements };
+  const data = {
+    courses: courses,
+    groupedBySemCourses: groupedBySemCourses,
+    graphElements: graphElements,
+    // setgraphPositions: setgraphPositions,
+  };
   return (
     <div className="App">
       <CoursesDataProvider value={data}>
