@@ -5,13 +5,31 @@ import { useHistory } from "react-router";
 import { auth } from "../firebase";
 import setFromLocalStorage from "../functions/setFromLocalStorage";
 import SyncLoader from "react-spinners/SyncLoader";
+import Dropdown from "react-dropdown";
+import "react-dropdown/style.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const IntroPage1 = ({ hasIntroData }) => {
   const classes = useStyles();
   const history = useHistory();
   const inputRef = useRef();
+  const [yrLvl, setYrLvl] = useState("");
   const [loading, setLoading] = useState(false);
   const divAnimation = useAnimation();
+
+  const options = ["Freshman", "Sophomore", "Junior", "Senior", "N/A"];
+
+  const notify = (text) =>
+    toast.error(text, {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
 
   useEffect(() => {
     if (hasIntroData) history.push("/intro2");
@@ -21,9 +39,12 @@ const IntroPage1 = ({ hasIntroData }) => {
     e.preventDefault();
     let newName = inputRef.current.value;
 
-    if (newName !== "") {
+    if (newName === "") notify("Name Field is Required");
+    else if (yrLvl === "") notify("Please Select Year Level First");
+    else {
       setLoading(true);
       setFromLocalStorage("name", newName);
+      setFromLocalStorage("yrLvl", `${yrLvl} Standing`);
       auth
         .signInAnonymously()
         .then((result) => result.user.updateProfile({ displayName: newName }))
@@ -34,6 +55,10 @@ const IntroPage1 = ({ hasIntroData }) => {
           setLoading(false);
         });
     }
+  };
+
+  const hadleYearLvlChange = (arg) => {
+    setYrLvl(arg.value);
   };
 
   useEffect(() => {
@@ -51,16 +76,16 @@ const IntroPage1 = ({ hasIntroData }) => {
         <img className="logo" src="/logo.png" alt="app logo" />
         <h4>IsKompSci</h4>
 
-        <form onSubmit={handleOnSubmit} className="bottom">
-          <input
-            className="my-input"
-            ref={inputRef}
-            type="text"
-            placeholder="What's your name?"
-            maxLength="8"
-            required
+        <form onSubmit={handleOnSubmit} className={classes.bottom}>
+          <input className="my-input" ref={inputRef} type="text" placeholder="What's your name?" maxLength="8" />
+          <Dropdown
+            className={classes.dropdown}
+            menuClassName={classes.menuClassName}
+            placeholderClassName={classes.placeholderClassName}
+            options={options}
+            onChange={hadleYearLvlChange}
+            placeholder="Select Year Level"
           />
-
           {!loading && (
             <div className={classes.block}>
               <Button
@@ -80,13 +105,31 @@ const IntroPage1 = ({ hasIntroData }) => {
           <SyncLoader color="var(--white)" loading={loading} />
         </form>
       </motion.div>
+      <ToastContainer />
     </div>
   );
 };
 
 const useStyles = makeStyles((theme) => {
   return {
+    bottom: {
+      marginTop: "15vh",
+      width: "100vw",
+    },
     block: { display: "block" },
+    dropdown: {
+      textAlign: "left",
+      width: "calc(60% + 1rem)",
+      borderRadius: "8.5rem",
+      margin: "36px auto",
+      boxShadow: "0 1px 10px rgb(54, 54, 54)",
+    },
+    menuClassName: {
+      boxShadow: "0 1px 10px rgb(54, 54, 54)",
+    },
+    placeholderClassName: {
+      color: "var(--darkgray)",
+    },
   };
 });
 

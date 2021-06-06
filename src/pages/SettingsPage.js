@@ -262,10 +262,6 @@ const useStyles = makeStyles((theme) => {
         display: "flex",
         alignItems: "center",
       },
-      "& p": {
-        display: "inline-block",
-        verticalAlign: "middle",
-      },
     },
     hr: {
       border: "1px solid rgba(1,1,1,0.2)",

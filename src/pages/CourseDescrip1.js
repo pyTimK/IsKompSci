@@ -1,8 +1,17 @@
 import { Button, makeStyles } from "@material-ui/core";
 import { motion } from "framer-motion";
+import CheckIcon from "@material-ui/icons/Check";
+import getFromLocalStorage from "../functions/getFromLocalStorage";
+import { Link } from "react-router-dom";
 
 const abbvreviations = { 1: "1st", 2: "2nd", 3: "2nd", 4: "2nd", M: "Mid" };
-
+const standingToLvl = {
+  "N/A Standing": 0,
+  "Freshman Standing": 1,
+  "Sophomore Standing": 2,
+  "Junior Standing": 3,
+  "Senior Standing": 4,
+};
 const parseList = (s, delimiter = ", ") => {
   let list = s.split(delimiter);
   if (list.length === 1 && list[0] === "") list = [];
@@ -11,6 +20,9 @@ const parseList = (s, delimiter = ", ") => {
 
 const CourseDescrip1 = ({ course, setWillGoToTips }) => {
   const classes = useStyles();
+
+  const taken = getFromLocalStorage("taken", []);
+  const yrLvl = getFromLocalStorage("yrLvl", "N/A");
 
   const prerequisites = parseList(course.prerequisites);
   const requirements = parseList(course.requirements);
@@ -69,6 +81,7 @@ const CourseDescrip1 = ({ course, setWillGoToTips }) => {
           </div>
         </div>
       )}
+      <hr />
       <div className={classes.infoShort}>
         <h4>Unit{course.units > 1 && "s"}: </h4>
         <p>{course.units}</p>
@@ -80,7 +93,14 @@ const CourseDescrip1 = ({ course, setWillGoToTips }) => {
           {prerequisites.map((prerequisite, index) => {
             return (
               <li key={index}>
-                <a href={prerequisite}>{prerequisite}</a>
+                <div className={classes.listCheckboxWrapper}>
+                  <Link to={`/course/${encodeURIComponent(prerequisite)}`}>{prerequisite}</Link>
+                  &nbsp;
+                  <CheckIcon
+                    style={{ color: taken.includes(prerequisite) ? "var(--green)" : "transparent" }}
+                    fontSize="small"
+                  />
+                </div>
               </li>
             );
           })}
@@ -93,12 +113,26 @@ const CourseDescrip1 = ({ course, setWillGoToTips }) => {
           {requirements.map((requirement, index) => {
             return (
               <li key={index}>
-                <h6>{requirement}</h6>
+                <div className={classes.listCheckboxWrapper}>
+                  <h6>{requirement}</h6>
+                  &nbsp;
+                  <CheckIcon
+                    style={{
+                      color:
+                        requirement !== "COI (Consent Of Instructor)" &&
+                        standingToLvl[yrLvl] >= standingToLvl[requirement]
+                          ? "var(--green)"
+                          : "transparent",
+                    }}
+                    fontSize="small"
+                  />
+                </div>
               </li>
             );
           })}
         </ul>
       </div>
+      <hr />
       <div className={classes.buttonWrapper}>
         <Button
           onTap={(e) => {
@@ -131,13 +165,13 @@ const useStyles = makeStyles((theme) => {
         letterSpacing: 0,
       },
       "& h5": {
-        color: "var(--green)",
+        color: "var(--darkergray)",
         fontWeight: 700,
         fontSize: "1rem",
         letterSpacing: 0,
       },
       "& h6": {
-        color: "var(--darkergreen)",
+        color: "var(--darkergray)",
         fontWeight: 500,
         fontSize: "0.9rem",
         letterSpacing: 0,
@@ -149,7 +183,7 @@ const useStyles = makeStyles((theme) => {
         letterSpacing: 0,
       },
       "& p": {
-        color: "var(--darkergreen)",
+        color: "var(--darkergray)",
         letterSpacing: 0,
         fontWeight: 400,
         fontSize: "1rem",
@@ -181,6 +215,10 @@ const useStyles = makeStyles((theme) => {
     buttonWrapper: {
       textAlign: "center",
       paddingTop: "20px",
+    },
+    listCheckboxWrapper: {
+      display: "flex",
+      alignItems: "center",
     },
   };
 });
