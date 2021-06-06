@@ -9,16 +9,19 @@ import SettingsPage from "./pages/SettingsPage";
 import { AnimatePresence, motion, useAnimation } from "framer-motion";
 import { CrossFadePageProvider } from "./contexts/CrossFadePageContext";
 import { useState } from "react";
+import FeedbackPage from "./pages/FeedbackPage";
 
 const Home = ({ hasIntroData }) => {
   const divFullScreenAnimate = useAnimation();
   const [editMode, toggleEditMode] = useToggle();
   const [showSettings, setShowSettings] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
   const [showHome, setShowHome] = useState(true);
   return (
     <div className="home-wrapper">
       <AnimatePresence>
         {showSettings && <SettingsPage setShowSettings={setShowSettings} setShowHome={setShowHome} />}
+        {showFeedback && <FeedbackPage setShowFeedback={setShowFeedback} setShowHome={setShowHome} />}
       </AnimatePresence>
       {showHome && (
         <CrossFadePageProvider value={divFullScreenAnimate}>
@@ -27,7 +30,8 @@ const Home = ({ hasIntroData }) => {
             hasIntroData={hasIntroData}
             editMode={editMode}
             toggleEditMode={toggleEditMode}
-            setShowSettings={setShowSettings}>
+            setShowSettings={setShowSettings}
+            setShowFeedback={setShowFeedback}>
             <Switch>
               <Route path="/main2">
                 <MainPage2 editMode={editMode} />

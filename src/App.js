@@ -26,18 +26,15 @@ function App() {
     savedGraphPositions = initialGraphPositions;
   }
 
-  console.log(savedGraphPositions);
+  const [graphPositions, setgraphPositions] = useState(savedGraphPositions);
 
-  // const [graphPositions, setgraphPositions] = useState(savedGraphPositions);
-  // console.log(graphPositions);
-
-  const graphElements = initializeGraphElements({ courses, taken, taking, savedGraphPositions });
+  const graphElements = initializeGraphElements({ courses, taken, taking, graphPositions });
 
   const data = {
     courses: courses,
     groupedBySemCourses: groupedBySemCourses,
     graphElements: graphElements,
-    // setgraphPositions: setgraphPositions,
+    setgraphPositions: setgraphPositions,
   };
   return (
     <div className="App">

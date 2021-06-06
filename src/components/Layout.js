@@ -11,7 +11,7 @@ import useLocalStorage from "../hooks/useLocalStorage";
 import { ReactFlowProvider } from "react-flow-renderer";
 import MyDrawer from "./MyDrawer";
 
-const Layout = ({ hasIntroData, children, editMode, toggleEditMode, setShowSettings }) => {
+const Layout = ({ hasIntroData, children, editMode, toggleEditMode, setShowSettings, setShowFeedback }) => {
   const history = useHistory();
   const location = useLocation();
   const classes = useStyles();
@@ -51,7 +51,12 @@ const Layout = ({ hasIntroData, children, editMode, toggleEditMode, setShowSetti
     <div className="layout-wrapper">
       {hasIntroData && (
         <div>
-          <MyDrawer drawer={drawer} toggleDrawer={toggleDrawer} setShowSettings={setShowSettings} />
+          <MyDrawer
+            drawer={drawer}
+            toggleDrawer={toggleDrawer}
+            setShowSettings={setShowSettings}
+            setShowFeedback={setShowFeedback}
+          />
           <motion.div animate={appbarAnimation}>
             <AppBar position="absolute">
               <Toolbar className={classes.toolbar}>

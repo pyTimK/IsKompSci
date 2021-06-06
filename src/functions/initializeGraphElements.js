@@ -1,8 +1,8 @@
-const initializeGraphElements = ({ courses, taken, taking, savedGraphPositions }) => {
+const initializeGraphElements = ({ courses, taken, taking, graphPositions }) => {
   // ? set true for AUTO GRAPH BETA
   const autoGraph = false;
 
-  const hasSavedGraph = savedGraphPositions !== null;
+  const hasSavedGraph = graphPositions !== null;
   if ([taken, taking].some((r) => [null, undefined].includes(r))) return [];
 
   const semSequence = [
@@ -27,7 +27,7 @@ const initializeGraphElements = ({ courses, taken, taking, savedGraphPositions }
       let semIndex = semSequence.findIndex((sem) => sem === course.offered);
       let position;
       if (!autoGraph && hasSavedGraph) {
-        position = savedGraphPositions[course.subject];
+        position = graphPositions[course.subject];
       } else {
         semCounts[semIndex]++;
         position = { x: 120 * (semCounts[semIndex] - 1), y: 100 * semIndex };

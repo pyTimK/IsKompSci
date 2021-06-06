@@ -14,22 +14,23 @@ import {
 } from "@material-ui/core";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import { motion, useAnimation } from "framer-motion";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import Ripples from "react-ripples";
 import React from "react";
 import getFromLocalStorage from "../functions/getFromLocalStorage";
 import setFromLocalStorage from "../functions/setFromLocalStorage";
 import UserDataContext from "../contexts/UserDataContext";
+import CoursesDataContext from "../contexts/CoursesDataContext";
 
 const SettingsPage = ({ setShowSettings, setShowHome }) => {
   const classes = useStyles();
-  const formDialogInputRef = useRef();
   const rootAnimation = useAnimation();
+  const [formDialogParam, setFormDialogParam] = useState({});
   const [isFormDialogOpen, setIsFormDialogOpen] = useState(false);
   const name = getFromLocalStorage("name", "Ricardo");
   const user = useContext(UserDataContext);
-  console.log(user);
+  const coursesData = useContext(CoursesDataContext);
 
   useEffect(() => {
     rootAnimation
@@ -57,41 +58,75 @@ const SettingsPage = ({ setShowSettings, setShowHome }) => {
             edge="start"
             className={classes.menuButton}
             aria-label="back">
-            <ArrowBackIosIcon className={classes.backIcon} />
+            <ArrowBackIosIcon />
           </IconButton>
           <h6 className={classes.settings}>Settings</h6>
         </Toolbar>
       </AppBar>
       <div className={classes.toolbarHeight}></div>
-      <SettingsTile onClick={() => setIsFormDialogOpen(true)} title="Change name">
+      {/* FORM */}
+      <FormDialog
+        open={isFormDialogOpen}
+        handleDialogClose={() => setIsFormDialogOpen(false)}
+        formDialogParam={formDialogParam}
+      />
+      {/* CHANGE NAME */}
+      <SettingsTile
+        onClick={() => {
+          setFormDialogParam({
+            title: "Change name",
+            hasTextField: true,
+            textFieldInitalValue: name,
+            textFieldLabel: "Name",
+            buttons: [
+              { text: "CANCEL", onClick: (e, value) => setIsFormDialogOpen(false) },
+              {
+                text: "UPDATE",
+                onClick: (e, value) => {
+                  if (value === name || value === "") return;
+                  setFromLocalStorage("name", value);
+                  user.updateProfile({ displayName: value }).catch((error) => {
+                    console.log("Error loging in: ", error.message);
+                  });
+                  setIsFormDialogOpen(false);
+                },
+                disabledIf: (value) => value === name || value === "",
+              },
+            ],
+          });
+          setIsFormDialogOpen(true);
+        }}
+        title="Change name">
         <div>
           <p>{name}</p>
           <ChevronRightIcon />
         </div>
       </SettingsTile>
-      <FormDialog
-        open={isFormDialogOpen}
-        handleDialogClose={() => setIsFormDialogOpen(false)}
-        title="Change name"
-        textFieldInitalValue={name}
-        textFieldLabel="Name"
-        buttons={[
-          { text: "CANCEL", onClick: (e, value) => setIsFormDialogOpen(false) },
-          {
-            text: "UPDATE",
-            onClick: (e, value) => {
-              if (value === name) return;
-              setFromLocalStorage("name", value);
-              user.updateProfile({ displayName: value }).catch((error) => {
-                console.log("Error loging in: ", error.message);
-              });
-              setIsFormDialogOpen(false);
-            },
-          },
-        ]}
-        formDialogInputRef={formDialogInputRef}
+
+      {/* RESET GRAPH */}
+      <SettingsTile
+        title="Reset Graph Positioning"
+        onClick={() => {
+          setFormDialogParam({
+            title: "Reset graph",
+            content: "Set the positions of the nodes in the course graph to their default positions.",
+            buttons: [
+              { text: "CANCEL", onClick: () => setIsFormDialogOpen(false) },
+              {
+                text: "CONTINUE",
+                onClick: () => {
+                  const initialGraphPositionsJSON = require("../data/graph-positions.json");
+                  const initialGraphPositions = initialGraphPositionsJSON.data;
+                  setFromLocalStorage("graphPositions", initialGraphPositions);
+                  coursesData.setgraphPositions(initialGraphPositions);
+                  setIsFormDialogOpen(false);
+                },
+              },
+            ],
+          });
+          setIsFormDialogOpen(true);
+        }}
       />
-      <SettingsTile title="Reset Graph Positioning" />
     </motion.div>
   );
 };
@@ -117,19 +152,18 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const FormDialog = ({
-  open,
-  handleDialogClose,
-  title,
-  content,
-  buttons,
-  formDialogInputRef,
-  textFieldInitalValue = "",
-  textFieldLabel,
-}) => {
+const FormDialog = ({ open, handleDialogClose, formDialogParam }) => {
   const classes = useStyles();
+  const title = formDialogParam.title || "";
+  const content = formDialogParam.content;
+  const buttons = formDialogParam.buttons || [];
+  const hasTextField = formDialogParam.hasTextField || false;
+  const textFieldInitalValue = formDialogParam.textFieldInitalValue || "";
+  const textFieldLabel = formDialogParam.textFieldLabel || "";
   const [value, setValue] = useState(textFieldInitalValue);
-
+  useEffect(() => {
+    setValue(textFieldInitalValue);
+  }, [textFieldInitalValue]);
   return (
     <Dialog
       open={open}
@@ -146,21 +180,26 @@ const FormDialog = ({
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-slide-description">{content}</DialogContentText>
-        <TextField
-          autoFocus
-          margin="dense"
-          id={textFieldLabel}
-          label={textFieldLabel}
-          className={classes.input}
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          fullWidth
-          ref={formDialogInputRef}
-        />
+        {hasTextField && (
+          <TextField
+            autoFocus
+            margin="dense"
+            id={textFieldLabel}
+            label={textFieldLabel}
+            className={classes.input}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            fullWidth
+          />
+        )}
       </DialogContent>
       <DialogActions>
         {buttons.map((button, index) => (
-          <Button key={index} onClick={(e) => button.onClick(e, value)} color="primary">
+          <Button
+            key={index}
+            onClick={(e) => button.onClick(e, value)}
+            color="primary"
+            disabled={button.disabledIf ? button.disabledIf(value) : false}>
             {button.text}
           </Button>
         ))}

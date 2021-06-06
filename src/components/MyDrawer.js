@@ -3,7 +3,7 @@ import getFromLocalStorage from "../functions/getFromLocalStorage";
 import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
 
-const MyDrawer = ({ drawer, toggleDrawer, setShowSettings }) => {
+const MyDrawer = ({ drawer, toggleDrawer, setShowSettings, setShowFeedback }) => {
   const classes = useStyles();
   const name = getFromLocalStorage("name", "Ricardough");
 
@@ -12,10 +12,7 @@ const MyDrawer = ({ drawer, toggleDrawer, setShowSettings }) => {
     {
       label: "Feedback",
       icon: <MailOutlineIcon />,
-      onClick: (e) => {
-        // TODO
-        console.log("Feedback Clicked!");
-      },
+      onClick: (e) => setShowFeedback(true),
     },
   ];
 
