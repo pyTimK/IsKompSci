@@ -8,6 +8,12 @@ const GroupBySem = ({ tighten, groupedBySemCourses, handleCourseTap }) => {
   return (
     <div id="group-by-sem-div">
       {Object.entries(groupedBySemCourses).map((semCourse, index) => {
+        console.log(semCourse[1]);
+        let totalUnits = 0;
+        semCourse[1].forEach((course) => {
+          if (!["PE", "NSTP"].includes(course.subject) && course.units) totalUnits += course.units;
+        });
+        console.log(totalUnits);
         return (
           <div className={`sem-card${tighten ? " tighten-sem-card" : ""}`} key={index}>
             <div>
@@ -33,7 +39,12 @@ const GroupBySem = ({ tighten, groupedBySemCourses, handleCourseTap }) => {
                 );
               })}
             </div>
-            <h5 className="sem-tag">{semCourse[0]}</h5>
+            <div className="sem-tag">
+              <h5 className="sem-tag-left">{semCourse[0]}</h5>
+              <div className="sem-tag-right">
+                <p>{`${totalUnits} units`}</p>
+              </div>
+            </div>
           </div>
         );
       })}

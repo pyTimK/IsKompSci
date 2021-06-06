@@ -291,9 +291,21 @@ form {
 
 .sem-tag {
   color: var(--darkgray);
-  font-weight: 700;
   padding-top: 8px;
-  padding-bottom: 8px;
+  display: flex;
+  align-items: baseline;
+  padding-bottom: 4px;
+}
+
+.sem-tag-left {
+  font-weight: 700;
+
+}
+
+.sem-tag-right {
+  flex-grow: 1;
+  text-align: right;
+  font-weight: 400;
 }
 
 /** REACT FLOW */

@@ -31,7 +31,7 @@ const CoursePage = ({ hasIntroData }) => {
     function handleScroll() {
       if (willGoToTips && window.scrollY === 0) {
         setWillGoToTips(false);
-        history.replace(`${id}/tips`);
+        history.push(`${id}/tips`);
       }
       const y = window.scrollY;
       if (y >= offsetNeeded) {
