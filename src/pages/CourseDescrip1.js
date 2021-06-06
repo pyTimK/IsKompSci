@@ -4,7 +4,7 @@ import CheckIcon from "@material-ui/icons/Check";
 import getFromLocalStorage from "../functions/getFromLocalStorage";
 import { Link } from "react-router-dom";
 
-const abbvreviations = { 1: "1st", 2: "2nd", 3: "2nd", 4: "2nd", M: "Mid" };
+const abbvreviations = { 1: "1st", 2: "2nd", 3: "3rd", 4: "4th", M: "Mid" };
 const standingToLvl = {
   "N/A Standing": 0,
   "Freshman Standing": 1,
@@ -29,6 +29,18 @@ const CourseDescrip1 = ({ course, setWillGoToTips }) => {
 
   const textbooks = parseList(course.recommended_textbooks, "\n");
   const websites = parseList(course.recommended_websites, "\n");
+  console.log(course);
+
+  let recommendedSem = abbvreviations[course.offered.charAt(3)];
+  let recommendedYear = abbvreviations[course.offered.charAt(0)];
+
+  if (course.subject === "PE") {
+    recommendedSem = "1st & 2nd";
+    recommendedYear = "1st & 2nd";
+  } else if (course.subject === "NSTP") {
+    recommendedSem = "1st & 2nd";
+    recommendedYear = "2nd";
+  }
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className={classes.root}>
@@ -40,8 +52,8 @@ const CourseDescrip1 = ({ course, setWillGoToTips }) => {
         <h4>When should you take it</h4>
         <p>
           It is recommended to take this course during the{" "}
-          <strong className={classes.inline}>{abbvreviations[course.offered.charAt(3)]} Semester </strong> of your{" "}
-          <strong className={classes.inline}>{abbvreviations[course.offered.charAt(0)]} Academic Year</strong>.
+          <strong className={classes.inline}>{recommendedSem} Semester </strong> of your{" "}
+          <strong className={classes.inline}>{recommendedYear} Academic Year</strong>.
         </p>
       </div>
       {(textbooks.length > 0 || websites.length > 0) && (
