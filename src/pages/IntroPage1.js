@@ -7,8 +7,7 @@ import setFromLocalStorage from "../functions/setFromLocalStorage";
 import SyncLoader from "react-spinners/SyncLoader";
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import notify from "../functions/notify";
 
 const IntroPage1 = ({ hasIntroData }) => {
   const classes = useStyles();
@@ -19,17 +18,6 @@ const IntroPage1 = ({ hasIntroData }) => {
   const divAnimation = useAnimation();
 
   const options = ["Freshman", "Sophomore", "Junior", "Senior", "N/A"];
-
-  const notify = (text) =>
-    toast.error(text, {
-      position: "top-center",
-      autoClose: 2000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
 
   useEffect(() => {
     if (hasIntroData) history.push("/intro2");
@@ -105,7 +93,6 @@ const IntroPage1 = ({ hasIntroData }) => {
           <SyncLoader color="var(--white)" loading={loading} />
         </form>
       </motion.div>
-      <ToastContainer />
     </div>
   );
 };

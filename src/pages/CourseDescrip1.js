@@ -29,7 +29,6 @@ const CourseDescrip1 = ({ course, setWillGoToTips }) => {
 
   const textbooks = parseList(course.recommended_textbooks, "\n");
   const websites = parseList(course.recommended_websites, "\n");
-  console.log(course);
 
   let recommendedSem = abbvreviations[course.offered.charAt(3)];
   let recommendedYear = abbvreviations[course.offered.charAt(0)];

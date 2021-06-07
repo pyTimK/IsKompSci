@@ -5,6 +5,9 @@ import TipsBox from "../components/TipsBox";
 import { db, fieldValue } from "../firebase";
 import { Shimmer } from "react-shimmer";
 import UserDataContext from "../contexts/UserDataContext";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import notify from "../functions/notify";
 
 const shimmerWidth = window.screen.width * 0.8;
 const shimmerWidthShort = window.screen.width * 0.3;
@@ -15,7 +18,6 @@ const CourseDescrip2 = ({ course }) => {
   const inputRef = useRef();
   const [inputFocus, setInputFocus] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [tips, setTips] = useState([]);
   const lastDocQuery = useRef(null);
   const reachEndQuery = useRef(false);
@@ -55,7 +57,7 @@ const CourseDescrip2 = ({ course }) => {
         if (!isMounted.current) return;
         console.log("Error adding tip: ", error.message);
         setLoading(false);
-        setError(error.message);
+        notify(`Error: ${error.message}`, 5000);
       });
   };
 
@@ -79,7 +81,7 @@ const CourseDescrip2 = ({ course }) => {
         if (!isMounted.current) return;
         console.log("Error updating tip: ", error.message);
         setLoading(false);
-        setError(error);
+        notify(`Error: ${error.message}`, 5000);
       });
   };
 
@@ -129,7 +131,7 @@ const CourseDescrip2 = ({ course }) => {
         if (!isMounted.current) return;
         console.log("Error getting tip: ", error.message);
         setLoading(false);
-        setError(error.message);
+        notify(`Error: ${error.message}`, 5000);
       });
   }, [subject]);
 

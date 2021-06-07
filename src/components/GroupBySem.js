@@ -8,12 +8,10 @@ const GroupBySem = ({ tighten, groupedBySemCourses, handleCourseTap }) => {
   return (
     <div id="group-by-sem-div">
       {Object.entries(groupedBySemCourses).map((semCourse, index) => {
-        console.log(semCourse[1]);
         let totalUnits = 0;
         semCourse[1].forEach((course) => {
           if (!["PE", "NSTP"].includes(course.subject) && course.units) totalUnits += course.units;
         });
-        console.log(totalUnits);
         return (
           <div className={`sem-card${tighten ? " tighten-sem-card" : ""}`} key={index}>
             <div>

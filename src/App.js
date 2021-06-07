@@ -5,6 +5,8 @@ import getFromLocalStorage from "./functions/getFromLocalStorage";
 import groupBySem from "./functions/groupBySem";
 import initializeGraphElements from "./functions/initializeGraphElements";
 import setFromLocalStorage from "./functions/setFromLocalStorage";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   // console.log("size: ", window.screen.width, window.screen.height);
@@ -36,11 +38,13 @@ function App() {
     graphElements: graphElements,
     setgraphPositions: setgraphPositions,
   };
+
   return (
     <div className="App">
       <CoursesDataProvider value={data}>
         <CourseStatusWrapper />
       </CoursesDataProvider>
+      <ToastContainer />
     </div>
   );
 }
