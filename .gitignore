@@ -24,5 +24,5 @@ yarn-debug.log*
 yarn-error.log*
 
 .github/workflows
-.firebase
+.firebase/
 .firebaserc
