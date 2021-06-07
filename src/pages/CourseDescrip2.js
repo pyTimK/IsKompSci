@@ -5,8 +5,6 @@ import TipsBox from "../components/TipsBox";
 import { db, fieldValue } from "../firebase";
 import { Shimmer } from "react-shimmer";
 import UserDataContext from "../contexts/UserDataContext";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import notify from "../functions/notify";
 
 const shimmerWidth = window.screen.width * 0.8;
@@ -50,6 +48,7 @@ const CourseDescrip2 = ({ course }) => {
         if (!isMounted.current) return;
         setTips((prevTips) => [{ ...newTip, id: docRef.id, ref: docRef }, ...prevTips]);
         setLoading(false);
+        inputRef.current.value = "";
       })
       .then((doc) => {})
       .catch((error) => {
@@ -75,6 +74,7 @@ const CourseDescrip2 = ({ course }) => {
         newTips.unshift({ ...updateTipRef.current, tip: message });
         setTips(newTips);
         setLoading(false);
+        inputRef.current.value = "";
       })
       .catch((error) => {
         //TODO handle ui on error
@@ -94,7 +94,6 @@ const CourseDescrip2 = ({ course }) => {
     setInputFocus(false);
     setIsUpdateMode(false);
     setLoading(true);
-    inputRef.current.value = "";
 
     if (isUpdateMode) {
       updateTip(message);

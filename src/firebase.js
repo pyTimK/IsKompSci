@@ -17,6 +17,18 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
+
+// ? OFFLINE DATA
+db.enablePersistence().catch((error) => {
+  if (error.code === "failed-precondition") {
+    // probably multiple tabs open at once
+    console.log("persistence failed");
+  } else if (error.code === "unimplemented") {
+    // lack of browser support
+    console.log("persistence is not available");
+  }
+});
+
 const fieldValue = firebase.firestore.FieldValue;
 
 export { auth, db, fieldValue };

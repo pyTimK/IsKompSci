@@ -56,7 +56,7 @@ const CoursePage = ({ hasIntroData }) => {
     let image;
     try {
       const imgName = course.subject.split(/[^\w\d]/).join("_");
-      image = require(`../assets/img/${imgName}.png`).default;
+      image = require(`../assets/img/${imgName.toUpperCase()}.png`).default;
       return image;
     } catch (error) {
       console.log("Error: ", error.message);

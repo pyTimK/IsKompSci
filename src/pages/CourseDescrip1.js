@@ -78,10 +78,12 @@ const CourseDescrip1 = ({ course, setWillGoToTips }) => {
                 <h5>Website{websites.length > 1 && "s"}</h5>
                 <ul>
                   {websites.map((recommend, index) => {
+                    const [recommendTitle, recommendWebsite] = recommend.split(" —- ");
                     return (
                       <li key={index}>
-                        <a className="wrapword" href={recommend} target="_blank" rel="noopener noreferrer">
-                          {recommend}
+                        <h6>{recommendTitle}</h6>
+                        <a className="wrapword" href={recommendWebsite} target="_blank" rel="noopener noreferrer">
+                          {recommendWebsite}
                         </a>
                       </li>
                     );
