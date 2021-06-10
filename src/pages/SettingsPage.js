@@ -26,7 +26,6 @@ import { useHistory } from "react-router";
 
 const SettingsPage = ({ setShowSettings, setShowHome }) => {
   const classes = useStyles();
-  const history = useHistory();
   const rootAnimation = useAnimation();
   const [formDialogParam, setFormDialogParam] = useState({});
   const [isFormDialogOpen, setIsFormDialogOpen] = useState(false);

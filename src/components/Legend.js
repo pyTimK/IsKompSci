@@ -9,7 +9,7 @@ const Legend = () => {
       {items.map((item, index) => (
         <div className="legend-item" key={index}>
           <div className={`legend-circle ${item[1]}`}></div>
-          <div className="legend-label">{item[0]}</div>
+          <div className="legend-label noselect">{item[0]}</div>
         </div>
       ))}
     </div>
