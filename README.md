@@ -1,7 +1,7 @@
 # IsKompSci
 The application is currently deployed at [iskompsci.web.app/](https://iskompsci.web.app/)
 
-## Requirements
+## Requirement
 1. nodejs
 
 Below is a guide to install nodejs on ubuntu taken from [zeolearn.com/magazine/setup-react-ubuntu](https://www.zeolearn.com/magazine/setup-react-ubuntu)
