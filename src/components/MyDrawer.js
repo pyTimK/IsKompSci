@@ -2,6 +2,8 @@ import { SwipeableDrawer, Divider, List, ListItem, ListItemIcon, ListItemText, m
 import getFromLocalStorage from "../functions/getFromLocalStorage";
 import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
+import YouTubeIcon from "@material-ui/icons/YouTube";
+import openInNewTab from "../functions/openInNewTab";
 
 const MyDrawer = ({ drawer, toggleDrawer, setShowSettings, setShowFeedback }) => {
   const classes = useStyles();
@@ -13,6 +15,13 @@ const MyDrawer = ({ drawer, toggleDrawer, setShowSettings, setShowFeedback }) =>
       label: "Feedback",
       icon: <MailOutlineIcon />,
       onClick: (e) => setShowFeedback(true),
+    },
+    {
+      label: "Watch Tutorial",
+      icon: <YouTubeIcon />,
+      onClick: (e) => {
+        openInNewTab("https://youtu.be/YFtIBPbMKko");
+      },
     },
   ];
 
