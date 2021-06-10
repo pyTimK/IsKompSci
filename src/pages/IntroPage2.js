@@ -47,6 +47,7 @@ const IntroPage2 = ({ hasIntroData, setHasIntroData }) => {
           opacity: 0,
         }}>
         <motion.h4
+          className="noselect"
           initial={{
             y: "-300%",
           }}
@@ -60,7 +61,7 @@ const IntroPage2 = ({ hasIntroData, setHasIntroData }) => {
           <div className="intro-left">
             <img className="logo" src="/logo.png" alt="app logo" />
           </div>
-          <div className="intro-right">
+          <div className="intro-right noselect">
             {/* <p> */}
             <TypewriterComponent
               onInit={(typewriter) => {
