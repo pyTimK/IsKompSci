@@ -40,7 +40,7 @@ const CourseBox = ({ course, handleCourseTap, subject, initialStatus }) => {
       whileTap={{ scale: 0.8 }}
       className={clsx("course-box", status)}
       key={course.id}>
-      <p>{course.subject}</p>
+      <p className="noselect">{course.subject}</p>
     </motion.div>
   );
 };

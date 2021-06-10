@@ -37,7 +37,7 @@ const GroupBySem = ({ tighten, groupedBySemCourses, handleCourseTap }) => {
                 );
               })}
             </div>
-            <div className="sem-tag">
+            <div className="sem-tag noselect">
               <h5 className="sem-tag-left">{semCourse[0]}</h5>
               <div className="sem-tag-right">
                 <p>{`${totalUnits} units`}</p>
