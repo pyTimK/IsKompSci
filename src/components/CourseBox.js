@@ -34,17 +34,23 @@ const CourseBox = ({ course, handleCourseTap, subject, initialStatus }) => {
   };
 
   return (
-    <motion.div
+    <motion.button
+      style={{ outline: "none" }}
       ref={divRef}
-      onTap={(e) => handleCourseTap({ e, subject, status, setStatus, exitAnimate })}
+      onTap={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        handleCourseTap({ e, subject, status, setStatus, exitAnimate });
+      }}
       whileTap={{ scale: 0.8 }}
-      className={clsx("course-box", status)}
+      className={clsx("course-box", "noselect", status)}
       unselectable="on"
       onSelectCapture={() => false}
       onMouseDown={() => false}
       key={course.id}>
       <p className="noselect">{course.subject}</p>
-    </motion.div>
+    </motion.button>
   );
 };
 
