@@ -31,18 +31,3 @@ npm run
 ```
 3. Open [http://localhost:3000](http://localhost:3000) to view the website on developer mode.
 
-
-
-
-
-
-# IsKompSci
-
-## For developers
-1. Download or Clone this project.
-2. Open project folder in VS Code
-3. Run in VS Code terminal
-```
-npm install
-npm start
-```
