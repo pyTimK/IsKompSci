@@ -1,9 +1,9 @@
 # IsKompSci
-The application is currently deployed in [https://iskompsci.web.app/](iskompsci.web.app/)
+The application is currently deployed in [iskompsci.web.app/](https://iskompsci.web.app/)
 
 ## Requirements
 1. nodejs
-Below is a guide to install nodejs on ubuntu taken from [https://www.zeolearn.com/magazine/setup-react-ubuntu](zeolearn.com/magazine/setup-react-ubuntu)
+Below is a guide to install nodejs on ubuntu taken from [zeolearn.com/magazine/setup-react-ubuntu](https://www.zeolearn.com/magazine/setup-react-ubuntu)
 
 >To get a more recent version of Node.js is to add a PPA (personal package archive) maintained by NodeSource. Open terminal and run the commands below:
 ```
