@@ -64,8 +64,14 @@ const IntroPage1 = ({ hasIntroData }) => {
         <img className="logo" src="/logo.png" alt="app logo" />
         <h4>IsKompSci</h4>
 
-        <form onSubmit={handleOnSubmit} className={classes.bottom}>
-          <input className="my-input" ref={inputRef} type="text" placeholder="What's your name?" maxLength="8" />
+        <div className={classes.bottom}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              inputRef.current.blur();
+            }}>
+            <input className="my-input" ref={inputRef} type="text" placeholder="What's your name?" maxLength="8" />
+          </form>
           <Dropdown
             className={classes.dropdown}
             menuClassName={classes.menuClassName}
@@ -77,6 +83,7 @@ const IntroPage1 = ({ hasIntroData }) => {
           {!loading && (
             <div className={classes.block}>
               <Button
+                onClick={handleOnSubmit}
                 // variant="contained"
                 // size="large"
                 className="mybutton"
@@ -91,7 +98,7 @@ const IntroPage1 = ({ hasIntroData }) => {
             </div>
           )}
           <SyncLoader color="var(--white)" loading={loading} />
-        </form>
+        </div>
       </motion.div>
     </div>
   );
