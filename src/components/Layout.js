@@ -60,7 +60,14 @@ const Layout = ({ hasIntroData, children, editMode, toggleEditMode, setShowSetti
           <motion.div animate={appbarAnimation}>
             <AppBar position="absolute">
               <Toolbar className={classes.toolbar}>
-                <IconButton onClick={toggleDrawer} edge="start" className={classes.menuButton} aria-label="menu">
+                <IconButton
+                  onClick={(e) => {
+                    if (editMode) toggleEditMode();
+                    toggleDrawer();
+                  }}
+                  edge="start"
+                  className={classes.menuButton}
+                  aria-label="menu">
                   <UseAnimations className={classes.avoidClicks} strokeColor="white" animation={menu4} size={36} />
                 </IconButton>
                 <h6 className={classes.title}>Course Outline</h6>
