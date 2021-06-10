@@ -40,8 +40,8 @@ const CourseBox = ({ course, handleCourseTap, subject, initialStatus }) => {
       whileTap={{ scale: 0.8 }}
       className={clsx("course-box", status)}
       unselectable="on"
-      onselectstart={() => false}
-      onmousedown={() => false}
+      onSelectCapture={() => false}
+      onMouseDown={() => false}
       key={course.id}>
       <p className="noselect">{course.subject}</p>
     </motion.div>

@@ -22,9 +22,11 @@ import getFromLocalStorage from "../functions/getFromLocalStorage";
 import setFromLocalStorage from "../functions/setFromLocalStorage";
 import UserDataContext from "../contexts/UserDataContext";
 import CoursesDataContext from "../contexts/CoursesDataContext";
+import { useHistory } from "react-router";
 
 const SettingsPage = ({ setShowSettings, setShowHome }) => {
   const classes = useStyles();
+  const history = useHistory();
   const rootAnimation = useAnimation();
   const [formDialogParam, setFormDialogParam] = useState({});
   const [isFormDialogOpen, setIsFormDialogOpen] = useState(false);
@@ -120,6 +122,30 @@ const SettingsPage = ({ setShowSettings, setShowHome }) => {
                   setFromLocalStorage("graphPositions", initialGraphPositions);
                   coursesData.setgraphPositions(initialGraphPositions);
                   setIsFormDialogOpen(false);
+                },
+              },
+            ],
+          });
+          setIsFormDialogOpen(true);
+        }}
+      />
+
+      {/* CLEAR DATA */}
+      <SettingsTile
+        title="Delete App Data"
+        onClick={() => {
+          setFormDialogParam({
+            title: "Clear Data",
+            content: "This would remove all your saved data including the list of your taken/taking courses.",
+            buttons: [
+              { text: "CANCEL", onClick: () => setIsFormDialogOpen(false) },
+              {
+                text: "CONTINUE",
+                onClick: () => {
+                  localStorage.clear();
+                  window.location.reload();
+                  // history.replace("/intro1");
+                  // setIsFormDialogOpen(false);
                 },
               },
             ],
