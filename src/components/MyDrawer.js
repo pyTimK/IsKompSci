@@ -11,17 +11,18 @@ const MyDrawer = ({ drawer, toggleDrawer, setShowSettings, setShowFeedback }) =>
 
   const drawerItems = [
     { label: "Settings", icon: <SettingsOutlinedIcon />, onClick: (e) => setShowSettings(true) },
+
     {
-      label: "Feedback",
-      icon: <MailOutlineIcon />,
-      onClick: (e) => setShowFeedback(true),
-    },
-    {
-      label: "Watch Tutorial",
+      label: "Tutorial",
       icon: <YouTubeIcon />,
       onClick: (e) => {
         openInNewTab("https://youtu.be/YFtIBPbMKko");
       },
+    },
+    {
+      label: "Feedback",
+      icon: <MailOutlineIcon />,
+      onClick: (e) => setShowFeedback(true),
     },
   ];
 
