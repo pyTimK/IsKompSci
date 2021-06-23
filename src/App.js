@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { CoursesDataProvider } from "./contexts/CoursesDataContext";
-import CourseStatusWrapper from "./CourseStatusWrapper";
+import CourseStatusWrapper from "./CourseStatusWrapper.jsx";
 import getFromLocalStorage from "./functions/getFromLocalStorage";
 import groupBySem from "./functions/groupBySem";
 import initializeGraphElements from "./functions/initializeGraphElements";

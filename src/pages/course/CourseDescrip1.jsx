@@ -1,7 +1,7 @@
 import { Button, makeStyles } from "@material-ui/core";
 import { motion } from "framer-motion";
 import CheckIcon from "@material-ui/icons/Check";
-import getFromLocalStorage from "../functions/getFromLocalStorage";
+import getFromLocalStorage from "../../functions/getFromLocalStorage";
 import { Link } from "react-router-dom";
 
 const abbvreviations = { 1: "1st", 2: "2nd", 3: "3rd", 4: "4th", M: "Mid" };
@@ -82,7 +82,7 @@ const CourseDescrip1 = ({ course, setWillGoToTips }) => {
                     return (
                       <li key={index}>
                         <h6>{recommendTitle}</h6>
-                        <a className="wrapword" href={recommendWebsite} target="_blank" rel="noopener noreferrer">
+                        <a className='wrapword' href={recommendWebsite} target='_blank' rel='noopener noreferrer'>
                           {recommendWebsite}
                         </a>
                       </li>
@@ -111,7 +111,7 @@ const CourseDescrip1 = ({ course, setWillGoToTips }) => {
                   &nbsp;
                   <CheckIcon
                     style={{ color: taken.includes(prerequisite) ? "var(--green)" : "transparent" }}
-                    fontSize="small"
+                    fontSize='small'
                   />
                 </div>
               </li>
@@ -137,7 +137,7 @@ const CourseDescrip1 = ({ course, setWillGoToTips }) => {
                           ? "var(--green)"
                           : "transparent",
                     }}
-                    fontSize="small"
+                    fontSize='small'
                   />
                 </div>
               </li>
@@ -152,7 +152,7 @@ const CourseDescrip1 = ({ course, setWillGoToTips }) => {
             window.scrollTo(0, 0);
             setWillGoToTips(true);
           }}
-          className="mybutton2"
+          className='button-descrip'
           component={motion.button}
           whileHover={{
             scale: 1.2,
@@ -168,7 +168,6 @@ const CourseDescrip1 = ({ course, setWillGoToTips }) => {
 
 const useStyles = makeStyles((theme) => {
   return {
-    //
     root: {
       overflow: "hidden",
       "& h4": {

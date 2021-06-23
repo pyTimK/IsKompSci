@@ -28,9 +28,9 @@ const MyDrawer = ({ drawer, toggleDrawer, setShowSettings, setShowFeedback }) =>
 
   return (
     <SwipeableDrawer open={drawer} onClose={toggleDrawer} onOpen={toggleDrawer}>
-      <div className={classes.drawer} role="presentation" onClick={toggleDrawer} onKeyDown={toggleDrawer}>
+      <div className={classes.drawer} role='presentation' onClick={toggleDrawer} onKeyDown={toggleDrawer}>
         <div className={classes.logo}>
-          <img className="logo" src="/logo.png" alt="app logo" />
+          <img className='logo' src='/logo.png' alt='app logo' />
         </div>
         <p>Hello!</p>
         <h5>{name}</h5>
@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => {
       // backgroundColor: green[600],
       height: "100%",
       padding: drawerPadding,
-      fontWeight: "300",
+      fontWeight: 300,
       textAlign: "center",
       color: "var(--darkgray)",
     },

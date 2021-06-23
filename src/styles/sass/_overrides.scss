@@ -1,0 +1,29 @@
+//* MATERIAL-UI
+.MuiInputBase-input {
+  color: black !important;
+}
+.MuiTabs-indicator {
+  height: var(--tabsIndicatorHeight) !important;
+}
+
+//* REACT FLOW
+.react-flow__edge-path {
+  stroke: black !important;
+  stroke-width: 2 !important;
+}
+
+.react-flow__node {
+  color: white !important;
+  font-size: 0.8rem !important;
+  padding: 5px !important;
+  border: none !important;
+  width: auto !important;
+}
+
+.react-flow__handle {
+  visibility: hidden !important;
+  border: none !important;
+  background: black !important;
+  width: 4px !important;
+  height: 4px !important;
+}

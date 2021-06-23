@@ -22,7 +22,6 @@ import getFromLocalStorage from "../functions/getFromLocalStorage";
 import setFromLocalStorage from "../functions/setFromLocalStorage";
 import UserDataContext from "../contexts/UserDataContext";
 import CoursesDataContext from "../contexts/CoursesDataContext";
-import { useHistory } from "react-router";
 
 const SettingsPage = ({ setShowSettings, setShowHome }) => {
   const classes = useStyles();
@@ -49,16 +48,16 @@ const SettingsPage = ({ setShowSettings, setShowHome }) => {
       exit={{ x: "100vw" }}
       animate={rootAnimation}
       className={classes.root}>
-      <AppBar position="absolute">
+      <AppBar position='absolute'>
         <Toolbar className={classes.toolbar}>
           <IconButton
             onClick={() => {
               setShowHome(true);
               setShowSettings(false);
             }}
-            edge="start"
+            edge='start'
             className={classes.menuButton}
-            aria-label="back">
+            aria-label='back'>
             <ArrowBackIosIcon />
           </IconButton>
           <h6 className={classes.settings}>Settings</h6>
@@ -97,7 +96,7 @@ const SettingsPage = ({ setShowSettings, setShowHome }) => {
           });
           setIsFormDialogOpen(true);
         }}
-        title="Change name">
+        title='Change name'>
         <div>
           <p>{name}</p>
           <ChevronRightIcon />
@@ -106,7 +105,7 @@ const SettingsPage = ({ setShowSettings, setShowHome }) => {
 
       {/* RESET GRAPH */}
       <SettingsTile
-        title="Reset Graph Positioning"
+        title='Reset Graph Positioning'
         onClick={() => {
           setFormDialogParam({
             title: "Reset graph",
@@ -131,7 +130,7 @@ const SettingsPage = ({ setShowSettings, setShowHome }) => {
 
       {/* CLEAR DATA */}
       <SettingsTile
-        title="Delete App Data"
+        title='Delete App Data'
         onClick={() => {
           setFormDialogParam({
             title: "Clear Data",
@@ -143,7 +142,7 @@ const SettingsPage = ({ setShowSettings, setShowHome }) => {
                 onClick: () => {
                   localStorage.clear();
                   window.location.reload();
-                  // history.replace("/intro1");
+                  // history.replace("/intro/1");
                   // setIsFormDialogOpen(false);
                 },
               },
@@ -160,7 +159,7 @@ const SettingsTile = ({ title, children, onClick }) => {
   const classes = useStyles();
   return (
     <div>
-      <Ripples during={1500} color="rgba(0, 0, 0, .2)">
+      <Ripples during={1500} color='rgba(0, 0, 0, .2)'>
         <motion.div onClick={onClick} whileTap={{ backgroundColor: "rgba(0,0,0,0.1)" }} className={classes.row}>
           <div className={classes.left}>
             <h6 className={classes.title}>{title}</h6>
@@ -174,7 +173,7 @@ const SettingsTile = ({ title, children, onClick }) => {
 };
 
 const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
+  return <Slide direction='up' ref={ref} {...props} />;
 });
 
 const FormDialog = ({ open, handleDialogClose, formDialogParam }) => {
@@ -198,17 +197,17 @@ const FormDialog = ({ open, handleDialogClose, formDialogParam }) => {
         setValue(textFieldInitalValue);
         handleDialogClose();
       }}
-      aria-labelledby="alert-dialog-slide-title"
-      aria-describedby="alert-dialog-slide-description">
-      <DialogTitle style={{ color: "var(--darkergray)" }} id="alert-dialog-slide-title">
+      aria-labelledby='alert-dialog-slide-title'
+      aria-describedby='alert-dialog-slide-description'>
+      <DialogTitle style={{ color: "var(--darkergray)" }} id='alert-dialog-slide-title'>
         {title}
       </DialogTitle>
       <DialogContent>
-        <DialogContentText id="alert-dialog-slide-description">{content}</DialogContentText>
+        <DialogContentText id='alert-dialog-slide-description'>{content}</DialogContentText>
         {hasTextField && (
           <TextField
             autoFocus
-            margin="dense"
+            margin='dense'
             id={textFieldLabel}
             label={textFieldLabel}
             className={classes.input}
@@ -223,7 +222,7 @@ const FormDialog = ({ open, handleDialogClose, formDialogParam }) => {
           <Button
             key={index}
             onClick={(e) => button.onClick(e, value)}
-            color="primary"
+            color='primary'
             disabled={button.disabledIf ? button.disabledIf(value) : false}>
             {button.text}
           </Button>

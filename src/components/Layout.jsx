@@ -1,4 +1,3 @@
-import { AppBar, IconButton, makeStyles, Tab, Tabs, Toolbar } from "@material-ui/core";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import DoneOutlinedIcon from "@material-ui/icons/DoneOutlined";
 import { motion, useAnimation } from "framer-motion";
@@ -10,6 +9,7 @@ import { useHistory, useLocation, useParams } from "react-router";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { ReactFlowProvider } from "react-flow-renderer";
 import MyDrawer from "./MyDrawer";
+import { AppBar, IconButton, Tab, Tabs, Toolbar, makeStyles } from "@material-ui/core";
 
 const Layout = ({ hasIntroData, children, editMode, toggleEditMode, setShowSettings, setShowFeedback }) => {
   const history = useHistory();
@@ -30,7 +30,7 @@ const Layout = ({ hasIntroData, children, editMode, toggleEditMode, setShowSetti
   }, [animate, appbarAnimation, history]);
 
   if (!hasIntroData) {
-    history.push("/intro1");
+    history.push("/intro/1");
   }
 
   if (location.pathname === "/main2" && tab !== 1) {
@@ -48,7 +48,7 @@ const Layout = ({ hasIntroData, children, editMode, toggleEditMode, setShowSetti
   };
 
   return (
-    <div className="layout-wrapper">
+    <div className={classes.root}>
       {hasIntroData && (
         <div>
           <MyDrawer
@@ -58,17 +58,17 @@ const Layout = ({ hasIntroData, children, editMode, toggleEditMode, setShowSetti
             setShowFeedback={setShowFeedback}
           />
           <motion.div animate={appbarAnimation}>
-            <AppBar position="absolute">
+            <AppBar position='absolute'>
               <Toolbar className={classes.toolbar}>
                 <IconButton
                   onClick={(e) => {
                     if (editMode) toggleEditMode();
                     toggleDrawer();
                   }}
-                  edge="start"
+                  edge='start'
                   className={classes.menuButton}
-                  aria-label="menu">
-                  <UseAnimations className={classes.avoidClicks} strokeColor="white" animation={menu4} size={36} />
+                  aria-label='menu'>
+                  <UseAnimations className={classes.avoidClicks} strokeColor='white' animation={menu4} size={36} />
                 </IconButton>
                 <h6 className={classes.title}>Course Outline</h6>
                 <IconButton
@@ -77,15 +77,15 @@ const Layout = ({ hasIntroData, children, editMode, toggleEditMode, setShowSetti
                     document.body.scrollTop = 0; // For Safari
                     document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
                   }}
-                  edge="end"
+                  edge='end'
                   className={classes.white}
-                  aria-label="edit">
+                  aria-label='edit'>
                   {editMode ? <DoneOutlinedIcon /> : <EditOutlinedIcon />}
                 </IconButton>
               </Toolbar>
-              <Tabs className={classes.tabs} value={tab} onChange={handleChange} variant="fullWidth">
-                <Tab className={classes.tabLabel} label="Cards" />
-                <Tab className={classes.tabLabel} label="Graph" />
+              <Tabs className={classes.tabs} value={tab} onChange={handleChange} variant='fullWidth'>
+                <Tab className={classes.tabLabel} label='Cards' />
+                <Tab className={classes.tabLabel} label='Graph' />
               </Tabs>
             </AppBar>
             <div className={classes.toolbarHeight}></div>
@@ -100,7 +100,8 @@ const Layout = ({ hasIntroData, children, editMode, toggleEditMode, setShowSetti
 const useStyles = makeStyles((theme) => {
   return {
     root: {
-      flexGrow: 1,
+      color: "white",
+      backgroundColor: "var(--bggray)",
     },
     toolbar: {
       height: "var(--toolbarHeight) !important",
@@ -119,7 +120,7 @@ const useStyles = makeStyles((theme) => {
       color: "white",
     },
     tabLabel: {
-      fontWeight: "400",
+      fontWeight: 400,
       fontSize: "0.8rem",
       color: "white",
       letterSpacing: "0.05rem",

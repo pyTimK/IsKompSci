@@ -2,9 +2,9 @@ import { Route, Switch, useHistory, useParams, useRouteMatch } from "react-route
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import { IconButton, makeStyles } from "@material-ui/core";
 import { useContext, useEffect, useMemo, useState } from "react";
-import CoursesDataContext from "../contexts/CoursesDataContext";
+import CoursesDataContext from "../../contexts/CoursesDataContext";
 import CourseDescrip2 from "./CourseDescrip2";
-import CourseDescrip1 from "./CourseDescrip1";
+import CourseDescrip1 from "./CourseDescrip1.jsx";
 import { AnimatePresence, motion } from "framer-motion";
 
 const offsetNeeded = 0.45 * document.documentElement.clientHeight;
@@ -12,7 +12,7 @@ const offsetNeeded = 0.45 * document.documentElement.clientHeight;
 const CoursePage = ({ hasIntroData }) => {
   const [opacity, setOpacity] = useState(1);
   const [willGoToTips, setWillGoToTips] = useState(false);
-  const classes = useStyles(opacity);
+  const classes = useStyles({ opacity });
   const { id } = useParams();
   const history = useHistory();
   const { path } = useRouteMatch();
@@ -49,18 +49,18 @@ const CoursePage = ({ hasIntroData }) => {
   }, [willGoToTips, history, id]);
 
   useEffect(() => {
-    if (!hasIntroData) history.push("/intro1");
+    if (!hasIntroData) history.push("/intro/1");
   }, [hasIntroData, history]);
 
   const image = useMemo(() => {
     let image;
     try {
       const imgName = course.subject.split(/[^\w\d]/).join("_");
-      image = require(`../assets/img/${imgName.toUpperCase()}.png`).default;
+      image = require(`../../assets/img/${imgName.toUpperCase()}.png`).default;
       return image;
     } catch (error) {
       console.log("Error: ", error.message);
-      image = require(`../assets/img/CS_12.png`).default;
+      image = require(`../../assets/img/CS_12.png`).default;
       return image;
     }
   }, [course]);
@@ -68,14 +68,14 @@ const CoursePage = ({ hasIntroData }) => {
   return (
     hasIntroData && (
       <div>
-        <div className="course-page-bg">
+        <div className={classes.mainBg}>
           <div className={classes.root}>
             <motion.div
               className={classes.backIconWrapper}
               initial={{ x: "-480px" }}
               animate={{ x: "-12px", transition: { delay: 0.1, duration: 1, type: "spring" } }}>
-              <IconButton onClick={() => history.goBack()} aria-label="back">
-                <ArrowBackIosIcon fontSize="large" className={classes.backIcon} />
+              <IconButton onClick={() => history.goBack()} aria-label='back'>
+                <ArrowBackIosIcon fontSize='large' className={classes.backIcon} />
               </IconButton>
             </motion.div>
             <div className={classes.spacer}></div>
@@ -84,7 +84,7 @@ const CoursePage = ({ hasIntroData }) => {
                 initial={{ opacity: 0, y: "30px" }}
                 animate={{ opacity: 1, y: 0, transition: { delay: 0.1, duration: 1 } }}
                 src={image}
-                alt="Related to course"></motion.img>
+                alt='Related to course'></motion.img>
             </div>
 
             <motion.div
@@ -98,7 +98,7 @@ const CoursePage = ({ hasIntroData }) => {
             </motion.div>
           </div>
         </div>
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="course-descrip-bg">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className={classes.descripBg}>
           <AnimatePresence exitBeforeEnter>
             <Switch location={history.location} key={history.location.pathname}>
               <Route path={`${path}/tips`}>
@@ -129,10 +129,9 @@ const CoursePage = ({ hasIntroData }) => {
 const useStyles = makeStyles((theme) => {
   const padding = "16px";
   return {
-    root: {
-      opacity: (opacity) => opacity,
+    root: ({ opacity }) => ({
+      opacity: opacity,
       padding: padding,
-      // paddingTop: (opacity) => `${16 + 50 * (1 - opacity)}px`,
       "& h5": {
         fontWeight: 600,
       },
@@ -140,7 +139,26 @@ const useStyles = makeStyles((theme) => {
         fontWeight: 200,
         fontSize: "1rem",
       },
+    }),
+    mainBg: {
+      position: "fixed",
+      width: "100vw",
+      height: "100vh",
+      backgroundColor: "var(--materialgreen)",
+      color: "white",
     },
+    descripBg: {
+      position: "absolute",
+      top: "45vh",
+      zIndex: 1,
+      width: `calc(100% - 2 * ${padding})`,
+      minHeight: `calc(55vh - 2 * ${padding})`,
+      padding: `${padding}`,
+      backgroundColor: "var(--white)",
+      color: "var(--darkergray)",
+      borderRadius: "2em 2em 0 0",
+    },
+
     backIconWrapper: {
       float: "left",
     },

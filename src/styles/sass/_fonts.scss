@@ -1,0 +1,20 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600&display=swap");
+
+$metropolis-fonts: (Thin, 200, false), (Light, 300), (Regular, 400), (Medium, 500), (SemiBold, 600), (Bold, 700);
+
+@mixin generate-font($family, $name, $weight, $has-woff: true) {
+  font-family: $family;
+  @if $has-woff {
+    src: url(../../assets/fonts/#{$name}.woff) format("woff"), url(../../assets/fonts/#{$name}.otf) format("truetype");
+  } @else {
+    src: url(../../assets/fonts/#{$name}.otf) format("truetype");
+  }
+  font-weight: $weight;
+  font-display: block;
+}
+
+@each $name, $weight, $has-woff in $metropolis-fonts {
+  @font-face {
+    @include generate-font(metropolis, Metropolis-#{$name}, $weight, $has-woff != false);
+  }
+}

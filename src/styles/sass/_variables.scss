@@ -1,0 +1,29 @@
+:root {
+  --green: #0a5e2a;
+  --darkgreen: #03461c;
+  --darkergreen: #f7f7f7;
+  --materialgreen: #4caf50;
+  --lightgreen: #6dac4f;
+  --bluegreen: #00a87e;
+  --white: #efefe7;
+  --orange: #ff9100;
+  --red: #fe0000;
+  --gray: #919191;
+  --darkgray: #5e5e5e;
+  --darkergray: #2e2e2e;
+  --bggray: #eaeaea;
+  --link: rgb(0, 80, 155);
+  --takenColor: var(--lightgreen);
+  --takingColor: var(--bluegreen);
+  --not-takenColor: var(--gray);
+  scroll-behavior: smooth;
+}
+
+//* HOME VARS
+.home-vars {
+  --toolbarHeight: 60px;
+  --tabsHeight: 48px;
+  --tabsIndicatorHeight: 2px;
+  --editModeTextHeight: 90px;
+  --editModeDividerTopMargin: 8px;
+}

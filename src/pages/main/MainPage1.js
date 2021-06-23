@@ -1,13 +1,15 @@
 import { AnimateSharedLayout, motion, useAnimation } from "framer-motion";
 import { useContext, useEffect } from "react";
 import { useHistory } from "react-router";
-import EditModeText from "../components/EditModeText";
-import GroupBySem from "../components/GroupBySem";
-import Legend from "../components/Legend";
-import CoursesDataContext from "../contexts/CoursesDataContext";
-import updateCourseStatus from "../functions/updateCourseStatus";
+import EditModeText from "../../components/EditModeText";
+import GroupBySem from "../../components/GroupBySem";
+import Legend from "../../components/Legend";
+import CoursesDataContext from "../../contexts/CoursesDataContext";
+import updateCourseStatus from "../../functions/updateCourseStatus";
+import { makeStyles } from "@material-ui/core";
 
 const MainPage1 = ({ editMode }) => {
+  const c = useStyles();
   const data = useContext(CoursesDataContext);
   const groupedBySemCourses = data.groupedBySemCourses;
   const graphElements = data.graphElements;
@@ -34,18 +36,22 @@ const MainPage1 = ({ editMode }) => {
     }
   };
   return (
-    <div className="main-bg">
-      <motion.div className="main-wrapper" initial={{ opacity: 0 }} animate={divAnimation}>
-        <AnimateSharedLayout>
-          <EditModeText editMode={editMode} text="TAP TO CHANGE COURSE STATUS" />
-          <motion.div layout>
-            <GroupBySem groupedBySemCourses={groupedBySemCourses} handleCourseTap={handleCourseTap} />
-          </motion.div>
-          <Legend />
-        </AnimateSharedLayout>
-      </motion.div>
-    </div>
+    <motion.div className={c.root} initial={{ opacity: 0 }} animate={divAnimation}>
+      <AnimateSharedLayout>
+        <EditModeText editMode={editMode} text='TAP TO CHANGE COURSE STATUS' />
+        <motion.div layout>
+          <GroupBySem groupedBySemCourses={groupedBySemCourses} handleCourseTap={handleCourseTap} />
+        </motion.div>
+        <Legend />
+      </AnimateSharedLayout>
+    </motion.div>
   );
 };
+
+const useStyles = makeStyles((theme) => {
+  return {
+    root: { padding: "0 16px" },
+  };
+});
 
 export default MainPage1;

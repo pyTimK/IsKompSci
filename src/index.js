@@ -1,10 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./styles/fonts.css";
-import "./index.css";
-import "./styles/intro.css";
-import "./styles/main.css";
-import "./styles/course_descrip.css";
+import "./styles/sass/index.scss";
 import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";

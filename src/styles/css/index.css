@@ -1,0 +1,238 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600&display=swap");
+:root {
+  --green: #0a5e2a;
+  --darkgreen: #03461c;
+  --darkergreen: #f7f7f7;
+  --materialgreen: #4caf50;
+  --lightgreen: #6dac4f;
+  --bluegreen: #00a87e;
+  --white: #efefe7;
+  --orange: #ff9100;
+  --red: #fe0000;
+  --gray: #919191;
+  --darkgray: #5e5e5e;
+  --darkergray: #2e2e2e;
+  --bggray: #eaeaea;
+  --link: rgb(0, 80, 155);
+  --takenColor: var(--lightgreen);
+  --takingColor: var(--bluegreen);
+  --not-takenColor: var(--gray);
+  scroll-behavior: smooth;
+}
+
+.home-vars {
+  --toolbarHeight: 60px;
+  --tabsHeight: 48px;
+  --tabsIndicatorHeight: 2px;
+  --editModeTextHeight: 90px;
+  --editModeDividerTopMargin: 8px;
+}
+
+@font-face {
+  font-family: metropolis;
+  src: url(../../assets/fonts/Metropolis-Thin.otf) format("truetype");
+  font-weight: 200;
+  font-display: block;
+}
+@font-face {
+  font-family: metropolis;
+  src: url(../../assets/fonts/Metropolis-Light.woff) format("woff"), url(../../assets/fonts/Metropolis-Light.otf) format("truetype");
+  font-weight: 300;
+  font-display: block;
+}
+@font-face {
+  font-family: metropolis;
+  src: url(../../assets/fonts/Metropolis-Regular.woff) format("woff"), url(../../assets/fonts/Metropolis-Regular.otf) format("truetype");
+  font-weight: 400;
+  font-display: block;
+}
+@font-face {
+  font-family: metropolis;
+  src: url(../../assets/fonts/Metropolis-Medium.woff) format("woff"), url(../../assets/fonts/Metropolis-Medium.otf) format("truetype");
+  font-weight: 500;
+  font-display: block;
+}
+@font-face {
+  font-family: metropolis;
+  src: url(../../assets/fonts/Metropolis-SemiBold.woff) format("woff"), url(../../assets/fonts/Metropolis-SemiBold.otf) format("truetype");
+  font-weight: 600;
+  font-display: block;
+}
+@font-face {
+  font-family: metropolis;
+  src: url(../../assets/fonts/Metropolis-Bold.woff) format("woff"), url(../../assets/fonts/Metropolis-Bold.otf) format("truetype");
+  font-weight: 700;
+  font-display: block;
+}
+.wrapword {
+  white-space: -moz-pre-wrap;
+  white-space: -webkit-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  word-break: break-all;
+  white-space: normal;
+}
+
+.noselect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.MuiInputBase-input {
+  color: black !important;
+}
+
+.MuiTabs-indicator {
+  height: var(--tabsIndicatorHeight) !important;
+}
+
+.react-flow__edge-path {
+  stroke: black !important;
+  stroke-width: 2 !important;
+}
+
+.react-flow__node {
+  color: white !important;
+  font-size: 0.8rem !important;
+  padding: 5px !important;
+  border: none !important;
+  width: auto !important;
+}
+
+.react-flow__handle {
+  visibility: hidden !important;
+  border: none !important;
+  background: black !important;
+  width: 4px !important;
+  height: 4px !important;
+}
+
+body {
+  margin: 0;
+  letter-spacing: 0.1rem;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+  font-family: metropolis, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+a {
+  text-decoration: none;
+}
+
+p {
+  margin: 0;
+  letter-spacing: 0.1rem;
+  font-size: 0.875rem;
+}
+
+h1 {
+  margin: 0;
+  letter-spacing: 0.1rem;
+  font-size: 6rem;
+  font-weight: 400;
+}
+
+h2 {
+  margin: 0;
+  letter-spacing: 0.1rem;
+  font-size: 3.75rem;
+  font-weight: 400;
+}
+
+h3 {
+  margin: 0;
+  letter-spacing: 0.1rem;
+  font-size: 3rem;
+  font-weight: 500;
+}
+
+h4 {
+  margin: 0;
+  letter-spacing: 0.1rem;
+  font-size: 2.125rem;
+  font-weight: 500;
+}
+
+h5 {
+  margin: 0;
+  letter-spacing: 0.1rem;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+h6 {
+  margin: 0;
+  letter-spacing: 0.1rem;
+  font-size: 1.25rem;
+  font-weight: 400;
+}
+
+form {
+  width: 100%;
+  margin: auto;
+}
+
+.logo {
+  width: 6rem;
+}
+
+.button-intro {
+  letter-spacing: 0.1rem;
+  background-color: var(--white) !important;
+  color: black !important;
+  box-shadow: 0 1px 10px #363636 !important;
+  padding: 8px 45px !important;
+  border-radius: 2rem !important;
+}
+
+.button-descrip {
+  letter-spacing: 0.1rem;
+  background-color: var(--green) !important;
+  color: var(--white) !important;
+  box-shadow: 0 1px 10px #363636 !important;
+  padding: 8px 45px !important;
+  border-radius: 2rem !important;
+  margin: 10px 0 10px 0 !important;
+}
+
+.button-tips-submit {
+  letter-spacing: 0.1rem;
+  background-color: var(--green) !important;
+  color: var(--white) !important;
+  box-shadow: 0 1px 10px #363636 !important;
+  width: 30%;
+}
+
+.button-tips-cancel {
+  letter-spacing: 0.1rem;
+  background-color: transparent !important;
+  color: var(--green) !important;
+  width: 30%;
+}
+
+.taken {
+  background-color: var(--takenColor) !important;
+}
+
+.taking {
+  background-color: var(--takingColor) !important;
+}
+
+.not-taken {
+  background-color: var(--not-takenColor) !important;
+}
+
+/*# sourceMappingURL=index.css.map */

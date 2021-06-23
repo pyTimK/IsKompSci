@@ -1,11 +1,11 @@
 import { Button, makeStyles } from "@material-ui/core";
 import { AnimateSharedLayout, motion } from "framer-motion";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import TipsBox from "../components/TipsBox";
-import { db, fieldValue } from "../firebase";
+import TipsBox from "../../components/TipsBox";
+import { db, fieldValue } from "../../firebase";
 import { Shimmer } from "react-shimmer";
-import UserDataContext from "../contexts/UserDataContext";
-import notify from "../functions/notify";
+import UserDataContext from "../../contexts/UserDataContext";
+import notify from "../../functions/notify";
 
 const shimmerWidth = window.screen.width * 0.8;
 const shimmerWidthShort = window.screen.width * 0.3;
@@ -178,8 +178,8 @@ const CourseDescrip2 = ({ course }) => {
                 transition: { duration: 0.05, ease: "easeInOut" },
               }}
               // rows={inputFocus ? 5 : 1}
-              type="text"
-              placeholder="Have your own advice?"
+              type='text'
+              placeholder='Have your own advice?'
               required
             />
             {inputFocus && (
@@ -197,7 +197,7 @@ const CourseDescrip2 = ({ course }) => {
                     setIsUpdateMode(false);
                     setInputFocus(false);
                   }}
-                  className="mybutton4"
+                  className='button-tips-cancel'
                   component={motion.div}
                   whileHover={{
                     scale: 1.2,
@@ -207,7 +207,7 @@ const CourseDescrip2 = ({ course }) => {
                   Cancel
                 </Button>
                 <Button
-                  className="mybutton3"
+                  className='button-tips-submit'
                   component={motion.button}
                   whileHover={{
                     scale: 1.2,
