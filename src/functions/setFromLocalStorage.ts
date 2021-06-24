@@ -1,4 +1,4 @@
-const setFromLocalStorage = (key, value) => {
+const setFromLocalStorage = <T>(key: string, value: T) => {
   try {
     window.localStorage.setItem(key, JSON.stringify(value));
   } catch (error) {

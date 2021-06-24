@@ -1,17 +1,17 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { CoursesDataProvider } from "./contexts/CoursesDataContext";
-import CourseStatusWrapper from "./CourseStatusWrapper.jsx";
+import CourseStatusWrapper from "./CourseStatusWrapper.js";
 import getFromLocalStorage from "./functions/getFromLocalStorage";
 import groupBySem from "./functions/groupBySem";
 import initializeGraphElements from "./functions/initializeGraphElements";
 import setFromLocalStorage from "./functions/setFromLocalStorage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { CourseData } from "./interfaces/CourseData";
 
-function App() {
-  // console.log("size: ", window.screen.width, window.screen.height);
-  // console.log("clientHeight: ", document.documentElement.clientHeight);
-  const coursesJSON = require("./data/courses.json");
+const App: React.FC = () => {
+  const coursesJSON: CourseData = require("./data/courses.json");
+
   const courses = coursesJSON.data;
 
   const groupedBySemCourses = groupBySem(courses);
@@ -40,13 +40,13 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div className='App'>
       <CoursesDataProvider value={data}>
         <CourseStatusWrapper />
       </CoursesDataProvider>
       <ToastContainer />
     </div>
   );
-}
+};
 
 export default App;

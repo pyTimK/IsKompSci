@@ -58,19 +58,19 @@ const FeedbackPage = ({ setShowFeedback, setShowHome }) => {
       animate={rootAnimation}
       className={classes.root}>
       <form onSubmit={sendEmail}>
-        <AppBar position="absolute">
+        <AppBar position='absolute'>
           <Toolbar className={classes.toolbar}>
             <IconButton
               onClick={() => {
                 close();
               }}
-              edge="start"
+              edge='start'
               className={classes.menuButton}
-              aria-label="back">
+              aria-label='back'>
               <ArrowBackIosIcon />
             </IconButton>
             <h6 className={classes.pageName}>Feedback</h6>
-            <IconButton type="submit" edge="end" className={classes.menuButton} aria-label="back">
+            <IconButton type='submit' edge='end' className={classes.menuButton} aria-label='back'>
               <SendRoundedIcon />
             </IconButton>
           </Toolbar>
@@ -78,13 +78,13 @@ const FeedbackPage = ({ setShowFeedback, setShowHome }) => {
         <div className={classes.toolbarHeight}></div>
         {/* CHANGE NAME */}
         <div className={classes.inputWrapper}>
-          <FeedbackTile title="Name" type="text" initialValue={name} />
-          <FeedbackTile title="Email" type="email" />
-          <FeedbackTile title="Subject" type="text" />
+          <FeedbackTile title='Name' type='text' initialValue={name} />
+          <FeedbackTile title='Email' type='email' />
+          <FeedbackTile title='Subject' type='text' />
           <div className={classes.textareaWrapper}>
             <textarea
               required
-              name="message"
+              name='message'
               placeholder="We'd love to hear your feedback."
               className={classes.textarea}
             />
@@ -98,6 +98,7 @@ const FeedbackPage = ({ setShowFeedback, setShowHome }) => {
 const FeedbackTile = ({ title, type, initialValue }) => {
   const classes = useStyles();
   const inputRef = useRef();
+
   return (
     <div>
       <motion.div
