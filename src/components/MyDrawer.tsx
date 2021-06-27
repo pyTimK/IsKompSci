@@ -1,40 +1,45 @@
 import { SwipeableDrawer, Divider, List, ListItem, ListItemIcon, ListItemText, makeStyles } from "@material-ui/core";
-import getFromLocalStorage from "../functions/getFromLocalStorage";
 import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import YouTubeIcon from "@material-ui/icons/YouTube";
 import openInNewTab from "../functions/openInNewTab";
+import { LocalStorageHelper } from "../classes/LocalStorageHelper";
+import { useContext } from "react";
+import { DrawerPageContext } from "../Home";
 
-const MyDrawer = ({ drawer, toggleDrawer, setShowSettings, setShowFeedback }) => {
+interface Props {
+  open: boolean;
+  toggleOpen: () => void;
+}
+
+const MyDrawer: React.FC<Props> = ({ open, toggleOpen }) => {
   const classes = useStyles();
-  const name = getFromLocalStorage("name", "Ricardough");
+  const name = LocalStorageHelper.get<string>("name", "Ricardough");
+  const drawerPage = useContext(DrawerPageContext)!;
 
   const drawerItems = [
-    { label: "Settings", icon: <SettingsOutlinedIcon />, onClick: (e) => setShowSettings(true) },
-
+    { label: "Settings", icon: <SettingsOutlinedIcon />, onClick: () => drawerPage.setShowSettings(true) },
     {
       label: "Tutorial",
       icon: <YouTubeIcon />,
-      onClick: (e) => {
-        openInNewTab("https://youtu.be/YFtIBPbMKko");
-      },
+      onClick: () => openInNewTab("https://youtu.be/YFtIBPbMKko"),
     },
     {
       label: "Feedback",
       icon: <MailOutlineIcon />,
-      onClick: (e) => setShowFeedback(true),
+      onClick: () => drawerPage.setShowFeedback(true),
     },
   ];
 
   return (
-    <SwipeableDrawer open={drawer} onClose={toggleDrawer} onOpen={toggleDrawer}>
-      <div className={classes.drawer} role='presentation' onClick={toggleDrawer} onKeyDown={toggleDrawer}>
+    <SwipeableDrawer open={open} onClose={toggleOpen} onOpen={toggleOpen}>
+      <div className={classes.drawer} role='presentation' onClick={toggleOpen} onKeyDown={toggleOpen}>
         <div className={classes.logo}>
           <img className='logo' src='/logo.png' alt='app logo' />
         </div>
         <p>Hello!</p>
         <h5>{name}</h5>
-        <Divider className={classes.drawerDivider} />
+        <Divider />
         <List>
           {drawerItems.map((item) => (
             <ListItem button key={item.label} onClick={item.onClick}>
@@ -55,7 +60,6 @@ const useStyles = makeStyles((theme) => {
     drawer: {
       width: 250,
       backgroundColor: "white",
-      // backgroundColor: green[600],
       height: "100%",
       padding: drawerPadding,
       fontWeight: 300,
@@ -74,8 +78,6 @@ const useStyles = makeStyles((theme) => {
       bottom: "16px",
       width: `calc(100% - 2 * ${drawerPadding})`,
       opacity: 0.7,
-
-      // width: `calc(100% - 2 * ${drawerPadding})`,
     },
   };
 });

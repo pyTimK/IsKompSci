@@ -1,7 +1,7 @@
 import { makeStyles } from "@material-ui/core";
 import clsx from "clsx";
 
-const Legend = () => {
+const Legend: React.FC = () => {
   const c = useStyles();
   const items = [
     ["Taken", "taken"],

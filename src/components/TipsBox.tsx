@@ -8,62 +8,49 @@ import DeleteOutlinedIcon from "@material-ui/icons/DeleteOutlined";
 import { makeStyles } from "@material-ui/core";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import { fieldValue } from "../firebase";
 import MyDialog from "./MyDialog";
+import Tip from "../classes/Tip";
 
-const TipsBox = ({ tip, uid, inputRef, updateTipRef, setIsUpdateMode, deleteTipVisually }) => {
-  const message = tip.tip || "";
-  const likersInitial = tip.likers || [];
-  const dislikersInitial = tip.dislikers || [];
-  const isLikedInitial = likersInitial.includes(uid);
-  const isDislikedInitial = dislikersInitial.includes(uid);
-  const likeCountInitial = tip.likes || 0;
-  let likeCountWithoutUser = likeCountInitial;
+interface Props {
+  tip: Tip;
+  uid: string;
+  textArea: HTMLTextAreaElement;
+  updateTipRef: React.MutableRefObject<Tip | null>;
+  setIsUpdateMode: React.Dispatch<React.SetStateAction<boolean>>;
+  deleteTipVisually: (id: string) => void;
+}
+
+const TipsBox: React.FC<Props> = ({ tip, uid, textArea, updateTipRef, setIsUpdateMode, deleteTipVisually }) => {
+  const isLikedInitial = tip.likers.includes(uid);
+  const isDislikedInitial = tip.dislikers.includes(uid);
+  let likeCountWithoutUser = tip.likes;
   if (isLikedInitial) likeCountWithoutUser--;
   else if (isDislikedInitial) likeCountWithoutUser++;
-  const docRef = tip.ref;
+
   const classes = useStyles();
   const [isLiked, setIsLiked] = useState(isLikedInitial);
   const [isDisliked, setIsDisliked] = useState(isDislikedInitial);
-  const [likeCount, setLikeCount] = useState(likeCountInitial);
+  const [likeCount, setLikeCount] = useState(tip.likes);
   const [isOpenDialog, setIsOpenDialog] = useState(false);
-  const ownTip = uid === tip.user;
+
+  //TODO Rename user to user_uid in firestore and code
+  //TODO Rename tip.tip to tip.message in firestore and code
+  const ownTip = uid === tip.uid;
 
   const handleLikeButtonTap = () => {
+    // TODO CHECK widgets tree if UI, TIPS CLASS, FIRESTORE updates
     const newCount = isLiked ? likeCountWithoutUser : likeCountWithoutUser + 1;
+    tip.updateLikes(isLiked, isDisliked, uid, newCount, "Like");
     setLikeCount(newCount);
     setIsLiked((prevIsLiked) => !prevIsLiked);
-
-    const updates = {
-      likes: isLiked ? fieldValue.increment(-1) : fieldValue.increment(1),
-      likers: isLiked ? fieldValue.arrayRemove(uid) : fieldValue.arrayUnion(uid),
-    };
-    if (isDisliked) {
-      updates.likes = fieldValue.increment(2);
-      updates.dislikers = fieldValue.arrayRemove(uid);
-    }
-
-    docRef.update(updates).catch((error) => console.log("Error liking: ", error.message));
-
     setIsDisliked(false);
   };
 
   const handleDislikeButtonTap = () => {
     const newCount = isDisliked ? likeCountWithoutUser : likeCountWithoutUser - 1;
+    tip.updateLikes(isLiked, isDisliked, uid, newCount, "Dislike");
     setLikeCount(newCount);
     setIsDisliked((prevIsdisLiked) => !prevIsdisLiked);
-
-    const updates = {
-      likes: isDisliked ? fieldValue.increment(1) : fieldValue.increment(-1),
-      dislikers: isDisliked ? fieldValue.arrayRemove(uid) : fieldValue.arrayUnion(uid),
-    };
-    if (isLiked) {
-      updates.likes = fieldValue.increment(-2);
-      updates.likers = fieldValue.arrayRemove(uid);
-    }
-
-    docRef.update(updates).catch((error) => console.log("Error disliking: ", error.message));
-
     setIsLiked(false);
   };
 
@@ -72,11 +59,10 @@ const TipsBox = ({ tip, uid, inputRef, updateTipRef, setIsUpdateMode, deleteTipV
       console.log("Error: You have no access for this tip");
       return;
     }
-    inputRef.value = message;
+    textArea.value = tip.tip;
     updateTipRef.current = tip;
-    inputRef.focus();
+    textArea.focus();
     setIsUpdateMode(true);
-    //
   };
 
   const handleDeletetButtonTap = () => {
@@ -93,9 +79,13 @@ const TipsBox = ({ tip, uid, inputRef, updateTipRef, setIsUpdateMode, deleteTipV
       return;
     }
     deleteTipVisually(tip.id);
-    docRef.delete().catch((error) => console.log("Error deleting: ", error.message));
+    tip.ref.delete().catch((_e) => {
+      const e: Error = _e;
+      console.log("Error deleting: ", e.message);
+    });
     setIsOpenDialog(false);
   };
+
   return (
     <div>
       <AnimatePresence>
@@ -105,19 +95,19 @@ const TipsBox = ({ tip, uid, inputRef, updateTipRef, setIsUpdateMode, deleteTipV
           exit={{ opacity: 0, y: "-100px" }}
           layout
           className={classes.tipsBox}>
-          <p>{message}</p>
+          <p>{tip.tip}</p>
           <div className={classes.actionsWrapper}>
             {ownTip && (
               <div className={classes.deleteUpdateWrapper}>
                 <div className={classes.editWrapper}>
-                  <IconButton onClick={handleEditButtonTap} aria-label="like">
+                  <IconButton onClick={handleEditButtonTap} aria-label='like'>
                     <motion.div whileTap={{ scale: 0.7 }}>
                       <EditOutlinedIcon className={classes.icons} />
                     </motion.div>
                   </IconButton>
                 </div>
                 <div className={classes.deleteWrapper}>
-                  <IconButton classes={classes.deleteIcon} onClick={handleDeletetButtonTap} aria-label="dislike">
+                  <IconButton onClick={handleDeletetButtonTap} aria-label='dislike'>
                     <motion.div whileTap={{ scale: 0.7 }}>
                       <DeleteOutlinedIcon className={classes.icons} />
                     </motion.div>
@@ -125,7 +115,7 @@ const TipsBox = ({ tip, uid, inputRef, updateTipRef, setIsUpdateMode, deleteTipV
                 </div>
               </div>
             )}
-            <IconButton onClick={handleLikeButtonTap} aria-label="like">
+            <IconButton onClick={handleLikeButtonTap} aria-label='like'>
               <AnimatePresence>
                 {isLiked && (
                   <motion.div whileTap={{ scale: 0.7 }}>
@@ -140,7 +130,7 @@ const TipsBox = ({ tip, uid, inputRef, updateTipRef, setIsUpdateMode, deleteTipV
               </AnimatePresence>
             </IconButton>
             <h6>{likeCount}</h6>
-            <IconButton onClick={handleDislikeButtonTap} aria-label="dislike">
+            <IconButton onClick={handleDislikeButtonTap} aria-label='dislike'>
               <AnimatePresence>
                 {isDisliked && (
                   <motion.div whileTap={{ scale: 0.7 }}>
@@ -160,8 +150,8 @@ const TipsBox = ({ tip, uid, inputRef, updateTipRef, setIsUpdateMode, deleteTipV
       <MyDialog
         open={isOpenDialog}
         handleDialogClose={() => setIsOpenDialog(false)}
-        title="Confirm Delete"
-        content="Are you sure you want to delete this Tip?"
+        title='Confirm Delete'
+        content='Are you sure you want to delete this Tip?'
         buttons={[
           { text: "Cancel", onClick: () => setIsOpenDialog(false) },
           {

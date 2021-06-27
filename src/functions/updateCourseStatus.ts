@@ -1,28 +1,27 @@
-import getFromLocalStorage from "./getFromLocalStorage";
-import setFromLocalStorage from "./setFromLocalStorage";
+import { Elements } from "react-flow-renderer";
+import { LocalStorageHelper } from "../classes/LocalStorageHelper";
 
-const updateCourseStatus = ({ subject, graphElements, setStatus }) => {
-  const updateGraphElement = (newStatus) => {
+const updateCourseStatus = (
+  subject: string,
+  graphElements: Elements,
+  setStatus: React.Dispatch<React.SetStateAction<string>>
+) => {
+  const updateGraphElement = (newStatus: string) => {
     if (!["PE-", "NSTP-"].some((specialSubject) => subject.startsWith(specialSubject))) {
       const nodeIndex = graphElements.findIndex((node) => node.id === subject);
-      if (nodeIndex !== -1) {
-        graphElements[nodeIndex].className = newStatus;
-      }
+      if (nodeIndex !== -1) graphElements[nodeIndex].className = newStatus;
     }
   };
 
-  const taken = getFromLocalStorage("taken", []);
-  const taking = getFromLocalStorage("taking", []);
+  const taken = LocalStorageHelper.get<string[]>("taken", []);
+  const taking = LocalStorageHelper.get<string[]>("taking", []);
 
-  const addFromLocalStorage = (key, list) => {
-    setFromLocalStorage(key, [...list, subject]);
-  };
-  const removeFromLocalStorage = (key, list) => {
-    setFromLocalStorage(
+  const addFromLocalStorage = (key: string, list: string[]) => LocalStorageHelper.set(key, [...list, subject]);
+  const removeFromLocalStorage = (key: string, list: string[]) =>
+    LocalStorageHelper.set(
       key,
       list.filter((takenCourse) => takenCourse !== subject)
     );
-  };
 
   setStatus((prevStatus) => {
     let newStatus = "";

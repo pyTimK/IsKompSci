@@ -1,47 +1,55 @@
 import React, { useContext, useRef } from "react";
-import ReactFlow, { useStoreState, Controls, useZoomPanHelper, useStoreActions } from "react-flow-renderer";
+import ReactFlow, {
+  useStoreState,
+  useZoomPanHelper,
+  useStoreActions,
+  OnLoadFunc,
+  Node,
+  FlowTransform,
+} from "react-flow-renderer";
 import { useHistory } from "react-router";
-import CoursesDataContext from "../contexts/CoursesDataContext";
-import CrossFadePageContext from "../contexts/CrossFadePageContext";
-import getFromLocalStorage from "../functions/getFromLocalStorage";
-import setFromLocalStorage from "../functions/setFromLocalStorage";
+import { LocalStorageHelper } from "../classes/LocalStorageHelper";
+import { CrossFadePageContext, EditModeContext } from "../Home";
+import { DataContext } from "../App";
+import { GraphPositions } from "../classes/GraphData";
+import { NodeData } from "../interfaces/NodeData";
 
-const onLoad = (reactFlowInstance) => {
-  reactFlowInstance.fitView();
-};
+const onLoad: OnLoadFunc = (reactFlowInstance) => reactFlowInstance.fitView();
 
-const OverviewFlow = ({ editMode }) => {
-  const data = useContext(CoursesDataContext);
-  const divFullScreenAnimate = useContext(CrossFadePageContext);
-  const divRef = useRef();
+const OverviewFlow: React.FC = () => {
   const history = useHistory();
-  const graphElements = data.graphElements || [];
-  const transformState = useStoreState((store) => store.transform);
-  const setSelectedElements = useStoreActions((actions) => actions.setSelectedElements);
-  const { transform } = useZoomPanHelper();
-  const initialTapPosition = useRef([0, 0]);
-  const initialTransformState = useRef([0, 0]);
+  const divRef = useRef<HTMLDivElement | null>(null);
+  const initialTapPosition = useRef<[number, number]>([0, 0]);
+  const initialTransformState = useRef<[number, number]>([0, 0]);
   const isMouseDown = useRef(false);
   const numMoves = useRef(0);
-  const onMoveStart = (flowTransform) => {
+  const divFullScreenAnimate = useContext(CrossFadePageContext);
+  const data = useContext(DataContext);
+  const editMode = useContext(EditModeContext)![0];
+
+  const { transform } = useZoomPanHelper();
+  const transformState = useStoreState((store) => store.transform);
+  const setSelectedElements = useStoreActions((actions) => actions.setSelectedElements);
+
+  const onMoveStart = (flowTransform: FlowTransform | undefined) => {
     if (numMoves.current > 2) return;
     transform({ x: transformState[0], y: transformState[1], zoom: transformState[2] });
     numMoves.current++;
   };
 
-  const exitAnimate = async ({ node }) => {
-    if (![node, node.data, node.data.status].every((e) => ![null, undefined].includes(e))) return;
+  const exitAnimate = async (node: Node<NodeData>) => {
+    if (!node.data) return;
+
     if (divRef.current === null) {
-      divFullScreenAnimate.set({
+      divFullScreenAnimate?.set({
         y: document.documentElement.clientHeight,
         width: window.screen.width,
         height: document.documentElement.clientHeight,
-        // opacity: 0,
         backgroundColor: `var(--${node.data.status}Color)`,
       });
     } else {
       const domRect = divRef.current.getBoundingClientRect();
-      divFullScreenAnimate.set({
+      divFullScreenAnimate?.set({
         x: domRect.x,
         y: domRect.y,
         width: domRect.width,
@@ -50,7 +58,7 @@ const OverviewFlow = ({ editMode }) => {
       });
     }
 
-    await divFullScreenAnimate.start({
+    await divFullScreenAnimate?.start({
       opacity: 1,
       x: 0,
       y: 0,
@@ -69,31 +77,32 @@ const OverviewFlow = ({ editMode }) => {
     <ReactFlow
       nodesConnectable={false}
       nodesDraggable={editMode}
-      elements={graphElements}
+      elements={data.graphData.elements}
       onLoad={onLoad}
       onMoveStart={onMoveStart}
-      onNodeDragStop={(e, node) => {
-        const savedGraphPositions = getFromLocalStorage("graphPositions");
+      onNodeDragStop={(_, node) => {
+        const savedGraphPositions = LocalStorageHelper.get<GraphPositions>("graphPositions", {});
         savedGraphPositions[node.id] = node.position;
-        setFromLocalStorage("graphPositions", savedGraphPositions);
+        LocalStorageHelper.set("graphPositions", savedGraphPositions);
       }}
       minZoom={0.3}
       selectNodesOnDrag={false}
       onSelectionChange={(elements) => {
-        if (editMode) return;
-        // console.log("ON SELECTION CHANGE,", elements, divRef.current);
-        if (![null, [], undefined].includes(elements) && [null, undefined].includes(divRef.current)) {
+        if (editMode || !elements || elements.length === 0) return;
+
+        if (!divRef.current) {
           setSelectedElements([]);
+          return;
         }
-        if ([null, [], undefined].includes(elements) || [null, undefined].includes(divRef.current)) return;
-        const node = elements[0];
+
+        const node = elements[0] as Node<NodeData>;
         const subject = encodeURIComponent(node.id);
-        exitAnimate({ node }).then(() => history.push(`/course/${subject}`));
+        exitAnimate(node).then(() => history.push(`/course/${subject}`));
       }}
       onMouseDown={(e) => {
         if (editMode) return;
         isMouseDown.current = true;
-        divRef.current = e.target;
+        divRef.current = e.target as HTMLDivElement;
         initialTapPosition.current = [e.clientX, e.clientY];
         initialTransformState.current = [transformState[0], transformState[1]];
       }}
@@ -110,22 +119,20 @@ const OverviewFlow = ({ editMode }) => {
           zoom: transformState[2],
         });
       }}
-      onMouseUp={(e) => {
+      onMouseUp={() => {
         if (editMode) return;
         isMouseDown.current = false;
       }}
       onTouchStart={(e) => {
         if (editMode) return;
-        divRef.current = e.target;
-        const evt = typeof e.originalEvent === "undefined" ? e : e.originalEvent;
-        const touch = evt.touches[0] || evt.changedTouches[0];
+        divRef.current = e.target as HTMLDivElement;
+        const touch = e.touches[0] || e.changedTouches[0];
         initialTapPosition.current = [touch.pageX, touch.pageY];
         initialTransformState.current = [transformState[0], transformState[1]];
       }}
       onTouchMove={(e) => {
         if (editMode) return;
-        const evt = typeof e.originalEvent === "undefined" ? e : e.originalEvent;
-        const touch = evt.touches[0] || evt.changedTouches[0];
+        const touch = e.touches[0] || e.changedTouches[0];
         const dx = touch.pageX - initialTapPosition.current[0];
         const dy = touch.pageY - initialTapPosition.current[1];
         transform({
@@ -134,18 +141,10 @@ const OverviewFlow = ({ editMode }) => {
           zoom: transformState[2],
         });
       }}
-      arrowHeadColor="black"
+      arrowHeadColor='black'
       snapToGrid={true}
-      snapGrid={[10, 10]}>
-      {!editMode && (
-        <Controls
-          showZoom={false}
-          showInteractive={false}
-          style={{ top: "10px", bottom: "auto", right: "10px", left: "auto" }}
-        />
-      )}
-      {/* <Background color="black" gap={10} /> */}
-    </ReactFlow>
+      snapGrid={[10, 10]}
+    />
   );
 };
 

@@ -1,26 +1,43 @@
 import clsx from "clsx";
 import { motion } from "framer-motion";
 import { useContext, useRef, useState } from "react";
-import CrossFadePageContext from "../contexts/CrossFadePageContext";
 import { makeStyles } from "@material-ui/core";
+import { Course } from "../classes/Course";
+import { CrossFadePageContext } from "../Home";
 
-const CourseBox = ({ course, handleCourseTap, subject, initialStatus }) => {
+export type HandleCourseTap = (params: {
+  e: MouseEvent | TouchEvent | PointerEvent;
+  subject: string;
+  status: string;
+  setStatus: React.Dispatch<React.SetStateAction<string>>;
+  exitAnimate: () => Promise<void>;
+}) => void;
+
+interface Props {
+  course: Course;
+  handleCourseTap: HandleCourseTap;
+  subject: string;
+  initialStatus: string;
+}
+
+const CourseBox: React.FC<Props> = ({ course, handleCourseTap, subject, initialStatus }) => {
   const classes = useStyles();
   const [status, setStatus] = useState(initialStatus);
-  const divRef = useRef();
+  const divRef = useRef<HTMLButtonElement>(null);
 
   const divFullScreenAnimate = useContext(CrossFadePageContext);
 
   const exitAnimate = async () => {
+    if (!divRef.current) return;
     const domRect = divRef.current.getBoundingClientRect();
-    divFullScreenAnimate.set({
+    divFullScreenAnimate?.set({
       x: domRect.x,
       y: domRect.y,
       width: domRect.width,
       height: domRect.height,
       backgroundColor: `var(--${status}Color)`,
     });
-    await divFullScreenAnimate.start({
+    await divFullScreenAnimate?.start({
       opacity: 1,
       x: 0,
       y: 0,

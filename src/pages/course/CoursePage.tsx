@@ -1,33 +1,36 @@
 import { Route, Switch, useHistory, useParams, useRouteMatch } from "react-router";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
-import { IconButton, makeStyles } from "@material-ui/core";
+import { IconButton, makeStyles, Theme } from "@material-ui/core";
 import { useContext, useEffect, useMemo, useState } from "react";
-import CoursesDataContext from "../../contexts/CoursesDataContext";
 import CourseDescrip2 from "./CourseDescrip2";
-import CourseDescrip1 from "./CourseDescrip1.jsx";
+import CourseDescrip1 from "./CourseDescrip1";
 import { AnimatePresence, motion } from "framer-motion";
+import { DataContext } from "../../App";
+import { HasIntroDataContext } from "../../CourseStatusWrapper";
+import scrollTop from "../../functions/scrollTop";
 
 const offsetNeeded = 0.45 * document.documentElement.clientHeight;
 
-const CoursePage = ({ hasIntroData }) => {
+const CoursePage: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const history = useHistory();
+  const { path } = useRouteMatch();
   const [opacity, setOpacity] = useState(1);
   const [willGoToTips, setWillGoToTips] = useState(false);
   const classes = useStyles({ opacity });
-  const { id } = useParams();
-  const history = useHistory();
-  const { path } = useRouteMatch();
+  const hasIntroData = useContext(HasIntroDataContext);
 
-  const data = useContext(CoursesDataContext);
+  const data = useContext(DataContext);
 
   const course = useMemo(() => {
-    const courses = data.courses;
+    const courses = data.courseData.courses;
     return courses.find((course) => course.subject === decodeURIComponent(id));
   }, [data, id]);
 
   const showAppbar = opacity === 0;
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    scrollTop();
     function handleScroll() {
       if (willGoToTips && window.scrollY === 0) {
         setWillGoToTips(false);
@@ -55,7 +58,7 @@ const CoursePage = ({ hasIntroData }) => {
   const image = useMemo(() => {
     let image;
     try {
-      const imgName = course.subject.split(/[^\w\d]/).join("_");
+      const imgName = course?.subject.split(/[^\w\d]/).join("_") ?? "CS_12";
       image = require(`../../assets/img/${imgName.toUpperCase()}.png`).default;
       return image;
     } catch (error) {
@@ -66,67 +69,73 @@ const CoursePage = ({ hasIntroData }) => {
   }, [course]);
 
   return (
-    hasIntroData && (
-      <div>
-        <div className={classes.mainBg}>
-          <div className={classes.root}>
-            <motion.div
-              className={classes.backIconWrapper}
-              initial={{ x: "-480px" }}
-              animate={{ x: "-12px", transition: { delay: 0.1, duration: 1, type: "spring" } }}>
-              <IconButton onClick={() => history.goBack()} aria-label='back'>
-                <ArrowBackIosIcon fontSize='large' className={classes.backIcon} />
-              </IconButton>
-            </motion.div>
-            <div className={classes.spacer}></div>
-            <div className={classes.courseImgDiv}>
-              <motion.img
-                initial={{ opacity: 0, y: "30px" }}
-                animate={{ opacity: 1, y: 0, transition: { delay: 0.1, duration: 1 } }}
-                src={image}
-                alt='Related to course'></motion.img>
-            </div>
+    <>
+      {hasIntroData &&
+        (course === undefined ? (
+          //TODO Create Course Doesn't Exist UI
+          <h1>Course Doesn't exist</h1>
+        ) : (
+          <div>
+            <div className={classes.mainBg}>
+              <div className={classes.root}>
+                <motion.div
+                  className={classes.backIconWrapper}
+                  initial={{ x: "-480px" }}
+                  animate={{ x: "-12px", transition: { delay: 0.1, duration: 1, type: "spring" } }}>
+                  <IconButton onClick={() => history.goBack()} aria-label='back'>
+                    <ArrowBackIosIcon fontSize='large' className={classes.backIcon} />
+                  </IconButton>
+                </motion.div>
+                <div className={classes.spacer}></div>
+                <div className={classes.courseImgDiv}>
+                  <motion.img
+                    initial={{ opacity: 0, y: "30px" }}
+                    animate={{ opacity: 1, y: 0, transition: { delay: 0.1, duration: 1 } }}
+                    src={image}
+                    alt='Related to course'></motion.img>
+                </div>
 
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1, transition: { delay: 0.6, duration: 1 } }}
-              className={classes.title}>
-              <motion.div>
-                <h5>{course.subject}</h5>
-                <h6>{course.title}</h6>
-              </motion.div>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1, transition: { delay: 0.6, duration: 1 } }}
+                  className={classes.title}>
+                  <motion.div>
+                    <h5>{course.subject}</h5>
+                    <h6>{course.title}</h6>
+                  </motion.div>
+                </motion.div>
+              </div>
+            </div>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className={classes.descripBg}>
+              <AnimatePresence exitBeforeEnter>
+                <Switch location={history.location} key={history.location.pathname}>
+                  <Route path={`${path}/tips`}>
+                    <CourseDescrip2 course={course} />
+                  </Route>
+                  <Route path={`${path}`}>
+                    <CourseDescrip1 course={course} setWillGoToTips={setWillGoToTips} />
+                  </Route>
+                </Switch>
+              </AnimatePresence>
             </motion.div>
+            <AnimatePresence>
+              {showAppbar && (
+                <motion.div
+                  className={classes.topbar}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}>
+                  {course.subject}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
-        </div>
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className={classes.descripBg}>
-          <AnimatePresence exitBeforeEnter>
-            <Switch location={history.location} key={history.location.pathname}>
-              <Route path={`${path}/tips`}>
-                <CourseDescrip2 course={course} />
-              </Route>
-              <Route path={`${path}`}>
-                <CourseDescrip1 course={course} setWillGoToTips={setWillGoToTips} />
-              </Route>
-            </Switch>
-          </AnimatePresence>
-        </motion.div>
-        <AnimatePresence>
-          {showAppbar && (
-            <motion.div
-              className={classes.topbar}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}>
-              {course.subject}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    )
+        ))}
+    </>
   );
 };
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles<Theme, { opacity: number }>((theme) => {
   const padding = "16px";
   return {
     root: ({ opacity }) => ({

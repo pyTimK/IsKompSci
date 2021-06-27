@@ -1,18 +1,21 @@
 import { Button, makeStyles } from "@material-ui/core";
 import { motion, useAnimation } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router";
 import { auth } from "../../firebase";
-import setFromLocalStorage from "../../functions/setFromLocalStorage";
 import SyncLoader from "react-spinners/SyncLoader";
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 import notify from "../../functions/notify";
+import { LocalStorageHelper } from "../../classes/LocalStorageHelper";
+import { HasIntroDataContext } from "../../CourseStatusWrapper";
+import { HTMLInputType } from "../../types/HTMLInputType";
 
-const IntroPage1 = ({ hasIntroData }) => {
+const IntroPage1: React.FC = () => {
   const classes = useStyles();
   const history = useHistory();
-  const inputRef = useRef();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const hasIntroData = useContext(HasIntroDataContext);
   const [yrLvl, setYrLvl] = useState("");
   const [loading, setLoading] = useState(false);
   const divAnimation = useAnimation();
@@ -23,23 +26,23 @@ const IntroPage1 = ({ hasIntroData }) => {
     if (hasIntroData) history.push("/intro/2");
   }, [hasIntroData, history]);
 
-  const handleOnSubmit = (e) => {
+  useEffect(() => {
+    divAnimation.start({ opacity: 1 });
+  }, [divAnimation]);
+
+  const handleOnSubmit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
-    let newName = inputRef.current.value;
+    let newName = inputRef.current?.value ?? "";
 
     if (newName === "") notify("Name Field is Required");
     else if (yrLvl === "") notify("Please Select Year Level First");
     else {
       setLoading(true);
-      setFromLocalStorage("name", newName);
-      setFromLocalStorage("yrLvl", `${yrLvl} Standing`);
+      LocalStorageHelper.set("name", newName);
+      LocalStorageHelper.set("yrLvl", `${yrLvl} Standing`);
       auth
         .signInAnonymously()
-        .then((result) =>
-          result.user.updateProfile({
-            displayName: newName,
-          })
-        )
+        .then((result) => result.user?.updateProfile({ displayName: newName }))
         .then(() =>
           divAnimation.start({
             opacity: 0,
@@ -49,22 +52,13 @@ const IntroPage1 = ({ hasIntroData }) => {
           })
         )
         .then(() => history.push("/intro/2"))
-        .catch((error) => {
-          console.log("Error loging in: ", error.message);
+        .catch((_e) => {
+          const e: Error = _e;
+          console.log("Error loging in: ", e.message);
           setLoading(false);
         });
     }
   };
-
-  const hadleYearLvlChange = (arg) => {
-    setYrLvl(arg.value);
-  };
-
-  useEffect(() => {
-    divAnimation.start({
-      opacity: 1,
-    });
-  }, [divAnimation]);
 
   return (
     <motion.div
@@ -78,35 +72,32 @@ const IntroPage1 = ({ hasIntroData }) => {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            inputRef.current.blur();
+            inputRef.current?.blur();
           }}>
-          <input className={classes.input} ref={inputRef} type='text' placeholder="What's your name?" maxLength='8' />
+          <input
+            className={classes.input}
+            ref={inputRef}
+            type={"text" as HTMLInputType}
+            placeholder="What's your name?"
+            maxLength={8}
+          />
         </form>
         <Dropdown
           className={classes.dropdown}
           menuClassName={classes.menuClassName}
           placeholderClassName={classes.placeholderClassName}
           options={options}
-          onChange={hadleYearLvlChange}
+          onChange={(arg) => setYrLvl(arg.value)}
           placeholder='Select Year Level'
         />
         {!loading && (
           <div className={classes.block}>
             <Button
               onClick={handleOnSubmit}
-              // variant="contained"
-              // size="large"
               className='button-intro'
               component={motion.button}
-              whileHover={{
-                scale: 1.2,
-                transition: {
-                  duration: 0.3,
-                },
-              }}
-              whileTap={{
-                scale: 0.9,
-              }}>
+              whileHover={{ scale: 1.2, transition: { duration: 0.3 } }}
+              whileTap={{ scale: 0.9 }}>
               Join
             </Button>
           </div>

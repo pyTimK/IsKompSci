@@ -2,25 +2,38 @@ import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import DoneOutlinedIcon from "@material-ui/icons/DoneOutlined";
 import { motion, useAnimation } from "framer-motion";
 import useToggle from "../hooks/useToggle";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import UseAnimations from "react-useanimations";
 import menu4 from "react-useanimations/lib/menu4";
 import { useHistory, useLocation, useParams } from "react-router";
-import useLocalStorage from "../hooks/useLocalStorage";
 import { ReactFlowProvider } from "react-flow-renderer";
 import MyDrawer from "./MyDrawer";
 import { AppBar, IconButton, Tab, Tabs, Toolbar, makeStyles } from "@material-ui/core";
+import { LocalStorageHelper } from "../classes/LocalStorageHelper";
+import scrollTop from "../functions/scrollTop";
+import { useContext } from "react";
+import { EditModeContext } from "../Home";
 
-const Layout = ({ hasIntroData, children, editMode, toggleEditMode, setShowSettings, setShowFeedback }) => {
+interface Props {
+  hasIntroData: boolean;
+}
+
+const Layout: React.FC<Props> = ({ hasIntroData, children }) => {
   const history = useHistory();
   const location = useLocation();
   const classes = useStyles();
-  const [drawer, toggleDrawer] = useToggle(false);
-  const [tab, setTab] = useLocalStorage("tabIndex", 0);
+  const [open, toggleOpen] = useToggle(false);
+  const initialTab = LocalStorageHelper.get<number>("tabIndex", 0);
+  const [tab, setTab] = useState(initialTab);
   const appbarAnimation = useAnimation();
+  const [editMode, toggleEditMode] = useContext(EditModeContext)!;
 
-  const { animate } = useParams();
+  useEffect(() => {
+    LocalStorageHelper.set("tabIndex", tab);
+  }, [tab]);
+
   //* animate!=1 means we dont need to reanimate, e.g., using back
+  const { animate } = useParams<{ animate: string }>();
 
   useEffect(() => {
     if (animate === "1") {
@@ -33,13 +46,10 @@ const Layout = ({ hasIntroData, children, editMode, toggleEditMode, setShowSetti
     history.push("/intro/1");
   }
 
-  if (location.pathname === "/main2" && tab !== 1) {
-    setTab(1);
-  } else if (location.pathname !== "/main2" && tab !== 0) {
-    setTab(0);
-  }
+  if (location.pathname === "/main2" && tab !== 1) setTab(1);
+  else if (location.pathname !== "/main2" && tab !== 0) setTab(0);
 
-  const handleChange = (e, newTab) => {
+  const handleChange = (_: React.ChangeEvent<{}>, newTab: any) => {
     if (newTab !== tab) {
       if (editMode) toggleEditMode();
       setTab(newTab);
@@ -51,19 +61,14 @@ const Layout = ({ hasIntroData, children, editMode, toggleEditMode, setShowSetti
     <div className={classes.root}>
       {hasIntroData && (
         <div>
-          <MyDrawer
-            drawer={drawer}
-            toggleDrawer={toggleDrawer}
-            setShowSettings={setShowSettings}
-            setShowFeedback={setShowFeedback}
-          />
+          <MyDrawer open={open} toggleOpen={toggleOpen} />
           <motion.div animate={appbarAnimation}>
             <AppBar position='absolute'>
               <Toolbar className={classes.toolbar}>
                 <IconButton
-                  onClick={(e) => {
+                  onClick={() => {
                     if (editMode) toggleEditMode();
-                    toggleDrawer();
+                    toggleOpen();
                   }}
                   edge='start'
                   className={classes.menuButton}
@@ -74,8 +79,7 @@ const Layout = ({ hasIntroData, children, editMode, toggleEditMode, setShowSetti
                 <IconButton
                   onClick={() => {
                     toggleEditMode();
-                    document.body.scrollTop = 0; // For Safari
-                    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+                    scrollTop();
                   }}
                   edge='end'
                   className={classes.white}

@@ -1,49 +1,41 @@
 import { Button, makeStyles } from "@material-ui/core";
-import { motion } from "framer-motion";
+import { AnimationControls, motion } from "framer-motion";
 import GroupBySem from "../../components/GroupBySem";
 import Legend from "../../components/Legend";
 import TypewriterComponent from "typewriter-effect";
 import { useHistory } from "react-router";
 import updateCourseStatus from "../../functions/updateCourseStatus";
-import getFromLocalStorage from "../../functions/getFromLocalStorage";
 import { useContext, useEffect } from "react";
-import CoursesDataContext from "../../contexts/CoursesDataContext";
-import setFromLocalStorage from "../../functions/setFromLocalStorage";
 import clsx from "clsx";
+import { LocalStorageHelper } from "../../classes/LocalStorageHelper";
+import { HasIntroDataContext } from "../../CourseStatusWrapper";
+import { DataContext } from "../../App";
 
-const IntroPage2 = ({ hasIntroData, setHasIntroData, exitAnimation }) => {
-  const data = useContext(CoursesDataContext);
+interface Props {
+  setHasIntroData: React.Dispatch<React.SetStateAction<boolean>>;
+  exitAnimation: AnimationControls;
+}
+
+const IntroPage2: React.FC<Props> = ({ setHasIntroData, exitAnimation }) => {
   const classes = useStyles();
-  const groupedBySemCourses = data.groupedBySemCourses;
-  const graphElements = data.graphElements;
   const history = useHistory();
-  const name = getFromLocalStorage("name", "Ricardo");
-
-  const taken = getFromLocalStorage("taken", []);
-  const taking = getFromLocalStorage("taking", []);
-  setFromLocalStorage("taken", taken);
-  setFromLocalStorage("taking", taking);
+  const data = useContext(DataContext);
+  const hasIntroData = useContext(HasIntroDataContext);
+  const name = LocalStorageHelper.get<string>("name", "Ricardo");
+  const taken = LocalStorageHelper.get<string[]>("taken", []);
+  const taking = LocalStorageHelper.get<string[]>("taking", []);
+  LocalStorageHelper.set("taken", taken);
+  LocalStorageHelper.set("taking", taking);
 
   useEffect(() => {
     if (hasIntroData) history.push("/1");
   }, [hasIntroData, history]);
 
   return (
-    <motion.div
-      initial={{
-        opacity: 0,
-      }}
-      animate={{
-        opacity: 1,
-      }}
-      exit={{
-        opacity: 0,
-      }}>
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
       <motion.h4
         className='noselect'
-        initial={{
-          y: "-300%",
-        }}
+        initial={{ y: "-300%" }}
         animate={{
           y: 0,
           transition: { delay: 1 },
@@ -55,7 +47,6 @@ const IntroPage2 = ({ hasIntroData, setHasIntroData, exitAnimation }) => {
           <img className='logo' src='/logo.png' alt='app logo' />
         </div>
         <div className={clsx(classes.right, "noselect")}>
-          {/* <p> */}
           <TypewriterComponent
             onInit={(typewriter) => {
               typewriter.pauseFor(2000).typeString("SELECT ALL THE COURSES YOU HAVE TAKEN!").start();
@@ -65,7 +56,6 @@ const IntroPage2 = ({ hasIntroData, setHasIntroData, exitAnimation }) => {
               cursor: "",
             }}
           />
-          {/* </p> */}
         </div>
       </div>
 
@@ -73,20 +63,13 @@ const IntroPage2 = ({ hasIntroData, setHasIntroData, exitAnimation }) => {
         <Legend />
         <GroupBySem
           tighten={true}
-          groupedBySemCourses={groupedBySemCourses}
-          handleCourseTap={({ subject, setStatus }) =>
-            updateCourseStatus({
-              subject,
-              graphElements,
-              setStatus,
-            })
-          }
+          handleCourseTap={({ subject, setStatus }) => updateCourseStatus(subject, data.graphData.elements, setStatus)}
         />
       </div>
 
       <div className={classes.bottom}>
         <Button
-          onTap={async (e) => {
+          onTap={async () => {
             await exitAnimation.start({ opacity: 0, transition: { delay: 0.3 } });
             setHasIntroData(true);
           }}

@@ -1,10 +1,13 @@
 import { makeStyles } from "@material-ui/core";
 import { AnimateSharedLayout, motion, useAnimation } from "framer-motion";
+import { useContext } from "react";
 import { useEffect } from "react";
 import EditModeText from "../../components/EditModeText";
 import OverviewFlow from "../../components/OverviewFlow";
+import { EditModeContext } from "../../Home";
 
-const MainPage2 = ({ editMode }) => {
+const MainPage2: React.FC = () => {
+  const editMode = useContext(EditModeContext)![0];
   const classes = useStyles(editMode);
   const divAnimation = useAnimation();
 
@@ -15,11 +18,10 @@ const MainPage2 = ({ editMode }) => {
   return (
     <AnimateSharedLayout>
       <motion.div initial={{ opacity: 0 }} animate={divAnimation}>
-        <EditModeText editMode={editMode} text='DRAG COURSES TO MODIFY VIEW' />
+        <EditModeText text='DRAG COURSES TO MODIFY VIEW' />
         {editMode && <hr className={classes.noMargin} />}
         <motion.div layout className={classes.flow}>
-          <OverviewFlow editMode={editMode} />
-          {/* <h1>fds</h1> */}
+          <OverviewFlow />
         </motion.div>
       </motion.div>
     </AnimateSharedLayout>

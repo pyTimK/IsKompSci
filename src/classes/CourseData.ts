@@ -1,12 +1,15 @@
 import { Course } from "./Course";
 export class CourseData {
   public groupedBySem: { [sem: string]: Course[] };
+  public courses: Course[];
 
-  constructor(public version: number, public AY: string, public courses: Course[]) {
-    this.groupedBySem = this.groupBySem();
+  constructor() {
+    const initialCourseData: CourseData = require("../data/courses.json");
+    this.courses = initialCourseData.courses;
+    this.groupedBySem = this.initializeGroupBySem();
   }
 
-  private groupBySem() {
+  private initializeGroupBySem() {
     const _groupedCourses: { [sem: string]: Course[] } = {};
     const specialCourses: { [name: string]: string[] } = {
       PE: ["1Y-1S", "1Y-2S", "2Y-1S", "2Y-2S"],

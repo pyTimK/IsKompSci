@@ -2,20 +2,26 @@ import { AppBar, IconButton, makeStyles, Toolbar } from "@material-ui/core";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import SendRoundedIcon from "@material-ui/icons/SendRounded";
 import { motion, useAnimation } from "framer-motion";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect } from "react";
 import React from "react";
-import getFromLocalStorage from "../functions/getFromLocalStorage";
-import emailjs from "emailjs-com";
+import emailjs, { EmailJSResponseStatus } from "emailjs-com";
+import { LocalStorageHelper } from "../../classes/LocalStorageHelper";
+import FeedbackTile from "./FeedbackTile";
+import { HTMLButtonType } from "../../types/HTMLButtonType";
+import { useContext } from "react";
+import { DrawerPageContext } from "../../Home";
+import notify from "../../functions/notify";
 
-const FeedbackPage = ({ setShowFeedback, setShowHome }) => {
+const FeedbackPage: React.FC = () => {
   const classes = useStyles();
   const rootAnimation = useAnimation();
-  const name = getFromLocalStorage("name", "Ricardo");
+  const name = LocalStorageHelper.get<string>("name", "Ricardo");
+  const drawerPage = useContext(DrawerPageContext)!;
 
   const close = useCallback(() => {
-    setShowHome(true);
-    setShowFeedback(false);
-  }, [setShowHome, setShowFeedback]);
+    drawerPage.setShowHome(true);
+    drawerPage.setShowFeedback(false);
+  }, [drawerPage]);
 
   useEffect(() => {
     rootAnimation
@@ -24,32 +30,35 @@ const FeedbackPage = ({ setShowFeedback, setShowHome }) => {
         transition: { delay: 0.2, duration: 0.1, type: "tween", ease: "linear" },
         transitionEnd: { zIndex: 0 },
       })
-      .then(() => setShowHome(false));
-  }, [rootAnimation, setShowHome]);
+      .then(() => drawerPage.setShowHome(false));
+  }, [rootAnimation, drawerPage]);
 
-  function sendEmail(e) {
+  const sendEmail: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
 
     const serviceId = process.env.REACT_APP_EMAILJS_SERVICE_ID || "";
     const templateId = process.env.REACT_APP_EMAILJS_TEMPLATE_ID || "";
-    const userId = process.env.REACT_APP_EMAILJS_USER_ID || "";
+    const userID = process.env.REACT_APP_EMAILJS_USER_ID || "";
 
-    if ([serviceId, templateId, userId].includes("")) {
+    if ([serviceId, templateId, userID].includes("")) {
       console.log("Sending credentials not included");
       close();
       return;
     }
 
-    emailjs.sendForm(serviceId, templateId, e.target, userId).then(
+    emailjs.sendForm(serviceId, templateId, e.target as HTMLFormElement, userID).then(
       (result) => {
-        //? Successfully sent message
+        //? Successfully sent message\
+        notify("Thank you for your feedback!", { type: "success" });
+        console.log("Successfully sent feedback: ");
       },
-      (error) => {
-        console.log("Error sending feedback: ", error.text);
+      (error: EmailJSResponseStatus) => {
+        notify("There seems to be an issue sending the feedback");
+        console.log("Error sending feedback: status = ", error.status);
       }
     );
     close();
-  }
+  };
 
   return (
     <motion.div
@@ -70,12 +79,13 @@ const FeedbackPage = ({ setShowFeedback, setShowHome }) => {
               <ArrowBackIosIcon />
             </IconButton>
             <h6 className={classes.pageName}>Feedback</h6>
-            <IconButton type='submit' edge='end' className={classes.menuButton} aria-label='back'>
+            <IconButton type={"submit" as HTMLButtonType} edge='end' className={classes.menuButton} aria-label='back'>
               <SendRoundedIcon />
             </IconButton>
           </Toolbar>
         </AppBar>
         <div className={classes.toolbarHeight}></div>
+
         {/* CHANGE NAME */}
         <div className={classes.inputWrapper}>
           <FeedbackTile title='Name' type='text' initialValue={name} />
@@ -92,33 +102,6 @@ const FeedbackPage = ({ setShowFeedback, setShowHome }) => {
         </div>
       </form>
     </motion.div>
-  );
-};
-
-const FeedbackTile = ({ title, type, initialValue }) => {
-  const classes = useStyles();
-  const inputRef = useRef();
-
-  return (
-    <div>
-      <motion.div
-        onClick={() => inputRef.current.focus()}
-        whileTap={{ backgroundColor: "rgba(0,0,0,0.1)" }}
-        className={classes.row}>
-        <div className={classes.left}>
-          <h6 className={classes.title}>{title}:</h6> &nbsp;
-          <input
-            className={classes.myInput}
-            ref={inputRef}
-            type={type}
-            name={title.toLowerCase()}
-            defaultValue={initialValue}
-            required
-          />
-        </div>
-      </motion.div>
-      <hr className={classes.hr} />
-    </div>
   );
 };
 
@@ -146,48 +129,15 @@ const useStyles = makeStyles((theme) => {
     toolbarHeight: {
       height: "var(--toolbarHeight)",
     },
-    //? Input Row
-    row: {
-      position: "relative",
-      width: `calc(100vw - 2 * ${rowPadding})`,
-      padding: rowPadding,
-      color: "black",
-    },
-    title: {
-      fontSize: "1.1rem",
-      letterSpacing: "0",
-      color: "var(--darkgray)",
-      display: "inline-block",
-    },
 
-    hr: {
-      border: "1px solid rgba(1,1,1,0.2)",
-      borderBottom: "none",
-      margin: "0",
-    },
     inputWrapper: {
       height: "calc(100vh - var(--toolbarHeight))",
       display: "flex",
       flexDirection: "column",
     },
-    left: {
-      display: "flex",
-    },
-    myInput: {
-      fontFamily: "Metropolis",
-      fontSize: "1.1rem",
-      color: "black",
-      border: "none",
-      flexGrow: 1,
-      backgroundColor: "transparent",
-      "&:focus": {
-        outline: "none",
-      },
-    },
     textareaWrapper: {
       flexGrow: 1,
       display: "flex",
-      // height,
     },
     textarea: {
       fontFamily: "Metropolis",

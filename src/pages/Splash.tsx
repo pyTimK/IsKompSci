@@ -1,10 +1,10 @@
 import { makeStyles } from "@material-ui/core";
 
-const Splash = () => {
+const Splash: React.FC = () => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <img className={classes.logo} src="/logo.png" alt="app logo" />
+      <img className={classes.logo} src='/logo.png' alt='app logo' />
     </div>
   );
 };

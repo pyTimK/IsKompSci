@@ -1,28 +1,35 @@
 import { Button, makeStyles } from "@material-ui/core";
 import { motion } from "framer-motion";
 import CheckIcon from "@material-ui/icons/Check";
-import getFromLocalStorage from "../../functions/getFromLocalStorage";
 import { Link } from "react-router-dom";
+import { LocalStorageHelper } from "../../classes/LocalStorageHelper";
+import { Course } from "../../classes/Course";
+import scrollTop from "../../functions/scrollTop";
 
-const abbvreviations = { 1: "1st", 2: "2nd", 3: "3rd", 4: "4th", M: "Mid" };
-const standingToLvl = {
+const abbvreviations: { [key: string]: string } = { 1: "1st", 2: "2nd", 3: "3rd", 4: "4th", M: "Mid" };
+const standingToLvl: { [key: string]: number } = {
   "N/A Standing": 0,
   "Freshman Standing": 1,
   "Sophomore Standing": 2,
   "Junior Standing": 3,
   "Senior Standing": 4,
 };
-const parseList = (s, delimiter = ", ") => {
+const parseList = (s: string, delimiter = ", ") => {
   let list = s.split(delimiter);
   if (list.length === 1 && list[0] === "") list = [];
   return list;
 };
 
-const CourseDescrip1 = ({ course, setWillGoToTips }) => {
+interface Props {
+  course: Course;
+  setWillGoToTips: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const CourseDescrip1: React.FC<Props> = ({ course, setWillGoToTips }) => {
   const classes = useStyles();
 
-  const taken = getFromLocalStorage("taken", []);
-  const yrLvl = getFromLocalStorage("yrLvl", "N/A");
+  const taken = LocalStorageHelper.get<string[]>("taken", []);
+  const yrLvl = LocalStorageHelper.get<string>("yrLvl", "N/A");
 
   const prerequisites = parseList(course.prerequisites);
   const requirements = parseList(course.requirements);
@@ -58,7 +65,7 @@ const CourseDescrip1 = ({ course, setWillGoToTips }) => {
       {(textbooks.length > 0 || websites.length > 0) && (
         <div className={classes.info}>
           <h4>Recommended Materials</h4>
-          <div className={classes.recommendation}>
+          <div>
             {textbooks.length > 0 && (
               <div>
                 <h5>Textbook{textbooks.length > 1 && "s"}</h5>
@@ -148,8 +155,8 @@ const CourseDescrip1 = ({ course, setWillGoToTips }) => {
       <hr />
       <div className={classes.buttonWrapper}>
         <Button
-          onTap={(e) => {
-            window.scrollTo(0, 0);
+          onTap={() => {
+            scrollTop();
             setWillGoToTips(true);
           }}
           className='button-descrip'

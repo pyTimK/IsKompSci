@@ -4,7 +4,11 @@ import { Route, Switch } from "react-router-dom";
 import IntroPage1 from "./IntroPage1";
 import IntroPage2 from "./IntroPage2";
 
-const IntroWrapper = ({ hasIntroData, setHasIntroData }) => {
+interface Props {
+  setHasIntroData: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const IntroWrapper: React.FC<Props> = ({ setHasIntroData }) => {
   const c = useStyles();
   const exitAnimation = useAnimation();
 
@@ -13,10 +17,10 @@ const IntroWrapper = ({ hasIntroData, setHasIntroData }) => {
       <div className={c.wrapper}>
         <Switch>
           <Route path='/intro/1'>
-            <IntroPage1 hasIntroData={hasIntroData} />
+            <IntroPage1 />
           </Route>
           <Route path='/intro/2'>
-            <IntroPage2 hasIntroData={hasIntroData} setHasIntroData={setHasIntroData} exitAnimation={exitAnimation} />
+            <IntroPage2 setHasIntroData={setHasIntroData} exitAnimation={exitAnimation} />
           </Route>
         </Switch>
       </div>

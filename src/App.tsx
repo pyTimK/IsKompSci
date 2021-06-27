@@ -1,49 +1,33 @@
-import { useState } from "react";
-import { CoursesDataProvider } from "./contexts/CoursesDataContext";
-import CourseStatusWrapper from "./CourseStatusWrapper.js";
-import getFromLocalStorage from "./functions/getFromLocalStorage";
-import groupBySem from "./functions/groupBySem";
-import initializeGraphElements from "./functions/initializeGraphElements";
-import setFromLocalStorage from "./functions/setFromLocalStorage";
+import React, { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { CourseData } from "./interfaces/CourseData";
+import Splash from "./pages/Splash";
+import { CourseData } from "./classes/CourseData";
+import { GraphData } from "./classes/GraphData";
+import { auth } from "./firebase";
+import CourseStatusWrapper from "./CourseStatusWrapper";
+
+const courseData = new CourseData();
+const graphData = new GraphData(courseData.courses);
+export const DataContext = React.createContext({ courseData, graphData, userData: auth.currentUser });
+const DataProvider = DataContext.Provider;
 
 const App: React.FC = () => {
-  const coursesJSON: CourseData = require("./data/courses.json");
+  const [userData, setUserData] = useState(auth.currentUser);
+  const [loading, setLoading] = useState(true);
 
-  const courses = coursesJSON.data;
-
-  const groupedBySemCourses = groupBySem(courses);
-
-  const initialGraphPositionsJSON = require("./data/graph-positions.json");
-  const initialGraphPositions = initialGraphPositionsJSON.data;
-
-  const taken = getFromLocalStorage("taken", []);
-  const taking = getFromLocalStorage("taking", []);
-
-  let savedGraphPositions = getFromLocalStorage("graphPositions");
-  if (savedGraphPositions === null) {
-    setFromLocalStorage("graphPositions", initialGraphPositions);
-    savedGraphPositions = initialGraphPositions;
-  }
-
-  const [graphPositions, setgraphPositions] = useState(savedGraphPositions);
-
-  const graphElements = initializeGraphElements({ courses, taken, taking, graphPositions });
-
-  const data = {
-    courses: courses,
-    groupedBySemCourses: groupedBySemCourses,
-    graphElements: graphElements,
-    setgraphPositions: setgraphPositions,
-  };
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      setUserData(user);
+      setLoading(false);
+    });
+  }, []);
 
   return (
     <div className='App'>
-      <CoursesDataProvider value={data}>
-        <CourseStatusWrapper />
-      </CoursesDataProvider>
+      <DataProvider value={{ courseData, graphData, userData }}>
+        {loading ? <Splash /> : <CourseStatusWrapper />}
+      </DataProvider>
       <ToastContainer />
     </div>
   );

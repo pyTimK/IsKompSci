@@ -1,53 +1,37 @@
 import { Route, Switch } from "react-router-dom";
-
 import IntroWrapper from "./pages/intro/IntroWrapper";
-import { auth } from "./firebase";
-
-import getFromLocalStorage from "./functions/getFromLocalStorage";
-import { useEffect, useState } from "react";
-import Home from "./Home.jsx";
+import React, { useState } from "react";
 import CoursePage from "./pages/course/CoursePage";
-import { UserDataProvider } from "./contexts/UserDataContext";
-import Splash from "./pages/Splash";
+import { LocalStorageHelper } from "./classes/LocalStorageHelper";
+import Home from "./Home";
 
-const hasData = () => {
-  const name = getFromLocalStorage("name", "");
-  const taken = getFromLocalStorage("taken", null);
-  const taking = getFromLocalStorage("taking", null);
-  return name !== "" && taken !== null && taking !== null;
-};
+const name = LocalStorageHelper.get<string>("name", "");
+const taken = LocalStorageHelper.get<string[]>("taken", []);
+const taking = LocalStorageHelper.get<string[]>("taking", []);
+const initialHasIntroData = name !== "" && taken !== [] && taking !== [];
 
-const CourseStatusWrapper = () => {
-  const [currentUser, setCurrentUser] = useState(auth.currentUser);
-  const [hasIntroData, setHasIntroData] = useState(hasData());
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      setCurrentUser(user);
-      setLoading(false);
-    });
-  }, []);
+export const HasIntroDataContext = React.createContext(initialHasIntroData);
+const HasIntroDataProvider = HasIntroDataContext.Provider;
+
+const CourseStatusWrapper: React.FC = () => {
+  const [hasIntroData, setHasIntroData] = useState(initialHasIntroData);
 
   return (
-    <UserDataProvider value={currentUser}>
-      {loading && <Splash />}
-      {!loading && (
-        <Switch>
-          <Route path='/intro/:page'>
-            <IntroWrapper hasIntroData={hasIntroData} setHasIntroData={setHasIntroData} />
-          </Route>
+    <HasIntroDataProvider value={hasIntroData}>
+      <Switch>
+        <Route path='/intro/:page'>
+          <IntroWrapper setHasIntroData={setHasIntroData} />
+        </Route>
 
-          <Route path='/course/:id'>
-            <CoursePage hasIntroData={hasIntroData} />
-          </Route>
+        <Route path='/course/:id'>
+          <CoursePage />
+        </Route>
 
-          <Route path='/:animate?'>
-            <Home hasIntroData={hasIntroData} />
-          </Route>
-        </Switch>
-      )}
-    </UserDataProvider>
+        <Route path='/:animate?'>
+          <Home />
+        </Route>
+      </Switch>
+    </HasIntroDataProvider>
   );
 };
-
 export default CourseStatusWrapper;

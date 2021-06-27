@@ -1,16 +1,24 @@
-import getFromLocalStorage from "../functions/getFromLocalStorage";
-import CourseBox from "./CourseBox";
-import { makeStyles } from "@material-ui/core";
+import { useContext } from "react";
+import CourseBox, { HandleCourseTap } from "./CourseBox";
+import { makeStyles, Theme } from "@material-ui/core";
 import clsx from "clsx";
+import { LocalStorageHelper } from "../classes/LocalStorageHelper";
+import { DataContext } from "../App";
 
-const GroupBySem = ({ tighten, groupedBySemCourses, handleCourseTap }) => {
-  const taken = getFromLocalStorage("taken", []);
-  const taking = getFromLocalStorage("taking", []);
+interface Props {
+  tighten?: boolean;
+  handleCourseTap: HandleCourseTap;
+}
+
+const GroupBySem: React.FC<Props> = ({ tighten = false, handleCourseTap }) => {
+  const data = useContext(DataContext);
+  const taken = LocalStorageHelper.get<string[]>("taken", []);
+  const taking = LocalStorageHelper.get<string[]>("taking", []);
   const classes = useStyles({ tighten });
 
   return (
     <div id='group-by-sem-div'>
-      {Object.entries(groupedBySemCourses).map((semCourse, index) => {
+      {Object.entries(data.courseData.groupedBySem).map((semCourse, index) => {
         let totalUnits = 0;
         semCourse[1].forEach((course) => {
           if (!["PE", "NSTP"].includes(course.subject) && course.units) totalUnits += course.units;
@@ -20,9 +28,8 @@ const GroupBySem = ({ tighten, groupedBySemCourses, handleCourseTap }) => {
             <div>
               {semCourse[1].map((course) => {
                 let subject = course.subject;
-                if (["PE", "NSTP"].includes(subject)) {
-                  subject = `${subject}-${semCourse[0]}`;
-                }
+                if (["PE", "NSTP"].includes(subject)) subject = `${subject}-${semCourse[0]}`;
+
                 let initialStatus = taken.includes(subject)
                   ? "taken"
                   : taking.includes(subject)
@@ -53,7 +60,7 @@ const GroupBySem = ({ tighten, groupedBySemCourses, handleCourseTap }) => {
   );
 };
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles<Theme, { tighten: boolean }>((theme) => ({
   card: ({ tighten }) => ({
     backgroundColor: "#fff",
     boxShadow: "3px 6px 12px var(--gray)",

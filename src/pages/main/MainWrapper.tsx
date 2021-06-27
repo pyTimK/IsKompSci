@@ -3,16 +3,16 @@ import { Route, Switch } from "react-router";
 import MainPage1 from "./MainPage1";
 import MainPage2 from "./MainPage2";
 
-const MainWrapper = ({ editMode }) => {
+const MainWrapper: React.FC = () => {
   const c = useStyles();
   return (
     <div className={c.root}>
       <Switch>
         <Route path='/main2'>
-          <MainPage2 editMode={editMode} />
+          <MainPage2 />
         </Route>
         <Route path='/'>
-          <MainPage1 editMode={editMode} />
+          <MainPage1 />
         </Route>
       </Switch>
     </div>

@@ -1,15 +1,22 @@
-import { toast } from "react-toastify";
+import { toast, TypeOptions } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const notify = (text, duration = 2000) =>
-  toast.error(text, {
+interface Props {
+  duration?: number;
+  type?: TypeOptions;
+}
+
+const notify = (text: string, props: Props = { duration: 2000, type: "error" }) => {
+  toast(text, {
     position: "top-center",
-    autoClose: duration,
+    autoClose: props.duration,
     hideProgressBar: true,
     closeOnClick: true,
     pauseOnHover: true,
     draggable: true,
     progress: undefined,
+    type: props.type,
   });
+};
 
 export default notify;

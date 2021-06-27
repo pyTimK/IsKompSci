@@ -1,39 +1,56 @@
-import Layout from "./components/Layout.jsx";
+import Layout from "./components/Layout";
 import useToggle from "./hooks/useToggle";
-import SettingsPage from "./pages/SettingsPage";
-import { AnimatePresence, motion, useAnimation } from "framer-motion";
-import { CrossFadePageProvider } from "./contexts/CrossFadePageContext";
-import { useState } from "react";
-import FeedbackPage from "./pages/FeedbackPage";
+import SettingsPage from "./pages/settings/SettingsPage";
+import { AnimatePresence, AnimationControls, motion, useAnimation } from "framer-motion";
+import React, { useMemo, useState } from "react";
+import FeedbackPage from "./pages/feedback/FeedbackPage";
 import MainWrapper from "./pages/main/MainWrapper";
 import { makeStyles } from "@material-ui/core";
+import { useContext } from "react";
+import { HasIntroDataContext } from "./CourseStatusWrapper";
 
-const Home = ({ hasIntroData }) => {
-  const divFullScreenAnimate = useAnimation();
+export const CrossFadePageContext = React.createContext<AnimationControls | null>(null);
+const CrossFadePageProvider = CrossFadePageContext.Provider;
+
+export const DrawerPageContext = React.createContext<
+  | {
+      [key in "setShowSettings" | "setShowFeedback" | "setShowHome"]: React.Dispatch<React.SetStateAction<boolean>>;
+    }
+  | null
+>(null);
+const DrawerPageProvider = DrawerPageContext.Provider;
+
+export const EditModeContext = React.createContext<[boolean, () => void] | null>(null);
+const EditModeProvider = EditModeContext.Provider;
+
+const Home: React.FC = () => {
   const classes = useStyles();
+  const divFullScreenAnimate = useAnimation();
   const [editMode, toggleEditMode] = useToggle();
   const [showSettings, setShowSettings] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
   const [showHome, setShowHome] = useState(true);
+  const hasIntroData = useContext(HasIntroDataContext);
+  const drawerPageValues = useMemo(() => ({ setShowSettings, setShowFeedback, setShowHome }), []);
+
   return (
     <div className='home-vars'>
-      <AnimatePresence>
-        {showSettings && <SettingsPage setShowSettings={setShowSettings} setShowHome={setShowHome} />}
-        {showFeedback && <FeedbackPage setShowFeedback={setShowFeedback} setShowHome={setShowHome} />}
-      </AnimatePresence>
-      {showHome && (
-        <CrossFadePageProvider value={divFullScreenAnimate}>
-          <motion.div className={classes.divFullScreenForTransition} animate={divFullScreenAnimate}></motion.div>
-          <Layout
-            hasIntroData={hasIntroData}
-            editMode={editMode}
-            toggleEditMode={toggleEditMode}
-            setShowSettings={setShowSettings}
-            setShowFeedback={setShowFeedback}>
-            <MainWrapper editMode={editMode} />
-          </Layout>
-        </CrossFadePageProvider>
-      )}
+      <DrawerPageProvider value={drawerPageValues}>
+        <AnimatePresence>
+          {showSettings && <SettingsPage />}
+          {showFeedback && <FeedbackPage />}
+        </AnimatePresence>
+        {showHome && (
+          <CrossFadePageProvider value={divFullScreenAnimate}>
+            <motion.div className={classes.divFullScreenForTransition} animate={divFullScreenAnimate}></motion.div>
+            <EditModeProvider value={[editMode, toggleEditMode]}>
+              <Layout hasIntroData={hasIntroData}>
+                <MainWrapper />
+              </Layout>
+            </EditModeProvider>
+          </CrossFadePageProvider>
+        )}
+      </DrawerPageProvider>
     </div>
   );
 };

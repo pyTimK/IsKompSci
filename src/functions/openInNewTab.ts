@@ -1,5 +1,5 @@
-const openInNewTab = (url) => {
+const openInNewTab = (url: string) => {
   var win = window.open(url, "_blank");
-  win.focus();
+  win?.focus();
 };
 export default openInNewTab;
