@@ -6,6 +6,9 @@ import ReactFlow, {
   OnLoadFunc,
   Node,
   FlowTransform,
+  Controls,
+  Elements,
+  Edge,
 } from "react-flow-renderer";
 import { useHistory } from "react-router";
 import { LocalStorageHelper } from "../classes/LocalStorageHelper";
@@ -13,6 +16,8 @@ import { CrossFadePageContext, EditModeContext } from "../Home";
 import { DataContext } from "../App";
 import { GraphPositions } from "../classes/GraphData";
 import { NodeData } from "../interfaces/NodeData";
+
+const isNode = (element: Node | Edge): element is Node => (element as Node).position !== undefined;
 
 const onLoad: OnLoadFunc = (reactFlowInstance) => reactFlowInstance.fitView();
 
@@ -87,7 +92,7 @@ const OverviewFlow: React.FC = () => {
       }}
       minZoom={0.3}
       selectNodesOnDrag={false}
-      onSelectionChange={(elements) => {
+      onSelectionChange={(elements: Elements | null) => {
         if (editMode || !elements || elements.length === 0) return;
 
         if (!divRef.current) {
@@ -95,9 +100,12 @@ const OverviewFlow: React.FC = () => {
           return;
         }
 
-        const node = elements[0] as Node<NodeData>;
-        const subject = encodeURIComponent(node.id);
-        exitAnimate(node).then(() => history.push(`/course/${subject}`));
+        const element = elements[0];
+        if (isNode(element)) {
+          const node = element as Node<NodeData>;
+          const subject = encodeURIComponent(node.id);
+          exitAnimate(node).then(() => history.push(`/course/${subject}`));
+        }
       }}
       onMouseDown={(e) => {
         if (editMode) return;
@@ -143,8 +151,15 @@ const OverviewFlow: React.FC = () => {
       }}
       arrowHeadColor='black'
       snapToGrid={true}
-      snapGrid={[10, 10]}
-    />
+      snapGrid={[10, 10]}>
+      {!editMode && (
+        <Controls
+          showZoom={false}
+          showInteractive={false}
+          style={{ top: "10px", bottom: "auto", right: "10px", left: "auto" }}
+        />
+      )}
+    </ReactFlow>
   );
 };
 
