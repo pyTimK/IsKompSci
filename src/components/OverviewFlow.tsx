@@ -12,10 +12,11 @@ import ReactFlow, {
 } from "react-flow-renderer";
 import { useHistory } from "react-router";
 import { LocalStorageHelper } from "../classes/LocalStorageHelper";
-import { CrossFadePageContext, EditModeContext } from "../Home";
+import { EditModeContext } from "../Home";
 import { DataContext } from "../App";
 import { GraphPositions } from "../classes/GraphData";
 import { NodeData } from "../interfaces/NodeData";
+import { CrossFadeTransitionContext } from "./CrossFadeTransition";
 
 const isNode = (element: Node | Edge): element is Node => (element as Node).position !== undefined;
 
@@ -28,9 +29,9 @@ const OverviewFlow: React.FC = () => {
   const initialTransformState = useRef<[number, number]>([0, 0]);
   const isMouseDown = useRef(false);
   const numMoves = useRef(0);
-  const divFullScreenAnimate = useContext(CrossFadePageContext);
   const data = useContext(DataContext);
   const editMode = useContext(EditModeContext)![0];
+  const crossFadeTransition = useContext(CrossFadeTransitionContext);
 
   const { transform } = useZoomPanHelper();
   const transformState = useStoreState((store) => store.transform);
@@ -40,42 +41,6 @@ const OverviewFlow: React.FC = () => {
     if (numMoves.current > 2) return;
     transform({ x: transformState[0], y: transformState[1], zoom: transformState[2] });
     numMoves.current++;
-  };
-
-  const exitAnimate = async (node: Node<NodeData>) => {
-    if (!node.data) return;
-
-    if (divRef.current === null) {
-      divFullScreenAnimate?.set({
-        y: document.documentElement.clientHeight,
-        width: window.screen.width,
-        height: document.documentElement.clientHeight,
-        backgroundColor: `var(--${node.data.status}Color)`,
-      });
-    } else {
-      const domRect = divRef.current.getBoundingClientRect();
-      divFullScreenAnimate?.set({
-        x: domRect.x,
-        y: domRect.y,
-        width: domRect.width,
-        height: domRect.height,
-        backgroundColor: `var(--${node.data.status}Color)`,
-      });
-    }
-
-    await divFullScreenAnimate?.start({
-      opacity: 1,
-      x: 0,
-      y: 0,
-      width: window.screen.width,
-      height: window.screen.height,
-
-      backgroundColor: "var(--materialgreen)",
-      transition: {
-        duration: 0.3,
-        ease: "easeOut",
-      },
-    });
   };
 
   return (
@@ -104,7 +69,8 @@ const OverviewFlow: React.FC = () => {
         if (isNode(element)) {
           const node = element as Node<NodeData>;
           const subject = encodeURIComponent(node.id);
-          exitAnimate(node).then(() => history.push(`/course/${subject}`));
+          if (!node.data) return;
+          crossFadeTransition?.exitAnimate(node.data.status, divRef).then(() => history.push(`/course/${subject}`));
         }
       }}
       onMouseDown={(e) => {

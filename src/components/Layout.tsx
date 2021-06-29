@@ -8,13 +8,12 @@ import menu4 from "react-useanimations/lib/menu4";
 import { useHistory, useLocation, useParams } from "react-router";
 import { ReactFlowProvider } from "react-flow-renderer";
 import MyDrawer from "./MyDrawer";
-import { AppBar, IconButton, Tab, Tabs, Toolbar, makeStyles, InputBase } from "@material-ui/core";
+import { AppBar, IconButton, Tab, Tabs, Toolbar, makeStyles } from "@material-ui/core";
 import { LocalStorageHelper } from "../classes/LocalStorageHelper";
 import scrollTop from "../functions/scrollTop";
 import { useContext } from "react";
 import { EditModeContext } from "../Home";
-import SearchIcon from "@material-ui/icons/Search";
-import { fade } from "@material-ui/core";
+import SearchBar from "./MyAutocomplete";
 
 interface Props {
   hasIntroData: boolean;
@@ -78,20 +77,9 @@ const Layout: React.FC<Props> = ({ hasIntroData, children }) => {
                   <UseAnimations className={classes.avoidClicks} strokeColor='white' animation={menu4} size={36} />
                 </IconButton>
                 {/* <h6 className={classes.title}>Course Outline</h6> */}
-                <div className={classes.search}>
-                  <div className={classes.searchIcon}>
-                    <SearchIcon />
-                  </div>
-                  <InputBase
-                    placeholder='Search…'
-                    classes={{
-                      root: classes.searchInputRoot,
-                      input: classes.searchInputInput,
-                    }}
-                    inputProps={{ "aria-label": "search" }}
-                  />
-                </div>
                 <div className={classes.grow} />
+                <SearchBar />
+
                 <IconButton
                   onClick={() => {
                     toggleEditMode();
@@ -122,6 +110,9 @@ const useStyles = makeStyles((theme) => {
     root: {
       color: "white",
       backgroundColor: "var(--bggray)",
+    },
+    grow: {
+      flexGrow: 1,
     },
     toolbar: {
       height: "var(--toolbarHeight) !important",
@@ -158,50 +149,6 @@ const useStyles = makeStyles((theme) => {
 
     tabs: {
       height: "var(--tabsHeight) !important",
-    },
-
-    //? SearchBar
-    search: {
-      position: "relative",
-      borderRadius: theme.shape.borderRadius,
-      backgroundColor: fade(theme.palette.common.white, 0.15),
-      "&:hover": {
-        backgroundColor: fade(theme.palette.common.white, 0.25),
-      },
-      marginRight: theme.spacing(2),
-      marginLeft: 0,
-      width: "100%",
-      [theme.breakpoints.up("sm")]: {
-        marginLeft: theme.spacing(3),
-        width: "auto",
-      },
-    },
-    searchIcon: {
-      padding: theme.spacing(0, 2),
-      height: "100%",
-      position: "absolute",
-      pointerEvents: "none",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      color: "white",
-    },
-    searchInputRoot: {
-      color: "inherit",
-    },
-    searchInputInput: {
-      padding: theme.spacing(1, 1, 1, 0),
-      // vertical padding + font size from searchIcon
-      paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-      transition: theme.transitions.create("width"),
-      width: "100%",
-      [theme.breakpoints.up("md")]: {
-        width: "20ch",
-      },
-      color: "white !important",
-    },
-    grow: {
-      flexGrow: 1,
     },
   };
 });

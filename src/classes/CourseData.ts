@@ -1,12 +1,33 @@
 import { Course } from "./Course";
+
 export class CourseData {
-  public groupedBySem: { [sem: string]: Course[] };
   public courses: Course[];
+  public groupedBySem: { [sem: string]: Course[] };
 
   constructor() {
-    const initialCourseData: CourseData = require("../data/courses.json");
-    this.courses = initialCourseData.courses;
+    this.courses = this.initializeCourses();
     this.groupedBySem = this.initializeGroupBySem();
+  }
+
+  private initializeCourses() {
+    const initialCourseData = require("../data/courses.json");
+    const initialCourses: CourseFromJSON[] = initialCourseData.courses;
+    const courses = initialCourses.map(
+      (c) =>
+        new Course(
+          c.id,
+          c.subject,
+          c.title,
+          c.description,
+          c.recommended_textbooks,
+          c.recommended_websites,
+          c.units,
+          c.offered,
+          c.prerequisites,
+          c.requirements
+        )
+    );
+    return courses;
   }
 
   private initializeGroupBySem() {
@@ -34,4 +55,17 @@ export class CourseData {
 
     return _groupedCourses;
   }
+}
+
+interface CourseFromJSON {
+  id: number;
+  subject: string;
+  title: string;
+  description: string;
+  recommended_textbooks: string;
+  recommended_websites: string;
+  units: number;
+  offered: string;
+  prerequisites: string;
+  requirements: string;
 }

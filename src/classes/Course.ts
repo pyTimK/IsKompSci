@@ -11,4 +11,8 @@ export class Course {
     public prerequisites: string,
     public requirements: string
   ) {}
+
+  get displaySearch() {
+    return `${this.subject}: ${this.title}`;
+  }
 }

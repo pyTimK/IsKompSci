@@ -1,16 +1,15 @@
 import clsx from "clsx";
 import { motion } from "framer-motion";
-import { useContext, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { makeStyles } from "@material-ui/core";
 import { Course } from "../classes/Course";
-import { CrossFadePageContext } from "../Home";
 
 export type HandleCourseTap = (params: {
   e: MouseEvent | TouchEvent | PointerEvent;
   subject: string;
   status: string;
   setStatus: React.Dispatch<React.SetStateAction<string>>;
-  exitAnimate: () => Promise<void>;
+  divRef: React.RefObject<HTMLButtonElement>;
 }) => void;
 
 interface Props {
@@ -25,33 +24,6 @@ const CourseBox: React.FC<Props> = ({ course, handleCourseTap, subject, initialS
   const [status, setStatus] = useState(initialStatus);
   const divRef = useRef<HTMLButtonElement>(null);
 
-  const divFullScreenAnimate = useContext(CrossFadePageContext);
-
-  const exitAnimate = async () => {
-    if (!divRef.current) return;
-    const domRect = divRef.current.getBoundingClientRect();
-    divFullScreenAnimate?.set({
-      x: domRect.x,
-      y: domRect.y,
-      width: domRect.width,
-      height: domRect.height,
-      backgroundColor: `var(--${status}Color)`,
-    });
-    await divFullScreenAnimate?.start({
-      opacity: 1,
-      x: 0,
-      y: 0,
-      width: window.screen.width,
-      height: document.documentElement.clientHeight,
-
-      backgroundColor: "var(--materialgreen)",
-      transition: {
-        duration: 0.3,
-        ease: "easeOut",
-      },
-    });
-  };
-
   return (
     <motion.button
       style={{ outline: "none" }}
@@ -60,7 +32,7 @@ const CourseBox: React.FC<Props> = ({ course, handleCourseTap, subject, initialS
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();
-        handleCourseTap({ e, subject, status, setStatus, exitAnimate });
+        handleCourseTap({ e, subject, status, setStatus, divRef });
       }}
       whileTap={{ scale: 0.8 }}
       className={clsx(classes.courseBox, "noselect", status)}

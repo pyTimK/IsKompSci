@@ -10,6 +10,7 @@ import { DataContext } from "../../App";
 import { HandleCourseTap } from "../../components/CourseBox";
 import scrollTop from "../../functions/scrollTop";
 import { EditModeContext } from "../../Home";
+import { CrossFadeTransitionContext } from "../../components/CrossFadeTransition";
 
 const MainPage1: React.FC = () => {
   const c = useStyles();
@@ -17,24 +18,25 @@ const MainPage1: React.FC = () => {
   const divAnimation = useAnimation();
   const history = useHistory();
   const editMode = useContext(EditModeContext)![0];
+  const crossFadeTransition = useContext(CrossFadeTransitionContext);
   useEffect(() => {
     divAnimation.start({ opacity: 1 });
     scrollTop();
   }, [divAnimation]);
 
-  const showCourseDetails = (subject = "", exitAnimate: () => Promise<void>) => {
+  const showCourseDetails = (subject = "", status: string, divRef: React.RefObject<HTMLButtonElement>) => {
     if (subject === "") return;
     if (subject.startsWith("PE-")) subject = "PE";
     else if (subject.startsWith("NSTP-")) subject = "NSTP";
     subject = encodeURIComponent(subject);
-    exitAnimate().then(() => history.push(`/course/${subject}`));
+    crossFadeTransition?.exitAnimate(status, divRef).then(() => history.push(`/course/${subject}`));
   };
 
-  const handleCourseTap: HandleCourseTap = ({ subject, setStatus, exitAnimate }) => {
+  const handleCourseTap: HandleCourseTap = ({ subject, status, setStatus, divRef }) => {
     if (editMode) {
       updateCourseStatus(subject, data.graphData.elements, setStatus);
     } else {
-      showCourseDetails(subject, exitAnimate);
+      showCourseDetails(subject, status, divRef);
     }
   };
   return (
