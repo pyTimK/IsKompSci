@@ -22,7 +22,8 @@ const CourseDescrip2: React.FC<Props> = ({ course }) => {
   const isMounted = useRef(true);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [inputFocus, setInputFocus] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loadingSetTip, setLoadingSetTip] = useState(false);
+  const [loadingGetTip, setLoadingGetTip] = useState(false);
   const [tips, setTips] = useState<Tip[]>([]);
   const lastDocQuery = useRef<firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData> | null>(null);
   const reachEndQuery = useRef(false);
@@ -47,15 +48,14 @@ const CourseDescrip2: React.FC<Props> = ({ course }) => {
         //? NO ERRORS, NEW TIPS WILL RE-RENDER
         if (!isMounted.current) return;
         setTips((prevTips) => [new Tip(newDocTip, docRef.id, docRef), ...prevTips]);
-        setLoading(false);
+        setLoadingSetTip(false);
         inputRef.current!.value = "";
       })
       .catch((_e) => {
         const e: Error = _e;
-        //TODO handle ui on error
         if (!isMounted.current) return;
         console.log("Error adding tip: ", e.message);
-        setLoading(false);
+        setLoadingSetTip(false);
         notify(`Error: ${e.message}`, { duration: 5000 });
       });
   };
@@ -75,15 +75,14 @@ const CourseDescrip2: React.FC<Props> = ({ course }) => {
         const newTips = tips.filter((tip) => updatedTip.id !== tip.id);
         newTips.unshift(updatedTip);
         setTips(newTips);
-        setLoading(false);
+        setLoadingSetTip(false);
         inputRef.current!.value = "";
       })
       .catch((_e) => {
         const e: Error = _e;
-        //TODO handle ui on error
         if (!isMounted.current) return;
         console.log("Error updating tip: ", e.message);
-        setLoading(false);
+        setLoadingSetTip(false);
         notify(`Error: ${e.message}`, { duration: 5000 });
       });
   };
@@ -96,7 +95,7 @@ const CourseDescrip2: React.FC<Props> = ({ course }) => {
     const message = inputRef.current!.value;
     setInputFocus(false);
     setIsUpdateMode(false);
-    setLoading(true);
+    setLoadingSetTip(true);
 
     if (isUpdateMode) {
       updateTip(message);
@@ -105,7 +104,8 @@ const CourseDescrip2: React.FC<Props> = ({ course }) => {
     }
   };
 
-  const getTips = useCallback(() => {
+  const getTips = useCallback(async () => {
+    setLoadingGetTip(true);
     const got_tips: Tip[] = [];
     const firstData = db
       .collection("tips")
@@ -116,47 +116,36 @@ const CourseDescrip2: React.FC<Props> = ({ course }) => {
 
     const willGetData = lastDocQuery.current === null ? firstData : firstData.startAfter(lastDocQuery.current);
 
-    willGetData
-      .limit(3)
-      .get()
-      .then((querySnapshot) => {
-        if (!isMounted.current) return;
-        querySnapshot.forEach((doc) => got_tips.push(new Tip(doc.data() as DocTip, doc.id, doc.ref)));
-        if (got_tips.length === 0) reachEndQuery.current = true;
-        setTips((prevTips) => [...prevTips, ...got_tips]);
-        setLoading(false);
-        if (!reachEndQuery.current) lastDocQuery.current = querySnapshot.docs[querySnapshot.docs.length - 1];
-      })
-      .catch((_e) => {
-        const e: Error = _e;
-        //TODO handle ui on error
-        if (!isMounted.current) return;
-        console.log("Error getting tip: ", e.message);
-        setLoading(false);
-        notify(`Error: ${e.message}`, { duration: 5000 });
-      });
+    try {
+      const querySnapshot = await willGetData.limit(3).get();
+      if (!isMounted.current) return;
+      querySnapshot.forEach((doc) => got_tips.push(new Tip(doc.data() as DocTip, doc.id, doc.ref)));
+      if (got_tips.length === 0) reachEndQuery.current = true;
+      setTips((prevTips) => [...prevTips, ...got_tips]);
+      setLoadingGetTip(false);
+      if (!reachEndQuery.current) lastDocQuery.current = querySnapshot.docs[querySnapshot.docs.length - 1];
+    } catch (_e) {
+      const e: Error = _e;
+      if (!isMounted.current) return;
+      console.log("Error getting tip: ", e.message);
+      setLoadingGetTip(false);
+      notify(`Error: ${e.message}`, { duration: 5000 });
+    }
   }, [subject]);
-
-  useEffect(() => {
-    getTips();
-    return () => {
-      isMounted.current = false;
-    };
-  }, [getTips]);
 
   useEffect(() => {
     function handleScroll() {
       if (!reachEndQuery.current) {
         var scrollMaxY = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        if (scrollMaxY <= window.scrollY) {
-          getTips();
-        }
-      }
+        if (scrollMaxY <= window.scrollY) getTips();
+      } else window.removeEventListener("scroll", handleScroll, false);
     }
 
-    window.addEventListener("scroll", handleScroll, false);
+    getTips().then(() => window.addEventListener("scroll", handleScroll, false));
+
     return () => {
       window.removeEventListener("scroll", handleScroll, false);
+      isMounted.current = false;
     };
   }, [getTips, reachEndQuery]);
 
@@ -207,7 +196,7 @@ const CourseDescrip2: React.FC<Props> = ({ course }) => {
             )}
           </form>
         </motion.div>
-        {!loading && tips.length === 0 && (
+        {!loadingGetTip && tips.length === 0 && (
           <motion.div
             layout
             initial={{ opacity: 0 }}
@@ -217,7 +206,7 @@ const CourseDescrip2: React.FC<Props> = ({ course }) => {
             <p>There are no tips posted yet for this course</p>
           </motion.div>
         )}
-        {loading && (
+        {loadingSetTip && (
           <motion.div layout initial={{ opacity: 1 }} exit={{ opacity: 0 }} className={classes.tipsBox}>
             <Shimmer height={12} width={shimmerWidthShort} className={classes.line} />
             <Shimmer height={12} width={shimmerWidth} className={classes.line} />
@@ -237,6 +226,13 @@ const CourseDescrip2: React.FC<Props> = ({ course }) => {
               deleteTipVisually={deleteTipVisually}></TipsBox>
           ))}
         </AnimateSharedLayout>
+        {loadingGetTip && (
+          <motion.div layout initial={{ opacity: 1 }} exit={{ opacity: 0 }} className={classes.tipsBox}>
+            <Shimmer height={12} width={shimmerWidthShort} className={classes.line} />
+            <Shimmer height={12} width={shimmerWidth} className={classes.line} />
+            <Shimmer height={12} width={shimmerWidth} className={classes.line} />
+          </motion.div>
+        )}
       </AnimateSharedLayout>
     </motion.div>
   );
