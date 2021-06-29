@@ -11,6 +11,7 @@ import { HandleCourseTap } from "../../components/CourseBox";
 import scrollTop from "../../functions/scrollTop";
 import { EditModeContext } from "../../Home";
 import { CrossFadeTransitionContext } from "../../components/CrossFadeTransition";
+import { Status } from "../../interfaces/Status";
 
 const MainPage1: React.FC = () => {
   const c = useStyles();
@@ -24,12 +25,12 @@ const MainPage1: React.FC = () => {
     scrollTop();
   }, [divAnimation]);
 
-  const showCourseDetails = (subject = "", status: string, divRef: React.RefObject<HTMLButtonElement>) => {
+  const showCourseDetails = (subject = "", status: Status, divRef: React.RefObject<HTMLButtonElement>) => {
     if (subject === "") return;
     if (subject.startsWith("PE-")) subject = "PE";
     else if (subject.startsWith("NSTP-")) subject = "NSTP";
-    subject = encodeURIComponent(subject);
-    crossFadeTransition?.exitAnimate(status, divRef).then(() => history.push(`/course/${subject}`));
+    const encodedSubject = encodeURIComponent(subject);
+    crossFadeTransition?.exitAnimate(status, divRef).then(() => history.push(`/course/${encodedSubject}`));
   };
 
   const handleCourseTap: HandleCourseTap = ({ subject, status, setStatus, divRef }) => {

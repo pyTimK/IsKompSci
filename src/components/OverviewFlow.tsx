@@ -68,9 +68,11 @@ const OverviewFlow: React.FC = () => {
         const element = elements[0];
         if (isNode(element)) {
           const node = element as Node<NodeData>;
-          const subject = encodeURIComponent(node.id);
+          const encodedSubject = encodeURIComponent(node.id);
           if (!node.data) return;
-          crossFadeTransition?.exitAnimate(node.data.status, divRef).then(() => history.push(`/course/${subject}`));
+          crossFadeTransition
+            ?.exitAnimate(node.data.status, divRef)
+            .then(() => history.push(`/course/${encodedSubject}`));
         }
       }}
       onMouseDown={(e) => {

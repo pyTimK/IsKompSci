@@ -1,10 +1,11 @@
 import { Elements } from "react-flow-renderer";
 import { LocalStorageHelper } from "../classes/LocalStorageHelper";
+import { Status } from "../interfaces/Status";
 
 const updateCourseStatus = (
   subject: string,
   graphElements: Elements,
-  setStatus: React.Dispatch<React.SetStateAction<string>>
+  setStatus: React.Dispatch<React.SetStateAction<Status>>
 ) => {
   const updateGraphElement = (newStatus: string) => {
     if (!["PE-", "NSTP-"].some((specialSubject) => subject.startsWith(specialSubject))) {
@@ -24,7 +25,7 @@ const updateCourseStatus = (
     );
 
   setStatus((prevStatus) => {
-    let newStatus = "";
+    let newStatus: Status;
 
     if (prevStatus === "not-taken") {
       newStatus = "taken";

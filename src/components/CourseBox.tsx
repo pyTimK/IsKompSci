@@ -3,12 +3,13 @@ import { motion } from "framer-motion";
 import { useRef, useState } from "react";
 import { makeStyles } from "@material-ui/core";
 import { Course } from "../classes/Course";
+import { Status } from "../interfaces/Status";
 
 export type HandleCourseTap = (params: {
   e: MouseEvent | TouchEvent | PointerEvent;
   subject: string;
-  status: string;
-  setStatus: React.Dispatch<React.SetStateAction<string>>;
+  status: Status;
+  setStatus: React.Dispatch<React.SetStateAction<Status>>;
   divRef: React.RefObject<HTMLButtonElement>;
 }) => void;
 
@@ -16,7 +17,7 @@ interface Props {
   course: Course;
   handleCourseTap: HandleCourseTap;
   subject: string;
-  initialStatus: string;
+  initialStatus: Status;
 }
 
 const CourseBox: React.FC<Props> = ({ course, handleCourseTap, subject, initialStatus }) => {

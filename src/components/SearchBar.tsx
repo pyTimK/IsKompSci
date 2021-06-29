@@ -1,5 +1,5 @@
 /* eslint-disable no-use-before-define */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import parse from "autosuggest-highlight/parse";
 import match from "autosuggest-highlight/match";
@@ -7,11 +7,37 @@ import { fade, InputBase, makeStyles } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import { useContext } from "react";
 import { DataContext } from "../App";
+import { CrossFadeTransitionContext } from "./CrossFadeTransition";
+import { useHistory } from "react-router-dom";
+import { Course } from "../classes/Course";
+
+const sortCourses = (courses: Course[], input: string) => {
+  if (input === "") return courses;
+  const coursesStartsWithInput: Course[] = [];
+  const coursesLeft: Course[] = [];
+  courses.forEach((course) => {
+    if (course.subject.toLowerCase().startsWith(input.toLowerCase())) {
+      coursesStartsWithInput.push(course);
+    } else {
+      coursesLeft.push(course);
+    }
+  });
+  return [...coursesStartsWithInput, ...coursesLeft];
+};
 
 const SearchBar: React.FC = () => {
   const c = useStyles();
+  const history = useHistory();
+  const crossFadeTransition = useContext(CrossFadeTransitionContext);
   const data = useContext(DataContext);
   const courses = data.courseData.courses;
+  const [input, setInput] = useState("");
+  const [sortedCourses, setSortedCourses] = useState(sortCourses(courses, input));
+
+  useEffect(() => {
+    setSortedCourses(sortCourses(courses, input));
+  }, [courses, input]);
+
   return (
     <Autocomplete
       id='highlights-demo'
@@ -24,7 +50,7 @@ const SearchBar: React.FC = () => {
         popupIndicator: c.popupIndicator,
         clearIndicator: c.clearIndicator,
       }}
-      options={courses}
+      options={sortedCourses}
       getOptionLabel={(course) => course.displaySearch}
       renderInput={(params) => {
         const { InputLabelProps, InputProps, ...rest } = params;
@@ -33,18 +59,21 @@ const SearchBar: React.FC = () => {
             <div className={c.searchIcon}>
               <SearchIcon />
             </div>
-            <InputBase {...params.InputProps} {...rest} placeholder='Search…' />
+            <InputBase {...InputProps} {...rest} placeholder='Search…' />
           </div>
         );
+      }}
+      onInputChange={(e, input) => {
+        setInput(input);
       }}
       renderOption={(course, { inputValue }) => {
         const matches = match(course.displaySearch, inputValue);
         const parts = parse(course.displaySearch, matches);
 
         return (
-          <div className={c.searchTextWrapper}>
+          <div className={c.optionTextWrapper}>
             {parts.map((part, index) => (
-              <span key={index} className={c.searchText} style={{ fontWeight: part.highlight ? 700 : 400 }}>
+              <span key={index} className={c.optionText} style={{ fontWeight: part.highlight ? 700 : 400 }}>
                 {part.text}
               </span>
             ))}
@@ -52,7 +81,9 @@ const SearchBar: React.FC = () => {
         );
       }}
       onChange={(e, newValue) => {
-        return;
+        if (!newValue) return;
+        const encodedSubject = encodeURIComponent(newValue.subject);
+        crossFadeTransition?.exitAnimate().then(() => history.push(`/course/${encodedSubject}`));
       }}
     />
   );
@@ -60,13 +91,16 @@ const SearchBar: React.FC = () => {
 
 const useStyles = makeStyles((theme) => {
   return {
-    searchTextWrapper: {
-      textOverflow: "ellipsis",
-      whiteSpace: "nowrap",
-      overflow: "hidden",
+    optionTextWrapper: {
+      // textOverflow: "ellipsis",
+      // whiteSpace: "nowrap",
+      // overflow: "hidden",
       color: "var(--darkergray)",
     },
-    searchText: {},
+    optionText: {
+      fontSize: "0.9rem",
+      letterSpacing: 0,
+    },
     paper: {
       backgroundColor: "white",
     },

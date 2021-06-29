@@ -1,16 +1,17 @@
 import { makeStyles } from "@material-ui/core";
 import { motion, useAnimation } from "framer-motion";
 import React from "react";
+import { Status } from "../interfaces/Status";
 
 const CrossFadeTransition: React.FC = ({ children }) => {
   const c = useStyles();
   const divFullScreenAnimate = useAnimation();
 
   const exitAnimate = async (
-    status: string,
-    divRef: React.RefObject<HTMLButtonElement> | React.MutableRefObject<HTMLDivElement | null>
+    status: Status = "taken",
+    divRef?: React.RefObject<HTMLButtonElement> | React.MutableRefObject<HTMLDivElement | null>
   ) => {
-    if (divRef.current === null) {
+    if (!status || !divRef || divRef.current === null) {
       divFullScreenAnimate?.set({
         y: document.documentElement.clientHeight,
         width: window.screen.width,
@@ -52,8 +53,8 @@ const CrossFadeTransition: React.FC = ({ children }) => {
 
 export const CrossFadeTransitionContext = React.createContext<{
   exitAnimate: (
-    status: string,
-    divRef: React.RefObject<HTMLButtonElement> | React.MutableRefObject<HTMLDivElement | null>
+    status?: Status,
+    divRef?: React.RefObject<HTMLButtonElement> | React.MutableRefObject<HTMLDivElement | null>
   ) => Promise<void>;
 } | null>(null);
 const CrossFadeTransitionProvider = CrossFadeTransitionContext.Provider;

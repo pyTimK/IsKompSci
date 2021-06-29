@@ -13,7 +13,7 @@ import { LocalStorageHelper } from "../classes/LocalStorageHelper";
 import scrollTop from "../functions/scrollTop";
 import { useContext } from "react";
 import { EditModeContext } from "../Home";
-import SearchBar from "./MyAutocomplete";
+import SearchBar from "./SearchBar";
 
 interface Props {
   hasIntroData: boolean;

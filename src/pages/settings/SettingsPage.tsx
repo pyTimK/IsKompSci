@@ -21,7 +21,6 @@ const SettingsPage: React.FC = () => {
   const drawerPage = useContext(DrawerPageContext)!;
 
   useEffect(() => {
-    console.log("useEffect ran!");
     rootAnimation
       .start({
         x: "0vw",

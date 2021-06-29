@@ -4,6 +4,7 @@ import { makeStyles, Theme } from "@material-ui/core";
 import clsx from "clsx";
 import { LocalStorageHelper } from "../classes/LocalStorageHelper";
 import { DataContext } from "../App";
+import { Status } from "../interfaces/Status";
 
 interface Props {
   tighten?: boolean;
@@ -30,7 +31,7 @@ const GroupBySem: React.FC<Props> = ({ tighten = false, handleCourseTap }) => {
                 let subject = course.subject;
                 if (["PE", "NSTP"].includes(subject)) subject = `${subject}-${semCourse[0]}`;
 
-                let initialStatus = taken.includes(subject)
+                let initialStatus: Status = taken.includes(subject)
                   ? "taken"
                   : taking.includes(subject)
                   ? "taking"
