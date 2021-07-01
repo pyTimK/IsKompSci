@@ -16,7 +16,6 @@ export abstract class LocalStorageHelper {
     try {
       this.storage.setItem(key, JSON.stringify(value));
     } catch (_e) {
-      //TODO Convert all catch error blocks to this:
       const e: Error = _e;
       console.log(e.message);
     }

@@ -38,7 +38,6 @@ const TipsBox: React.FC<Props> = ({ tip, uid, textArea, updateTipRef, setIsUpdat
   const ownTip = uid === tip.uid;
 
   const handleLikeButtonTap = () => {
-    // TODO CHECK widgets tree if UI, TIPS CLASS, FIRESTORE updates
     const newCount = isLiked ? likeCountWithoutUser : likeCountWithoutUser + 1;
     tip.updateLikes(isLiked, isDisliked, uid, newCount, "Like");
     setLikeCount(newCount);
