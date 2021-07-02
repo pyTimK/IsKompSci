@@ -5,7 +5,7 @@ import YouTubeIcon from "@material-ui/icons/YouTube";
 import openInNewTab from "../functions/openInNewTab";
 import { LocalStorageHelper } from "../classes/LocalStorageHelper";
 import { useContext } from "react";
-import { DrawerPageContext } from "../Home";
+import { DrawerPageContext } from "../pages/Home";
 
 interface Props {
   open: boolean;

@@ -1,7 +1,7 @@
 import { makeStyles } from "@material-ui/core";
 import { AnimatePresence, motion } from "framer-motion";
 import { useContext } from "react";
-import { EditModeContext } from "../Home";
+import { EditModeContext } from "../pages/Home";
 
 interface Props {
   text: string;

@@ -8,7 +8,7 @@ import { LocalStorageHelper } from "../../classes/LocalStorageHelper";
 import { DataContext } from "../../App";
 import SettingsTile from "./SettingsTile";
 import FormDialog from "../../components/FormDialog";
-import { DrawerPageContext } from "../../Home";
+import { DrawerPageContext } from "../Home";
 
 const SettingsPage: React.FC = () => {
   const classes = useStyles();

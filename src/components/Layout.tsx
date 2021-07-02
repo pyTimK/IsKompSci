@@ -12,7 +12,7 @@ import { AppBar, IconButton, Tab, Tabs, Toolbar, makeStyles } from "@material-ui
 import { LocalStorageHelper } from "../classes/LocalStorageHelper";
 import scrollTop from "../functions/scrollTop";
 import { useContext } from "react";
-import { EditModeContext } from "../Home";
+import { EditModeContext } from "../pages/Home";
 import SearchBar from "./SearchBar";
 
 interface Props {

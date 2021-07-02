@@ -3,7 +3,7 @@ import IntroWrapper from "./pages/intro/IntroWrapper";
 import React, { useState } from "react";
 import CoursePage from "./pages/course/CoursePage";
 import { LocalStorageHelper } from "./classes/LocalStorageHelper";
-import Home from "./Home";
+import Home from "./pages/Home";
 
 const name = LocalStorageHelper.get<string>("name", "");
 const taken = LocalStorageHelper.get<string[]>("taken", []);

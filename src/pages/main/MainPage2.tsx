@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { useEffect } from "react";
 import EditModeText from "../../components/EditModeText";
 import OverviewFlow from "../../components/OverviewFlow";
-import { EditModeContext } from "../../Home";
+import { EditModeContext } from "../Home";
 
 const MainPage2: React.FC = () => {
   const editMode = useContext(EditModeContext)![0];

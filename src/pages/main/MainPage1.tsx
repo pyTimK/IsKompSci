@@ -9,9 +9,9 @@ import { makeStyles } from "@material-ui/core";
 import { DataContext } from "../../App";
 import { HandleCourseTap } from "../../components/CourseBox";
 import scrollTop from "../../functions/scrollTop";
-import { EditModeContext } from "../../Home";
+import { EditModeContext } from "../Home";
 import { CrossFadeTransitionContext } from "../../components/CrossFadeTransition";
-import { Status } from "../../interfaces/Status";
+import { Status, statusToColor } from "../../interfaces/Status";
 
 const MainPage1: React.FC = () => {
   const c = useStyles();
@@ -30,7 +30,9 @@ const MainPage1: React.FC = () => {
     if (subject.startsWith("PE-")) subject = "PE";
     else if (subject.startsWith("NSTP-")) subject = "NSTP";
     const encodedSubject = encodeURIComponent(subject);
-    crossFadeTransition?.exitAnimate(status, divRef).then(() => history.push(`/course/${encodedSubject}`));
+    crossFadeTransition
+      ?.exitAnimate({ initialColor: statusToColor(status), initialPosition: divRef })
+      .then(() => history.push(`/course/${encodedSubject}`));
   };
 
   const handleCourseTap: HandleCourseTap = ({ subject, status, setStatus, divRef }) => {

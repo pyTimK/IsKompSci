@@ -83,7 +83,7 @@ const SearchBar: React.FC = () => {
       onChange={(e, newValue) => {
         if (!newValue) return;
         const encodedSubject = encodeURIComponent(newValue.subject);
-        crossFadeTransition?.exitAnimate().then(() => history.push(`/course/${encodedSubject}`));
+        crossFadeTransition?.exitAnimate({}).then(() => history.push(`/course/${encodedSubject}`));
       }}
     />
   );

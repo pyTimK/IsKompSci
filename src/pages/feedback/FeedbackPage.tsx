@@ -9,7 +9,7 @@ import { LocalStorageHelper } from "../../classes/LocalStorageHelper";
 import FeedbackTile from "./FeedbackTile";
 import { HTMLButtonType } from "../../types/HTMLButtonType";
 import { useContext } from "react";
-import { DrawerPageContext } from "../../Home";
+import { DrawerPageContext } from "../Home";
 import notify from "../../functions/notify";
 
 const FeedbackPage: React.FC = () => {

@@ -1,13 +1,13 @@
-import Layout from "./components/Layout";
-import useToggle from "./hooks/useToggle";
-import SettingsPage from "./pages/settings/SettingsPage";
+import Layout from "../components/Layout";
+import useToggle from "../hooks/useToggle";
+import SettingsPage from "./settings/SettingsPage";
 import { AnimatePresence } from "framer-motion";
 import React, { useMemo, useState } from "react";
-import FeedbackPage from "./pages/feedback/FeedbackPage";
-import MainWrapper from "./pages/main/MainWrapper";
+import FeedbackPage from "./feedback/FeedbackPage";
+import MainWrapper from "./main/MainWrapper";
 import { useContext } from "react";
-import { HasIntroDataContext } from "./CourseStatusWrapper";
-import CrossFadeTransition from "./components/CrossFadeTransition";
+import { HasIntroDataContext } from "../CourseStatusWrapper";
+import CrossFadeTransition from "../components/CrossFadeTransition";
 
 export const DrawerPageContext = React.createContext<
   | {

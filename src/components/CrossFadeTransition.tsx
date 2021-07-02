@@ -1,33 +1,44 @@
 import { makeStyles } from "@material-ui/core";
 import { motion, useAnimation } from "framer-motion";
 import React from "react";
-import { Status } from "../interfaces/Status";
+import { statusToColor } from "../interfaces/Status";
+
+interface PositionDimension {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+type ExitAnimate = (predicate: {
+  initialColor?: string;
+  finalColor?: string;
+  initialPosition?:
+    | React.RefObject<HTMLButtonElement>
+    | React.MutableRefObject<HTMLDivElement | null>
+    | PositionDimension;
+}) => Promise<void>;
 
 const CrossFadeTransition: React.FC = ({ children }) => {
   const c = useStyles();
   const divFullScreenAnimate = useAnimation();
 
-  const exitAnimate = async (
-    status: Status = "taken",
-    divRef?: React.RefObject<HTMLButtonElement> | React.MutableRefObject<HTMLDivElement | null>
-  ) => {
-    if (!status || !divRef || divRef.current === null) {
-      divFullScreenAnimate?.set({
-        y: document.documentElement.clientHeight,
-        width: window.screen.width,
-        height: document.documentElement.clientHeight,
-        backgroundColor: `var(--${status}Color)`,
-      });
-    } else {
-      const domRect = divRef.current.getBoundingClientRect();
-      divFullScreenAnimate?.set({
-        x: domRect.x,
-        y: domRect.y,
-        width: domRect.width,
-        height: domRect.height,
-        backgroundColor: `var(--${status}Color)`,
-      });
-    }
+  const exitAnimate: ExitAnimate = async ({
+    initialColor = statusToColor("taken"),
+    finalColor = "var(--materialgreen)",
+    initialPosition,
+  }) => {
+    divFullScreenAnimate?.set({ backgroundColor: initialColor });
+    divFullScreenAnimate?.set(
+      !initialPosition
+        ? slideUpProperties
+        : isPositionDimension(initialPosition)
+        ? initialPosition
+        : !initialPosition.current
+        ? slideUpProperties
+        : domRectToPositionAndDimenstion(initialPosition.current.getBoundingClientRect())
+    );
+
     await divFullScreenAnimate?.start({
       opacity: 1,
       x: 0,
@@ -35,7 +46,7 @@ const CrossFadeTransition: React.FC = ({ children }) => {
       width: window.screen.width,
       height: document.documentElement.clientHeight,
 
-      backgroundColor: "var(--materialgreen)",
+      backgroundColor: finalColor,
       transition: {
         duration: 0.3,
         ease: "easeOut",
@@ -52,12 +63,34 @@ const CrossFadeTransition: React.FC = ({ children }) => {
 };
 
 export const CrossFadeTransitionContext = React.createContext<{
-  exitAnimate: (
-    status?: Status,
-    divRef?: React.RefObject<HTMLButtonElement> | React.MutableRefObject<HTMLDivElement | null>
-  ) => Promise<void>;
+  /**
+   *  Defaults to Slide Up transition if no provided `initialPosition`
+   */
+  exitAnimate: ExitAnimate;
 } | null>(null);
 const CrossFadeTransitionProvider = CrossFadeTransitionContext.Provider;
+
+const isPositionDimension = (
+  initialPosition:
+    | React.RefObject<HTMLButtonElement>
+    | React.MutableRefObject<HTMLDivElement | null>
+    | PositionDimension
+): initialPosition is PositionDimension => (initialPosition as PositionDimension).x !== undefined;
+
+const slideUpProperties = {
+  y: document.documentElement.clientHeight,
+  width: window.screen.width,
+  height: document.documentElement.clientHeight,
+};
+
+const domRectToPositionAndDimenstion = (domRect: DOMRect): PositionDimension => {
+  return {
+    x: domRect.x,
+    y: domRect.y,
+    width: domRect.width,
+    height: domRect.height,
+  };
+};
 
 const useStyles = makeStyles((theme) => ({
   divFullScreen: {

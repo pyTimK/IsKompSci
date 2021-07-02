@@ -12,11 +12,12 @@ import ReactFlow, {
 } from "react-flow-renderer";
 import { useHistory } from "react-router";
 import { LocalStorageHelper } from "../classes/LocalStorageHelper";
-import { EditModeContext } from "../Home";
+import { EditModeContext } from "../pages/Home";
 import { DataContext } from "../App";
 import { GraphPositions } from "../classes/GraphData";
 import { NodeData } from "../interfaces/NodeData";
 import { CrossFadeTransitionContext } from "./CrossFadeTransition";
+import { statusToColor } from "../interfaces/Status";
 
 const isNode = (element: Node | Edge): element is Node => (element as Node).position !== undefined;
 
@@ -71,7 +72,7 @@ const OverviewFlow: React.FC = () => {
           const encodedSubject = encodeURIComponent(node.id);
           if (!node.data) return;
           crossFadeTransition
-            ?.exitAnimate(node.data.status, divRef)
+            ?.exitAnimate({ initialColor: statusToColor(node.data.status), initialPosition: divRef })
             .then(() => history.push(`/course/${encodedSubject}`));
         }
       }}
