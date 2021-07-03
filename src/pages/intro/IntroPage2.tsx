@@ -8,7 +8,7 @@ import updateCourseStatus from "../../functions/updateCourseStatus";
 import { useContext, useEffect } from "react";
 import clsx from "clsx";
 import { LocalStorageHelper } from "../../classes/LocalStorageHelper";
-import { HasIntroDataContext } from "../../CourseStatusWrapper";
+import { HasIntroDataContext } from "../../RoutesWrapper";
 import { DataContext } from "../../App";
 
 interface Props {

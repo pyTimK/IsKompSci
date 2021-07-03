@@ -1,51 +1,29 @@
 import { AppBar, IconButton, makeStyles, Toolbar } from "@material-ui/core";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
-import { motion, useAnimation } from "framer-motion";
-import { useContext, useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { useContext, useState } from "react";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import React from "react";
 import { LocalStorageHelper } from "../../classes/LocalStorageHelper";
 import { DataContext } from "../../App";
 import SettingsTile from "./SettingsTile";
 import FormDialog from "../../components/FormDialog";
-import { DrawerPageContext } from "../Home";
+import { useHistory } from "react-router-dom";
 
 const SettingsPage: React.FC = () => {
   const classes = useStyles();
-  const rootAnimation = useAnimation();
+  const history = useHistory();
   const [openChangeNameDialog, setOpenChangeNameDialog] = useState(false);
   const [openResetGraphDialog, setOpenResetGraphDialog] = useState(false);
   const [openClearDataDialog, setOpenClearDataDialog] = useState(false);
   const name = LocalStorageHelper.get<string>("name", "Ricardo");
   const data = useContext(DataContext);
-  const drawerPage = useContext(DrawerPageContext)!;
-
-  useEffect(() => {
-    rootAnimation
-      .start({
-        x: "0vw",
-        transition: { delay: 0.2, duration: 0.1, type: "tween", ease: "linear" },
-        transitionEnd: { zIndex: 0 },
-      })
-      .then(() => drawerPage.setShowHome(false));
-  }, [rootAnimation, drawerPage]);
 
   return (
-    <motion.div
-      initial={{ x: "100vw", zIndex: 1301 }}
-      exit={{ x: "100vw" }}
-      animate={rootAnimation}
-      className={classes.root}>
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className={classes.root}>
       <AppBar position='absolute'>
         <Toolbar className={classes.toolbar}>
-          <IconButton
-            onClick={() => {
-              drawerPage.setShowHome(true);
-              drawerPage.setShowSettings(false);
-            }}
-            edge='start'
-            className={classes.menuButton}
-            aria-label='back'>
+          <IconButton onClick={() => history.goBack()} edge='start' className={classes.menuButton} aria-label='back'>
             <ArrowBackIosIcon />
           </IconButton>
           <h6 className={classes.settings}>Settings</h6>

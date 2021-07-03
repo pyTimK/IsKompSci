@@ -5,7 +5,7 @@ import Splash from "./pages/Splash";
 import { CourseData } from "./classes/CourseData";
 import { GraphData } from "./classes/GraphData";
 import { auth } from "./firebase";
-import CourseStatusWrapper from "./CourseStatusWrapper";
+import RoutesWrapper from "./RoutesWrapper";
 
 const courseData = new CourseData();
 const graphData = new GraphData(courseData.courses);
@@ -26,7 +26,7 @@ const App: React.FC = () => {
   return (
     <div className='App'>
       <DataProvider value={{ courseData, graphData, userData }}>
-        {loading ? <Splash /> : <CourseStatusWrapper />}
+        {loading ? <Splash /> : <RoutesWrapper />}
       </DataProvider>
       <ToastContainer />
     </div>

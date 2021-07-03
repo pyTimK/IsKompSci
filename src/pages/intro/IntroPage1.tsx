@@ -8,7 +8,7 @@ import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 import notify from "../../functions/notify";
 import { LocalStorageHelper } from "../../classes/LocalStorageHelper";
-import { HasIntroDataContext } from "../../CourseStatusWrapper";
+import { HasIntroDataContext } from "../../RoutesWrapper";
 import { HTMLInputType } from "../../types/HTMLInputType";
 
 const IntroPage1: React.FC = () => {

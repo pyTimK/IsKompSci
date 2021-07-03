@@ -6,7 +6,7 @@ import CourseDescrip2 from "./CourseDescrip2";
 import CourseDescrip1 from "./CourseDescrip1";
 import { AnimatePresence, motion } from "framer-motion";
 import { DataContext } from "../../App";
-import { HasIntroDataContext } from "../../CourseStatusWrapper";
+import { HasIntroDataContext } from "../../RoutesWrapper";
 import scrollTop from "../../functions/scrollTop";
 
 const offsetNeeded = 0.45 * document.documentElement.clientHeight;

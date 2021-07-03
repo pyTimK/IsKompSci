@@ -31,7 +31,7 @@ const MainPage1: React.FC = () => {
     else if (subject.startsWith("NSTP-")) subject = "NSTP";
     const encodedSubject = encodeURIComponent(subject);
     crossFadeTransition
-      ?.exitAnimate({ initialColor: statusToColor(status), initialPosition: divRef })
+      ?.exitAnimate({ initialColor: statusToColor(status), copyDivRefPosition: divRef })
       .then(() => history.push(`/course/${encodedSubject}`));
   };
 

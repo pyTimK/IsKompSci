@@ -4,8 +4,9 @@ import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import YouTubeIcon from "@material-ui/icons/YouTube";
 import openInNewTab from "../functions/openInNewTab";
 import { LocalStorageHelper } from "../classes/LocalStorageHelper";
+import { useHistory } from "react-router-dom";
 import { useContext } from "react";
-import { DrawerPageContext } from "../pages/Home";
+import { CrossFadeTransitionContext, PositionDimension } from "./CrossFadeTransition";
 
 interface Props {
   open: boolean;
@@ -14,20 +15,37 @@ interface Props {
 
 const MyDrawer: React.FC<Props> = ({ open, toggleOpen }) => {
   const classes = useStyles();
+  const history = useHistory();
+  const crossFadeTransition = useContext(CrossFadeTransitionContext);
   const name = LocalStorageHelper.get<string>("name", "Ricardough");
-  const drawerPage = useContext(DrawerPageContext)!;
 
   const drawerItems = [
-    { label: "Settings", icon: <SettingsOutlinedIcon />, onClick: () => drawerPage.setShowSettings(true) },
     {
-      label: "Tutorial",
-      icon: <YouTubeIcon />,
-      onClick: () => openInNewTab("https://youtu.be/YFtIBPbMKko"),
+      label: "Settings",
+      icon: <SettingsOutlinedIcon />,
+      onClick: () => {
+        crossFadeTransition
+          ?.exitAnimate({
+            initialColor: "var(--white)",
+            finalColor: "#fff",
+            initialPosition: crossFadeInitialPosition(),
+          })
+          .then(() => history.push("/settings"));
+      },
     },
+    { label: "Tutorial", icon: <YouTubeIcon />, onClick: () => openInNewTab("https://youtu.be/YFtIBPbMKko") },
     {
       label: "Feedback",
       icon: <MailOutlineIcon />,
-      onClick: () => drawerPage.setShowFeedback(true),
+      onClick: () => {
+        crossFadeTransition
+          ?.exitAnimate({
+            initialColor: "var(--white)",
+            finalColor: "#fff",
+            initialPosition: crossFadeInitialPosition(),
+          })
+          .then(() => history.push("/feedback"));
+      },
     },
   ];
 
@@ -52,6 +70,17 @@ const MyDrawer: React.FC<Props> = ({ open, toggleOpen }) => {
       </div>
     </SwipeableDrawer>
   );
+};
+
+const crossFadeInitialPosition = (): PositionDimension => {
+  const percentWidth = 0.6;
+  const percentHeight = 0.8;
+  return {
+    x: (window.screen.width * (1 - percentWidth)) / 2,
+    y: (document.documentElement.clientHeight * (1 - percentHeight)) / 2,
+    width: window.screen.width * percentWidth,
+    height: document.documentElement.clientHeight * percentHeight,
+  };
 };
 
 const useStyles = makeStyles((theme) => {

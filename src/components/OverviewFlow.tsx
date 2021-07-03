@@ -72,7 +72,7 @@ const OverviewFlow: React.FC = () => {
           const encodedSubject = encodeURIComponent(node.id);
           if (!node.data) return;
           crossFadeTransition
-            ?.exitAnimate({ initialColor: statusToColor(node.data.status), initialPosition: divRef })
+            ?.exitAnimate({ initialColor: statusToColor(node.data.status), copyDivRefPosition: divRef })
             .then(() => history.push(`/course/${encodedSubject}`));
         }
       }}

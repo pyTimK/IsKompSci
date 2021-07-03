@@ -17,11 +17,11 @@
   --takingColor: var(--bluegreen);
   --not-takenColor: var(--gray);
   scroll-behavior: smooth;
+  --toolbarHeight: 60px;
 }
 
 //* HOME VARS
-.home-vars {
-  --toolbarHeight: 60px;
+.home-page-vars {
   --tabsHeight: 48px;
   --tabsIndicatorHeight: 2px;
   --editModeTextHeight: 90px;
