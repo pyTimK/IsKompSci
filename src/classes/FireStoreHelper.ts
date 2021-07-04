@@ -46,4 +46,11 @@ export default class FireStoreHelper {
 
     return new Tip(newDocTip, docRef.id, docRef);
   };
+
+  /**
+   * Updates the specified Tip in the FireStore.
+   */
+  updateTip = async (message: string, tip: Tip) => {
+    await tip.ref.update({ tip: message });
+  };
 }

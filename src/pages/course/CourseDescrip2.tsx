@@ -52,32 +52,36 @@ const CourseDescrip2: React.FC<Props> = ({ course }) => {
     [fireStoreHelper]
   );
 
-  const updateTip = (message: string) => {
-    if (updateTipRef.current === null) {
-      console.log("Error: updateTipRef does not exist");
-      return;
-    }
-    const updatedTip = updateTipRef.current;
-    updatedTip.tip = message;
-    updatedTip.ref
-      .update({ tip: message })
-      .then(() => {
-        //? NO ERRORS, NEW TIPS WILL RE-RENDER
+  const updateTip = useCallback(
+    async (message: string) => {
+      if (updateTipRef.current === null) {
+        notify(`Unexpected error in updating Tip`);
+        console.log("Error: updateTipRef does not exist");
+        return;
+      }
+      const toUpdateTip = updateTipRef.current;
+      toUpdateTip.tip = message; //Updates Tip instance
+
+      try {
+        await fireStoreHelper.updateTip(message, toUpdateTip);
+
         if (!isMounted.current) return;
-        const newTips = tips.filter((tip) => updatedTip.id !== tip.id);
-        newTips.unshift(updatedTip);
-        setTips(newTips);
-        setLoadingTip(false);
         inputRef.current!.value = "";
-      })
-      .catch((_e) => {
+        setTips((prevTips) => {
+          const newTips = prevTips.filter((tip) => toUpdateTip.id !== tip.id);
+          newTips.unshift(toUpdateTip);
+          return newTips;
+        });
+      } catch (_e) {
         const e: Error = _e;
-        if (!isMounted.current) return;
         console.log("Error updating tip: ", e.message);
-        setLoadingTip(false);
+        if (!isMounted.current) return;
         notify(`Error: ${e.message}`, { duration: 5000 });
-      });
-  };
+      }
+      setLoadingTip(false);
+    },
+    [fireStoreHelper]
+  );
 
   const deleteTipVisually = (id: string) => setTips((prevTips) => prevTips.filter((tip) => tip.id !== id));
 
