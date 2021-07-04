@@ -2,7 +2,6 @@ import { Button, makeStyles } from "@material-ui/core";
 import { AnimateSharedLayout, motion } from "framer-motion";
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import TipsBox from "../../components/TipsBox";
-import { db } from "../../firebase";
 import { Shimmer } from "react-shimmer";
 import notify from "../../functions/notify";
 import { DataContext } from "../../App";
@@ -19,45 +18,39 @@ interface Props {
 
 const CourseDescrip2: React.FC<Props> = ({ course }) => {
   const classes = useStyles();
-  const subject = course.subject.split(/[^\w\d]/).join("_"); //TODO DELETE THIS
   const [inputFocus, setInputFocus] = useState(false);
   const [loadingTip, setLoadingTip] = useState(true);
   const [tips, setTips] = useState<Tip[]>([]);
   const isMounted = useRef(true);
   const gettingTips = useRef(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const fireStoreHelper = useMemo(() => new FireStoreHelper(course.subject), [course.subject]);
   const data = useContext(DataContext);
-  const courseDocRef = db.collection("tips").doc(subject);
+  const fireStoreHelper = useMemo(
+    () => new FireStoreHelper(course.subject, data.userData),
+    [course.subject, data.userData]
+  );
 
   //? FOR UPDATE
   const updateTipRef = useRef<Tip | null>(null);
   const [isUpdateMode, setIsUpdateMode] = useState(false);
 
-  const createTip = (message: string) => {
-    const newDocTip = Tip.createDocTip(data.userData, message);
-    courseDocRef
-      .get()
-      .then((docSnapshot) => {
-        if (docSnapshot.exists) return;
-        return courseDocRef.set({ name: course.subject });
-      })
-      .then(() => courseDocRef.collection("list").add(newDocTip))
-      .then((docRef) => {
-        //? NO ERRORS, NEW TIPS WILL RE-RENDER
+  const createTip = useCallback(
+    async (message: string) => {
+      try {
+        const newTip = await fireStoreHelper.createTip(message);
         if (!isMounted.current) return;
-        setTips((prevTips) => [new Tip(newDocTip, docRef.id, docRef), ...prevTips]);
-        setLoadingTip(false);
         inputRef.current!.value = "";
-      })
-      .catch((_e) => {
+        setTips((prevTips) => [newTip, ...prevTips]);
+      } catch (_e) {
         const e: Error = _e;
-        if (!isMounted.current) return;
         console.log("Error adding tip: ", e.message);
-        setLoadingTip(false);
+        if (!isMounted.current) return;
         notify(`Error: ${e.message}`, { duration: 5000 });
-      });
-  };
+      }
+      setLoadingTip(false);
+    },
+    [fireStoreHelper]
+  );
 
   const updateTip = (message: string) => {
     if (updateTipRef.current === null) {
@@ -111,10 +104,10 @@ const CourseDescrip2: React.FC<Props> = ({ course }) => {
     let reachedEnd = false;
     gettingTips.current = true;
     try {
-      const got_tips = await fireStoreHelper.getTips();
-      reachedEnd = got_tips.length < 3;
+      const gotTips = await fireStoreHelper.getTips();
+      reachedEnd = gotTips.length < 3;
       if (!isMounted.current) return false;
-      if (got_tips.length !== 0) setTips((prevTips) => [...prevTips, ...got_tips]);
+      if (gotTips.length !== 0) setTips((prevTips) => [...prevTips, ...gotTips]);
     } catch (_e) {
       const e: Error = _e;
       if (!isMounted.current) return false;
@@ -136,9 +129,9 @@ const CourseDescrip2: React.FC<Props> = ({ course }) => {
       }
     };
 
-    getTips().then(() => {
+    getTips().then((reachedEnd) => {
       setLoadingTip(false);
-      window.addEventListener("scroll", handleScroll, false);
+      if (!reachedEnd) window.addEventListener("scroll", handleScroll, false);
     });
 
     return () => {

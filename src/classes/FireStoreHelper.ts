@@ -6,7 +6,7 @@ export default class FireStoreHelper {
   private lastDocQuery: firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData> | null = null;
   private subjectDocName: string;
 
-  constructor(subject: String) {
+  constructor(private subject: string, private userData: firebase.User | null) {
     this.subjectDocName = subject.split(/[^\w\d]/).join("_");
   }
 
@@ -33,7 +33,17 @@ export default class FireStoreHelper {
     return got_tips;
   };
 
-  createTips = async () => {
-    
-  }
+  /**
+   * Creates a new tip in the FireStore and returns the created Tip.
+   */
+  createTip = async (message: string) => {
+    const newDocTip = Tip.createDocTip(this.userData, message);
+
+    const courseDocRef = db.collection("tips").doc(this.subjectDocName);
+    const docSnapshot = await courseDocRef.get();
+    if (!docSnapshot.exists) await courseDocRef.set({ name: this.subject });
+    const docRef = await courseDocRef.collection("list").add(newDocTip);
+
+    return new Tip(newDocTip, docRef.id, docRef);
+  };
 }
