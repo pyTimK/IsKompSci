@@ -11,7 +11,7 @@ export default class FireStoreHelper {
   }
 
   /**
-   * Asynchronous method that returns three tips at a time
+   * Returns the next three tips.
    */
   getTips = async () => {
     const got_tips: Tip[] = [];
@@ -32,4 +32,8 @@ export default class FireStoreHelper {
 
     return got_tips;
   };
+
+  createTips = async () => {
+    
+  }
 }

@@ -24,6 +24,7 @@ const CourseDescrip2: React.FC<Props> = ({ course }) => {
   const [loadingTip, setLoadingTip] = useState(true);
   const [tips, setTips] = useState<Tip[]>([]);
   const isMounted = useRef(true);
+  const gettingTips = useRef(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const fireStoreHelper = useMemo(() => new FireStoreHelper(course.subject), [course.subject]);
   const data = useContext(DataContext);
@@ -108,6 +109,7 @@ const CourseDescrip2: React.FC<Props> = ({ course }) => {
    */
   const getTips = useCallback(async () => {
     let reachedEnd = false;
+    gettingTips.current = true;
     try {
       const got_tips = await fireStoreHelper.getTips();
       reachedEnd = got_tips.length < 3;
@@ -119,13 +121,15 @@ const CourseDescrip2: React.FC<Props> = ({ course }) => {
       console.log("Error getting tip: ", e.message);
       notify(`Error: ${e.message}`, { duration: 5000 });
     }
+    gettingTips.current = false;
     return reachedEnd;
   }, [fireStoreHelper]);
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollMaxY = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      if (scrollMaxY <= window.scrollY) {
+      const scrollToLoad = scrollMaxY - 100;
+      if (!gettingTips.current && scrollToLoad <= window.scrollY) {
         getTips().then((reachedEnd) => {
           if (reachedEnd) window.removeEventListener("scroll", handleScroll, false);
         });
