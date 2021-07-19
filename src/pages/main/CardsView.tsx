@@ -9,16 +9,16 @@ import { makeStyles } from "@material-ui/core";
 import { DataContext } from "../../App";
 import { HandleCourseTap } from "../../components/CourseBox";
 import scrollTop from "../../functions/scrollTop";
-import { EditModeContext } from "../Home";
+import { EditModeContext } from "./Home";
 import { CrossFadeTransitionContext } from "../../components/CrossFadeTransition";
 import { Status, statusToColor } from "../../interfaces/Status";
 
-const MainPage1: React.FC = () => {
+const CardsView: React.FC = () => {
   const c = useStyles();
   const data = useContext(DataContext);
   const divAnimation = useAnimation();
   const history = useHistory();
-  const editMode = useContext(EditModeContext)![0];
+  const editMode = useContext(EditModeContext);
   const crossFadeTransition = useContext(CrossFadeTransitionContext);
   useEffect(() => {
     divAnimation.start({ opacity: 1 });
@@ -61,4 +61,4 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-export default MainPage1;
+export default CardsView;

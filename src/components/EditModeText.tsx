@@ -1,7 +1,7 @@
 import { makeStyles } from "@material-ui/core";
 import { AnimatePresence, motion } from "framer-motion";
 import { useContext } from "react";
-import { EditModeContext } from "../pages/Home";
+import { EditModeContext } from "../pages/main/Home";
 
 interface Props {
   text: string;
@@ -9,7 +9,7 @@ interface Props {
 
 const EditModeText: React.FC<Props> = ({ text }) => {
   const c = useStyles();
-  const editMode = useContext(EditModeContext)![0];
+  const editMode = useContext(EditModeContext);
   return (
     <AnimatePresence>
       {editMode && (

@@ -12,7 +12,7 @@ import ReactFlow, {
 } from "react-flow-renderer";
 import { useHistory } from "react-router";
 import { LocalStorageHelper } from "../classes/LocalStorageHelper";
-import { EditModeContext } from "../pages/Home";
+import { EditModeContext } from "../pages/main/Home";
 import { DataContext } from "../App";
 import { GraphPositions } from "../classes/GraphData";
 import { NodeData } from "../interfaces/NodeData";
@@ -31,7 +31,7 @@ const OverviewFlow: React.FC = () => {
   const isMouseDown = useRef(false);
   const numMoves = useRef(0);
   const data = useContext(DataContext);
-  const editMode = useContext(EditModeContext)![0];
+  const editMode = useContext(EditModeContext);
   const crossFadeTransition = useContext(CrossFadeTransitionContext);
 
   const { transform } = useZoomPanHelper();
