@@ -193,7 +193,7 @@ form {
   letter-spacing: 0.1rem;
   background-color: var(--white) !important;
   color: black !important;
-  box-shadow: 0 1px 10px #363636 !important;
+  box-shadow: 0 1px 5px #363636 !important;
   padding: 8px 45px !important;
   border-radius: 2rem !important;
 }
@@ -202,7 +202,7 @@ form {
   letter-spacing: 0.1rem;
   background-color: var(--green) !important;
   color: var(--white) !important;
-  box-shadow: 0 1px 10px #363636 !important;
+  box-shadow: 0 1px 5px #363636 !important;
   padding: 8px 45px !important;
   border-radius: 2rem !important;
   margin: 10px 0 10px 0 !important;
@@ -212,7 +212,7 @@ form {
   letter-spacing: 0.1rem;
   background-color: var(--green) !important;
   color: var(--white) !important;
-  box-shadow: 0 1px 10px #363636 !important;
+  box-shadow: 0 1px 5px #363636 !important;
   width: 30%;
 }
 

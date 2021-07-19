@@ -11,7 +11,7 @@
   color: $color !important;
 
   @if $has-shadow {
-    box-shadow: 0 1px 10px rgb(54, 54, 54) !important;
+    box-shadow: 0 1px 5px rgb(54, 54, 54) !important;
   }
 
   @if $rounded {
