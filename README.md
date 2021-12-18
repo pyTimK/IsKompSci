@@ -1,6 +1,10 @@
 # IsKompSci
 The application is currently deployed at [iskompsci.web.app/](https://iskompsci.web.app/)
 
+## Screenshot
+
+![alt text](https://github.com/pyTimK/IsKompSci/blob/main/Graphic-Feature.png)
+
 ## Requirement
 1. nodejs
 
