@@ -1,5 +1,5 @@
 # IsKompSci
-The application is currently deployed at [iskompsci.web.app/](https://iskompsci.web.app/)
+The application is currently deployed at [iskompsci.web.app](https://iskompsci.web.app/)
 
 ## Screenshot
 
